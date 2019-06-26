@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BAFB3E9D-4BDD-4D7D-9237-435F7F32882A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>G1ANT.Addon.MSOffice.Tests</RootNamespace>
+    <AssemblyName>G1ANT.Addon.MSOffice.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="G1ANT.Engine">
+      <HintPath>..\..\..\G1ANT.Bin\debug\G1ANT.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="G1ANT.Language, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\G1ANT.Bin\debug\G1ANT.Language.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="nunit.framework, Version=3.8.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.3.8.1\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commands\ExcelActivateSheetTests.cs" />
+    <Compile Include="Commands\ExcelAddSheetTests.cs" />
+    <Compile Include="Commands\ExcelCloseTests.cs" />
+    <Compile Include="Commands\ExcelExportTests.cs" />
+    <Compile Include="Commands\ExcelGetFormulaTests.cs" />
+    <Compile Include="Commands\ExcelDuplicateRowTests.cs" />
+    <Compile Include="Commands\ExcelGetRowTests.cs" />
+    <Compile Include="Commands\ExcelGetValueTests.cs" />
+    <Compile Include="Commands\ExcelImportTextTests.cs" />
+    <Compile Include="Commands\ExcelRemoveRowTests.cs" />
+    <Compile Include="Commands\ExcelRemoveColumnTests.cs" />
+    <Compile Include="Commands\ExcelInsertColumnTests.cs" />
+    <Compile Include="Commands\ExcelOpenTests.cs" />
+    <Compile Include="Commands\ExcelRunMacroTests.cs" />
+    <Compile Include="Commands\ExcelSaveTests.cs" />
+    <Compile Include="Commands\ExcelInsertRowTests.cs" />
+    <Compile Include="Commands\ExcelSetValTests.cs" />
+    <Compile Include="Commands\ExcelSwitchTests.cs" />
+    <Compile Include="Commands\LoadMSOfficeTest.cs" />
+    <Compile Include="Commands\OutlookCloseTests.cs" />
+    <Compile Include="Commands\OutlookFindMailsTests.cs" />
+    <Compile Include="Commands\OutlookNewMessageTests.cs" />
+    <Compile Include="Commands\OutlookOpenTests.cs" />
+    <Compile Include="Commands\OutlookSendTests.cs" />
+    <Compile Include="Commands\WordCloseTests.cs" />
+    <Compile Include="Commands\WordExportTests.cs" />
+    <Compile Include="Commands\WordGetTextTests.cs" />
+    <Compile Include="Commands\WordOpenTests.cs" />
+    <Compile Include="Commands\WordInsertTextTests.cs" />
+    <Compile Include="Commands\WordReplaceTests.cs" />
+    <Compile Include="Commands\WordRunMacroTests.cs" />
+    <Compile Include="Commands\WordSaveTests.cs" />
+    <Compile Include="Commands\WordSwitchTests.cs" />
+    <Compile Include="MSOfficeTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\G1ANT.Addon.MSOffice\G1ANT.Addon.MSOffice.csproj">
+      <Project>{e2e36395-6ae4-42eb-8fd7-9a7c9b7c37b5}</Project>
+      <Name>G1ANT.Addon.MSOffice</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Commands\ExcelDuplicateRow\ShouldDuplicateRow_WhenDuplicateRowCommandIsCalled.G1ANT" />
+    <None Include="Commands\ExcelActivateSheet\ShouldSetValueOnProperSheet_WhenExcelActivateSheetCommandIsCalled.G1ANT" />
+    <None Include="Commands\ExcelAddSheet\ShouldAddSheet_WhenExcelAddSheetCommandIsCalled.G1ANT" />
+    <None Include="Commands\ExcelExport\ShouldExportFile_WhenExcelExportCommandIsCalled.G1ANT" />
+    <None Include="Commands\ExcelGetRow\ShouldReturnAllUsedElementsFromRow_WhenGetRowCommandIsCalled.G1ANT" />
+    <None Include="Commands\ExcelGetValue\ShouldReturnCellValue_WhenGetValueCommandIsCalled.G1ANT" />
+    <None Include="Commands\ExcelImportText\ShouldImportTextIntoExcel_WhenCSVFileIsProvided.G1ANT" />
+    <None Include="Commands\ExcelRemoveColumn\ShouldRemoveColumn_WhenRemoveColumnCommandIsCalled.G1ANT" />
+    <None Include="Commands\ExcelRemoveRow\ShouldRemoveRow_WhenRemoveRowCommandIsCalled.G1ANT" />
+    <None Include="Commands\ExcelReply\ShouldReplyToGivenMessage_WhenReplyCommandIsCalled.G1ANT" />
+    <None Include="Commands\ExcelSwitch\ShouldSwitchExcelWindow_WhenSwitchCommandIsCalled.G1ANT" />
+    <None Include="Commands\OutlookClose\ShouldCloseOutlook_WhenCloseCommandIsCalled.G1ANT" />
+    <None Include="Commands\OutlookGetFolder\ShouldReturnFolder_WhenGetFolderCommandIsCalled.G1ANT" />
+    <None Include="Commands\OutlookGetRootFolders\ShouldReturnListOfRootFolders_WhenGetRootFoldersCommandIsCalled.G1ANT" />
+    <None Include="Commands\OutlookMoveTo\ShouldMoveToAnotherFolder_WhenMoveToCommandIsCalled.G1ANT" />
+    <None Include="Commands\OutlookNewMessage\ShouldCreateNewMessageHtmlBody_WhenNewMessageCommandIsCalled.G1ANT" />
+    <None Include="Commands\OutlookNewMessage\ShouldCreateNewMessage_WhenNewMessageCommandIsCalled.G1ANT" />
+    <None Include="Commands\OutlookOpen\ShouldOpenOutlook_WhenOpenCommandIsCalled.G1ANT" />
+    <None Include="Commands\OutlookSaveAttachment\ShouldSaveAttachment_WhenSaveAttachmentCommandIsCalled.G1ANT" />
+    <None Include="Commands\OutlookSend\ShouldSendMessage_WhenSendCommandIsCalled.G1ANT" />
+    <None Include="Commands\WordClose\ShouldCloseWord_WhenCloseCommandIsCalled.G1ANT" />
+    <None Include="Commands\WordExport\ShouldExportFile_WhenExportCommandIsCalled.G1ANT" />
+    <None Include="Commands\WordGetText\ShoudReturnText_WhenGetTextCommandIsCalled.G1ANT" />
+    <None Include="Commands\WordInsertText\ShouldInsertText_WhenInsertTextCommandIsCalled.G1ANT" />
+    <None Include="Commands\WordOpen\ShouldOpenWord_WhenOpenCommandIsCalled.G1ANT" />
+    <None Include="Commands\WordReplace\ShouldReplaceWords_WhenReplaceCommandIsCalled.G1ANT" />
+    <None Include="Commands\WordSave\ShouldSaveFile_WhenSaveCommandIsCalled.G1ANT" />
+    <None Include="Commands\WordSwitchCommand\ShouldSwitchActiveWordWindow_WhenSwitchCommandIsCalled.G1ANT" />
+    <None Include="packages.config" />
+    <EmbeddedResource Include="Resources\getRowTest.xlsx" />
+    <EmbeddedResource Include="Resources\TestData.csv" />
+    <EmbeddedResource Include="Resources\TestDocument.docx" />
+    <EmbeddedResource Include="Resources\TestDocumentMacro.docm" />
+    <EmbeddedResource Include="Resources\TestWorkbook.xlsm" />
+    <EmbeddedResource Include="Resources\XlsTestWorkbook.xlsx" />
+    <EmbeddedResource Include="Resources\XlsTestWorkbook2.xlsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Commands\ExcelClose\ShouldCloseExcel_WhenExcelCloseCommandIsCalled.G1ANT" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Commands\ExcelGetFormula\ShouldReturnFormulaAsText_WhenGetTextFormulaCommandIsCalled.G1ANT" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Commands\ExcelInsertColumn\ShouldInsertColumn_WhenInsertColumnCommandIsCalled.txt" />
+    <Content Include="Commands\ExcelSave\ShouldSaveExcelFile_WhenSaveCommandIsCalled.txt" />
+    <None Include="Commands\OutlookFindMail\ShouldReturnTrue_WhenMailIsPresentInInbox.G1ANT" />
+    <None Include="Commands\ExcelOpen\ShouldOpenExcel_WhenExcelCommandWasCalled.G1ANT" />
+    <None Include="Commands\ExcelInsertRow\ShouldInsertRow_WhenInsertRowCommandIsCalled.G1ANT" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,5 @@
+﻿♥outlookInboxFolder = ‴t.g1ant.test@gmail.com\Skrzynka odbiorcza‴
+outlook.open display false
+outlook.getrootfolders result ♥rootFolders
+outlook.close
+test ♥rootFolders.Count>0

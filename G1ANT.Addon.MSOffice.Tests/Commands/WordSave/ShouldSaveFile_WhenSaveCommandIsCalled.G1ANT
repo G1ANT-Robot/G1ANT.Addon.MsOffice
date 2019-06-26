@@ -1,0 +1,16 @@
+﻿♥filepath = ‴♥environment⟦TEMP⟧\tempwordfile.xlsx‴
+♥testText = ‴Test text.‴
+
+file.delete filename ♥filepath timeout 2
+word.open
+word.inserttext text ♥testText
+word.save path ♥filepath
+word.close
+
+word.open path ♥filepath
+    word.gettext result ♥text
+word.close
+
+file.delete filename ♥filepath
+
+test ♥text.ToString().Trim()==♥testText

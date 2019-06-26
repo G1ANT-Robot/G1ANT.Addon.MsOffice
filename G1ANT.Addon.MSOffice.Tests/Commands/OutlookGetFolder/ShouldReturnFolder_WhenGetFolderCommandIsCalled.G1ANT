@@ -1,0 +1,9 @@
+﻿♥outlookInboxFolder = ‴t.g1ant.test@gmail.com\Skrzynka odbiorcza‴
+outlook.open display false
+outlook.getfolder path ♥outlookInboxFolder result ♥InboxFolder errorcall CanNotGetFolder
+outlook.close
+
+procedure CanNotGetFolder
+    outlook.close
+    test false
+end

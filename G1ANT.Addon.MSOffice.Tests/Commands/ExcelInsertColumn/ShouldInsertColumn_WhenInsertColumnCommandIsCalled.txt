@@ -1,0 +1,21 @@
+﻿excel.open
+
+excel.setvalue value ‴1‴ row ‴1‴ colindex ‴1‴
+excel.setvalue value ‴3‴ row ‴1‴ colindex ‴2‴
+excel.setvalue value ‴5‴ row ‴1‴ colindex ‴3‴
+
+excel.insertcolumn colindex ‴1‴
+excel.insertcolumn colindex ‴3‴
+
+for ♥a from 1 to 3 step 2
+    excel.getvalue row 1 colindex ♥a result ♥cellValue
+    ♥cellValue = ⟦integer⟧♥cellValue
+    test ♥cellValue==♥a errorcall TestFailed
+end
+
+excel.close
+
+procedure TestFailed
+    excel.close
+    test false
+end

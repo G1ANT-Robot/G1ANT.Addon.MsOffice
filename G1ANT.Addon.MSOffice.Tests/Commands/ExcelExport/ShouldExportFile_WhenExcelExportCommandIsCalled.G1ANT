@@ -1,0 +1,8 @@
+﻿excel.open
+excel.setvalue value 1 row 1 colindex 1
+♥path = ‴♥environment⟦TEMP⟧\testexcelsheet.pdf‴
+excel.export path ♥path
+excel.close
+
+file.exists ♥path
+file.delete ♥path timeout 2

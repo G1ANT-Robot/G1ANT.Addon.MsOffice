@@ -1,0 +1,16 @@
+﻿excel.open
+
+♥filePath = ‴♥environment⟦TEMP⟧\testcsv.csv‴
+
+text.write text ‴"1","2","3"‴ filename ♥filePath
+
+excel.importtext path ♥filePath destination ‴A1‴ delimiter ‴,‴
+
+excel.getrow row 1 result ♥usedCells
+
+file.delete ♥filePath
+excel.close
+
+for ♥a from 1 to 3
+    test ♥usedCells⟦System.Convert.ToChar(96+♥a).ToString()⟧==♥a
+end

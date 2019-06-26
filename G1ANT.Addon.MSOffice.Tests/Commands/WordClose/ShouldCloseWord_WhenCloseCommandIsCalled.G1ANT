@@ -1,0 +1,5 @@
+﻿word.open
+word.close
+
+♥macrodlls = ‴System.dll,System.Drawing.dll,System.Windows.Forms.dll,System.Diagnostics.dll‴
+test ⊂System.Diagnostics.Process.GetProcessesByName("WORD.EXE").Length == 0⊃

@@ -1,0 +1,5 @@
+﻿excel.open
+excel.setvalue value ‴Test text.‴ row ‴1‴ colname ‴A‴
+excel.getvalue row ‴1‴ colname ‴A‴ result ♥cellValue
+excel.close
+test ⊂♥cellValue == "Test text."⊃

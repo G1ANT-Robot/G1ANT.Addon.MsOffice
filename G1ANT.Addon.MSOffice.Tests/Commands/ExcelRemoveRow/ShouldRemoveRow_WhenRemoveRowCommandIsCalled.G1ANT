@@ -1,0 +1,20 @@
+﻿excel.open
+
+for ♥a from 1 to 3
+    excel.setvalue value ♥a row ♥a colindex ‴1‴
+end
+
+excel.removerow row 1
+
+for ♥counter from 1 to 2
+    excel.getvalue row ♥counter colindex 1 result ♥cellValue
+    ♥cellValue = ⟦integer⟧♥cellValue
+    test ♥cellValue==♥counter+1 errorcall TestFailed
+end
+
+excel.close
+
+procedure TestFailed
+    excel.close
+    test failed
+end

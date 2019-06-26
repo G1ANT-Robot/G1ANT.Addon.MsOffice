@@ -1,0 +1,4 @@
+﻿outlook.open display false
+outlook.findmails search ‴title‴ result ♥foundMails
+outlook.close
+test ♥foundMails

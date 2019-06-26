@@ -1,0 +1,19 @@
+﻿excel.open
+
+for ♥a from 1 to 3
+    excel.setvalue value ♥a row 1 colindex ♥a
+end
+
+excel.duplicaterow source 1 destination 2
+
+for ♥counter from 1 to 3
+    excel.getvalue row 2 colindex ♥counter result ♥cellValue
+    test ♥cellValue==♥counter.ToString() errorcall TestFailed
+end
+
+excel.close
+
+procedure TestFailed
+    excel.close
+    test false
+end

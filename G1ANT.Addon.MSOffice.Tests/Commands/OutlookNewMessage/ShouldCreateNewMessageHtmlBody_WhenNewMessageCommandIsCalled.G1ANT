@@ -1,0 +1,4 @@
+﻿outlook.open display false
+
+outlook.newmessage to ‴t.g1ant.test@gmail.com‴ subject ‴Test mail‴ body ‴<html><body><p><h1>HTML Body</h1></p><p>example text</p></body></html>‴ isbodyhtml ‴true‴
+outlook.send

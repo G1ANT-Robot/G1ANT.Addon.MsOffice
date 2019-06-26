@@ -1,0 +1,9 @@
+﻿word.open result ♥word1
+word.inserttext text ‴test‴
+word.open result ♥word2
+word.switch id ♥word1
+word.gettext result ♥text
+test ♥text.ToString().Trim()=="test"
+word.close
+word.switch id ♥word2
+word.close

@@ -1,0 +1,18 @@
+﻿excel.open
+
+for ♥a from 1 to 3
+    excel.setvalue value ♥a row 1 colindex ♥a
+end
+
+excel.getrow row 1 result ♥usedCells
+
+for ♥counter from 1 to 3
+    test ♥usedCells⟦System.Convert.ToChar('a'+♥counter-1).ToString()⟧==♥counter errorcall TestFailed
+end
+
+excel.close
+
+procedure TestFailed
+    excel.close
+    test false
+end

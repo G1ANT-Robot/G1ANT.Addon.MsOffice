@@ -1,0 +1,16 @@
+﻿♥outlookInboxFolder = ‴t.g1ant.test@gmail.com\Skrzynka odbiorcza‴
+
+outlook.open
+
+outlook.getfolder ♥outlookInboxFolder result ♥InboxFolder errorcall CouldNotMoveToAnotherFolder
+♥emails = ♥InboxFolder⟦mails⟧
+♥mail = ♥emails⟦♥emails.Count⟧
+
+outlook.reply mail ♥mail result ♥replyMessage errorcall CouldNotReplyMessage
+
+outlook.close
+
+procedure CouldNotReplyMessage
+    outlook.close
+    test false
+end

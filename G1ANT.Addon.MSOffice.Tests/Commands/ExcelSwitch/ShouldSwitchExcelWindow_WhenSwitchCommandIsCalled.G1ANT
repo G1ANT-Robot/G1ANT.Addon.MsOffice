@@ -1,0 +1,10 @@
+﻿excel.open result ♥excel1
+excel.setvalue value 1 row 1 colindex 1
+excel.open result ♥excel2
+excel.switch id ♥excel1
+excel.getvalue row 1 colindex 1 result ♥cellContent
+♥cellContent = ⟦integer⟧♥cellContent
+excel.close
+excel.switch id ♥excel2
+excel.close
+test ♥cellContent==1

@@ -1,0 +1,5 @@
+﻿excel.open
+excel.close
+
+♥macrodlls = ‴System.dll,System.Drawing.dll,System.Windows.Forms.dll,System.Diagnostics.dll‴
+test ⊂System.Diagnostics.Process.GetProcessesByName("EXCEL.EXE").Length == 0⊃

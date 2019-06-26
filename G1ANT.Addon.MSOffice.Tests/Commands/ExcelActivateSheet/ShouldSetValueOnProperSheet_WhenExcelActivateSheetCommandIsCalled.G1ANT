@@ -1,0 +1,9 @@
+﻿excel.open
+excel.addsheet name ‴TestSheet1‴
+excel.setvalue value 1 row 1 colindex 1
+excel.addsheet name ‴TestSheet2‴
+excel.setvalue value 0 row 1 colindex 1
+excel.activatesheet name ‴TestSheet1‴
+excel.getvalue row 1 colindex 1 result ♥cellValue
+excel.close
+test ♥cellValue

@@ -1,0 +1,5 @@
+﻿word.open
+word.inserttext text ‴Test text.‴
+word.gettext result ♥text
+word.close
+test ⊂♥text.ToString().Trim()=="Test text."⊃

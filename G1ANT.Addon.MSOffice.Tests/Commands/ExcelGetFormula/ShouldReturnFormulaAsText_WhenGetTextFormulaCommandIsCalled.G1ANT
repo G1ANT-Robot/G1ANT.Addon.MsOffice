@@ -1,0 +1,7 @@
+﻿excel.open
+excel.setvalue value ‴1‴ row ‴1‴ colname ‴A‴
+excel.setvalue value ‴2‴ row ‴1‴ colname ‴B‴
+excel.setvalue value ‴=A1+B1‴ row ‴1‴ colname ‴C‴
+excel.getformula row ‴1‴ colname ‴C‴ result ♥cellValue
+excel.close
+test ♥cellValue.Equals("=A1+B1")

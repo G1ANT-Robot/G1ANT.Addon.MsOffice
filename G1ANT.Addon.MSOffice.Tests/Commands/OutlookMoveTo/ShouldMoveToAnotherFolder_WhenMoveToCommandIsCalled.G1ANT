@@ -1,0 +1,17 @@
+﻿♥outlookInboxFolder = ‴t.g1ant.test@gmail.com\Skrzynka odbiorcza‴
+♥OutlookDestinationFolder = ‴t.g1ant.test@gmail.com\Test destination‴
+
+outlook.open display false
+
+outlook.getfolder ♥outlookInboxFolder result ♥InboxFolder errorcall CouldNotMoveToAnotherFolder
+outlook.getfolder ♥OutlookDestinationFolder result ♥destinationFolder errorcall CouldNotMoveToAnotherFolder
+♥emails = ♥InboxFolder⟦mails⟧
+♥mail = ♥emails⟦♥emails.Count⟧
+
+outlook.moveto item ♥mail destinationfolder ♥destinationFolder errorcall CouldNotMoveToAnotherFolder
+outlook.close
+
+procedure CouldNotMoveToAnotherFolder
+    outlook.close
+    test false
+end

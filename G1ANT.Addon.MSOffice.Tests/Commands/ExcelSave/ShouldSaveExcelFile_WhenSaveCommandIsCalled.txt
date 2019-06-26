@@ -1,0 +1,20 @@
+﻿♥filepath = ‴♥environment⟦TEMP⟧\tempexcelfile.xlsx‴
+file.delete filename ♥filepath timeout 2
+
+♥colindex1TestValue = ‴Test text.‴
+♥colindex2TestValue = ‴54642 5854 22‴
+
+excel.open
+excel.setvalue value ♥colindex1TestValue row 1 colindex 1
+excel.setvalue value ♥colindex2TestValue row 1 colindex 2
+excel.save path ♥filepath
+excel.close
+
+excel.open path ♥filepath 
+    excel.getvalue row 1 colindex 1 result ♥valueColindex1
+    excel.getvalue row 1 colindex 2 result ♥valueColindex2
+excel.close
+file.delete filename ♥filepath timeout 2
+
+test ♥valueColindex1==♥colindex1TestValue
+test ♥valueColindex2==♥colindex2TestValue

@@ -1,0 +1,6 @@
+﻿word.open
+word.inserttext text ‴start‴
+word.replace from "start" to ‴stop‴ 
+word.gettext result ♥text
+word.close
+test ♥text.ToString().Trim()=="stop"
