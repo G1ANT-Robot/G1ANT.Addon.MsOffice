@@ -4,15 +4,15 @@ This structure stores information about a mail message, which was retrieved from
 
 | Field         | Type                                                        | Description                              |
 | ------------- | ----------------------------------------------------------- | ---------------------------------------- |
-| `id`          | [text](G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The identification number of the message |
-| `from`        | [text](G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The sender of the message                |
-| `cc`        | [text](G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The CC recipient(s) of the message                |
-| `bcc`        | [text](G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The BCC recipient(s) of the message                |
-| `account`          | [text](G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The recipient of the message             |
-| `subject`     | [text](G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The subject of the message               |
-| `body`        | [text](G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The contents of the message              |
-| `htmlbody`    | [text](G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The HTML contents of the message         |
-| `attachments` | [list](G1ANT.Language/G1ANT.Language/Structures/ListStructure.md) | The list of attachments in the message   |
+| `id`          | [text](https://manual.g1ant.com/link/G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The identification number of the message |
+| `from`        | [text](https://manual.g1ant.com/link/G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The sender of the message                |
+| `cc`        | [text](https://manual.g1ant.com/link/G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The CC recipient(s) of the message                |
+| `bcc`        | [text](https://manual.g1ant.com/link/G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The BCC recipient(s) of the message                |
+| `account`          | [text](https://manual.g1ant.com/link/G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The recipient of the message             |
+| `subject`     | [text](https://manual.g1ant.com/link/G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The subject of the message               |
+| `body`        | [text](https://manual.g1ant.com/link/G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The contents of the message              |
+| `htmlbody`    | [text](https://manual.g1ant.com/link/G1ANT.Language/G1ANT.Language/Structures/TextStructure.md) | The HTML contents of the message         |
+| `attachments` | [list](https://manual.g1ant.com/link/G1ANT.Language/G1ANT.Language/Structures/ListStructure.md) | The list of attachments in the message   |
 
 ## Example
 
@@ -31,4 +31,4 @@ foreach ♥email in ♥unreadEmails
 end
 ```
 
-Note that another Outlook structure is used here as well: [outlookfolder](outlookfolderstructure.md) (for the `♥inboxFolder` variable).
+Note that another Outlook structure is used here as well: [outlookfolder](https://manual.g1ant.com/link/G1ANT.Addon/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Structures/outlookfolderstructure.md) (for the `♥inboxFolder` variable).
