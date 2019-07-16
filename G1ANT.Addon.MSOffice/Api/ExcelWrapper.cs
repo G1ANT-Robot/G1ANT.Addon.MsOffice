@@ -222,6 +222,11 @@ namespace G1ANT.Addon.MSOffice
             }
         }
 
+        public void Paste()
+        {
+            sheet.Paste();
+        }
+
         public void Close()
         {
             try
