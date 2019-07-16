@@ -17,17 +17,12 @@ namespace G1ANT.Addon.MSOffice
     [Command(Name = "excel.paste", Tooltip = "This inserts clipboard content into the currently selected cell or range")]
     public class ExcelPasteCommand : Command
     {
-        public class Arguments : CommandArguments
-        {
-
-        }
-
         public ExcelPasteCommand(AbstractScripter scripter) : base(scripter)
         {
 
         }
 
-        public void Execute(Arguments arguments)
+        public void Execute(CommandArguments arguments)
         {
             try
             {
