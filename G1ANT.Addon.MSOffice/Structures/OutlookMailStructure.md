@@ -31,4 +31,4 @@ foreach ♥email in ♥unreadEmails
 end
 ```
 
-Note that another Outlook structure is used here as well: [outlookfolder](https://manual.g1ant.com/link/G1ANT.Addon/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Structures/outlookfolderstructure.md) (for the `♥inboxFolder` variable).
+Note that another Outlook structure is used here as well: [outlookfolder](https://manual.g1ant.com/link/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Structures/outlookfolderstructure.md) (for the `♥inboxFolder` variable).
