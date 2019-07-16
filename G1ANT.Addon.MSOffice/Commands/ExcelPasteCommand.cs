@@ -14,7 +14,7 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice
 {
-    [Command(Name = "excel.paste", Tooltip = "This inserts clipboard content into the currently selected cell or range")]
+    [Command(Name = "excel.paste", Tooltip = "This command inserts clipboard content into the currently selected cell or range")]
     public class ExcelPasteCommand : Command
     {
         public ExcelPasteCommand(AbstractScripter scripter) : base(scripter)
