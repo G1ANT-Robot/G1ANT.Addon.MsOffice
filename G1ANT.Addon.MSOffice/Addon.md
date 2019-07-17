@@ -49,6 +49,6 @@
 
 | Name | Description |
 | ---- | ----------- |
-| [OutlookAttachment](https://manual.g1ant.com/link/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Structures/OutlookAttachmentStructure.md) |  |
-| [OutlookFolder](https://manual.g1ant.com/link/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Structures/OutlookFolderStructure.md) |  |
-| [OutlookMail](https://manual.g1ant.com/link/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Structures/OutlookMailStructure.md) |  |
+| [OutlookAttachment](https://manual.g1ant.com/link/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Structures/OutlookAttachmentStructure.md) | This structure stores information about the attachment to a mail message, which was retrieved with the `outlook.getfolder` command |
+| [OutlookFolder](https://manual.g1ant.com/link/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Structures/OutlookFolderStructure.md) | This structure stores information about the Outlook folder, which was retrieved with the `outlook.getfolder` command |
+| [OutlookMail](https://manual.g1ant.com/link/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Structures/OutlookMailStructure.md) | This structure stores information about a mail message, which was retrieved from the Outlook folder with the `outlook.getfolder` command |

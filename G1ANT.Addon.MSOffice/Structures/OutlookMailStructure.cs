@@ -1,4 +1,4 @@
-﻿/**
+/**
 *    Copyright(C) G1ANT Ltd, All rights reserved
 *    Solution G1ANT.Addon, Project G1ANT.Addon.MSOffice
 *    www.g1ant.com
@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace G1ANT.Addon.MSOffice
 {
-    [Structure(Name = "OutlookMail", AutoCreate = false)]
+    [Structure(Name = "OutlookMail", AutoCreate = false, Tooltip = "This structure stores information about a mail message, which was retrieved from the Outlook folder with the `outlook.getfolder` command")]
     public class OutlookMailStructure : StructureTyped<MailItem>
     {
         private const string IdIndex = "id";
