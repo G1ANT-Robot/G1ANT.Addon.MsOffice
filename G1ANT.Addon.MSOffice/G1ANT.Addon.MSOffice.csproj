@@ -103,6 +103,7 @@
     <Compile Include="Commands\ExcelGetValueCommand.cs" />
     <Compile Include="Commands\ExcelImportTextCommand.cs" />
     <Compile Include="Commands\ExcelDuplicateRowCommand.cs" />
+    <Compile Include="Commands\ExcelPasteCommand.cs" />
     <Compile Include="Commands\ExcelRemoveRowCommand.cs" />
     <Compile Include="Commands\ExcelRemoveColumnCommand.cs" />
     <Compile Include="Commands\ExcelInsertColumnCommand.cs" />
