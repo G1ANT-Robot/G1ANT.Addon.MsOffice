@@ -129,6 +129,11 @@ namespace G1ANT.Addon.MSOffice
             return result;
         }
 
+        public void Copy()
+        {
+            sheet.Application.SendKeys("^c", true);
+        }
+
         public void ActivateSheet(string name)
         {
             sheet = GetSheetByName(name);
