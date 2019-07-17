@@ -1,4 +1,4 @@
-﻿/**
+/**
 *    Copyright(C) G1ANT Ltd, All rights reserved
 *    Solution G1ANT.Addon, Project G1ANT.Addon.MSOffice
 *    www.g1ant.com
@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace G1ANT.Addon.MSOffice
 {
-    [Structure(Name = "OutlookFolder", AutoCreate = false)]
+    [Structure(Name = "OutlookFolder", AutoCreate = false, Tooltip = "This structure stores information about the Outlook folder, which was retrieved with the `outlook.getfolder` command")]
     public class OutlookFolderStructure : StructureTyped<MAPIFolder>
     {
         const string NameIndex = "name";

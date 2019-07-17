@@ -25,7 +25,7 @@ For more information about `if`, `timeout`, `errorcall`, `errorjump`, `errormess
 
 ## Example
 
-This simple script opens a Word document from the location specified by the `♥sourceFile` variable (be sure to provide a real filepath there). The ID of this Word instance will be stored in the `♥wordId1` variable — it’s used by the [`word.switch`](https://manual.g1ant.com/link/G1ANT.Addon/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Commands/WordSwitchCommand.md) command:
+This simple script opens a Word document from the location specified by the `♥sourceFile` variable (be sure to provide a real filepath there). The ID of this Word instance will be stored in the `♥wordId1` variable — it’s used by the [`word.switch`](https://manual.g1ant.com/link/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Commands/WordSwitchCommand.md) command:
 
 ```G1ANT
 word.open C:\programs\document.docx result ♥wordId1

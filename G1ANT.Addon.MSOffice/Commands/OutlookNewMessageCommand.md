@@ -29,7 +29,7 @@ For more information about `if`, `timeout`, `errorcall`, `errorjump`, `errormess
 
 ## Example
 
-In the following script a new message with two attachments (be sure to provide real filepaths there) is created. To send it, use the [`outlook.send`](https://manual.g1ant.com/link/G1ANT.Addon/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Commands/OutlookSendCommand.md) command.
+In the following script a new message with two attachments (be sure to provide real filepaths there) is created. To send it, use the [`outlook.send`](https://manual.g1ant.com/link/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Commands/OutlookSendCommand.md) command.
 
 ```G1ANT
 outlook.open
