@@ -52,7 +52,7 @@ namespace G1ANT.Addon.MSOffice
                 else if (arguments.ColName1 != null)
                     col1 = arguments.ColName1.Value;
                 else
-                    throw new ArgumentException("One of the ColIndex1 or ColName1 arguments have to be set up.");
+                    throw new ArgumentException("One of the ColIndex1 or ColName1 arguments has to be set up.");
 
                 if (arguments.ColIndex2 != null)
                     col2 = arguments.ColIndex2.Value;
