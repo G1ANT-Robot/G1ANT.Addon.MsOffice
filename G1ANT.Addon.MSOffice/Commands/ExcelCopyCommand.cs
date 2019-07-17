@@ -16,16 +16,9 @@ namespace G1ANT.Addon.MSOffice
     [Command(Name = "excel.copy", Tooltip = "This command copies content of the currently selected cells to the clipboard")]
     public class ExcelCopyCommand : Command
     {
-        public class Arguments : CommandArguments
-        {
-        }
+        public ExcelCopyCommand(AbstractScripter scripter) : base(scripter){}
 
-        public ExcelCopyCommand(AbstractScripter scripter) : base(scripter)
-        {
-
-        }
-
-        public void Execute(Arguments arguments)
+        public void Execute(CommandArguments arguments)
         {
             try
             {
