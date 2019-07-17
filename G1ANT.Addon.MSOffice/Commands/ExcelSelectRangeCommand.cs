@@ -66,7 +66,7 @@ namespace G1ANT.Addon.MSOffice
             }
             catch (Exception ex)
             {
-                throw new ApplicationException($"Error occured while selecting range in current excel instance. Message: '{ex.Message}'", ex);
+                throw new ApplicationException($"Error occurred while selecting a range in the current Excel instance. Message: '{ex.Message}'", ex);
             }
         }
     }
