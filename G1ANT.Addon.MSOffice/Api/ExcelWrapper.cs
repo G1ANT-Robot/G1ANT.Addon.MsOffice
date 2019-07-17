@@ -140,6 +140,12 @@ namespace G1ANT.Addon.MSOffice
             sheet.Activate();
         }
 
+        public void SetRange(string range)
+        {
+
+        }
+
+
         public void AddSheet(string name)
         {
             _Worksheet currentActiveSheet = workbook.ActiveSheet;
@@ -236,6 +242,19 @@ namespace G1ANT.Addon.MSOffice
             {
                 throw new ApplicationException($"Error occured while closing current Excel Instance. Message: {ex.Message}");
             }
+        }
+
+        public void SelectRange(object startColumn, int startRow, object endColumn, int endRow)
+        {
+            if (startColumn == null || endColumn == null)
+            {
+                throw new ApplicationException("Starting cell's column and ending cell's column needs to be specified.");
+            }
+
+            var startingCell = sheet.Cells[startRow, startColumn];
+            var endingCell = sheet.Cells[endRow, endColumn];
+            var range = sheet.Range[startingCell, endingCell];
+            range.Select();
         }
 
         public void InsertColumn(object column, string where)
