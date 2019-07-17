@@ -242,7 +242,7 @@ namespace G1ANT.Addon.MSOffice
         {
             if (startColumn == null || endColumn == null)
             {
-                throw new ApplicationException("Starting cell's column and ending cell's column needs to be specified.");
+                throw new ApplicationException("Starting cell's column and ending cell's column need to be specified.");
             }
 
             var startingCell = sheet.Cells[startRow, startColumn];
