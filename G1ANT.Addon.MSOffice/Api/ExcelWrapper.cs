@@ -140,12 +140,6 @@ namespace G1ANT.Addon.MSOffice
             sheet.Activate();
         }
 
-        public void SetRange(string range)
-        {
-
-        }
-
-
         public void AddSheet(string name)
         {
             _Worksheet currentActiveSheet = workbook.ActiveSheet;
