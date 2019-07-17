@@ -96,12 +96,14 @@
     <Compile Include="Commands\ExcelActivateSheetCommand.cs" />
     <Compile Include="Commands\ExcelAddSheetCommand.cs" />
     <Compile Include="Commands\ExcelCloseCommand.cs" />
+    <Compile Include="Commands\ExcelCopyCommand.cs" />
     <Compile Include="Commands\ExcelExportCommand.cs" />
     <Compile Include="Commands\ExcelGetFormulaCommand.cs" />
     <Compile Include="Commands\ExcelGetRowCommand.cs" />
     <Compile Include="Commands\ExcelGetValueCommand.cs" />
     <Compile Include="Commands\ExcelImportTextCommand.cs" />
     <Compile Include="Commands\ExcelDuplicateRowCommand.cs" />
+    <Compile Include="Commands\ExcelPasteCommand.cs" />
     <Compile Include="Commands\ExcelRemoveRowCommand.cs" />
     <Compile Include="Commands\ExcelRemoveColumnCommand.cs" />
     <Compile Include="Commands\ExcelInsertColumnCommand.cs" />
@@ -110,6 +112,7 @@
     <Compile Include="Commands\ExcelRunVBCodeCommand.cs" />
     <Compile Include="Commands\ExcelSaveCommand.cs" />
     <Compile Include="Commands\ExcelInsertRowCommand.cs" />
+    <Compile Include="Commands\ExcelSelectRangeCommand.cs" />
     <Compile Include="Commands\ExcelSetValueCommand.cs" />
     <Compile Include="Commands\ExcelSwitchCommand.cs" />
     <Compile Include="Structures\OutlookAttachmentStructure.cs" />
