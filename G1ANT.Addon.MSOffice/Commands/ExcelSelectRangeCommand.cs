@@ -59,7 +59,7 @@ namespace G1ANT.Addon.MSOffice
                 else if (arguments.ColName2 != null)
                     col2 = arguments.ColName2.Value;
                 else
-                    throw new ArgumentException("One of the ColIndex2 or ColName2 arguments have to be set up.");
+                    throw new ArgumentException("One of the ColIndex2 or ColName2 arguments has to be set up.");
 
 
                 ExcelManager.CurrentExcel.SelectRange(col1, arguments.Row1.Value, col2, arguments.Row2.Value);
