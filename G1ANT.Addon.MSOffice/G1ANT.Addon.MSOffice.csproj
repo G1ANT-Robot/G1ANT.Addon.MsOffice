@@ -112,6 +112,7 @@
     <Compile Include="Commands\ExcelRunVBCodeCommand.cs" />
     <Compile Include="Commands\ExcelSaveCommand.cs" />
     <Compile Include="Commands\ExcelInsertRowCommand.cs" />
+    <Compile Include="Commands\ExcelSelectRangeCommand.cs" />
     <Compile Include="Commands\ExcelSetValueCommand.cs" />
     <Compile Include="Commands\ExcelSwitchCommand.cs" />
     <Compile Include="Structures\OutlookAttachmentStructure.cs" />
