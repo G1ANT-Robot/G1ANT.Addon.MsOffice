@@ -30,7 +30,7 @@ namespace G1ANT.Addon.MSOffice
             }
             catch (Exception ex)
             {
-                throw new ApplicationException($"Error occured while trying to pasting. Message: {ex.Message}", ex);
+                throw new ApplicationException($"Error occurred while trying to paste. Message: {ex.Message}", ex);
             }
         }
     }
