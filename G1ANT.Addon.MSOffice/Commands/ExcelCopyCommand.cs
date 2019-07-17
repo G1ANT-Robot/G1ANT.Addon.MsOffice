@@ -26,7 +26,7 @@ namespace G1ANT.Addon.MSOffice
             }
             catch (Exception ex)
             {
-                throw new ApplicationException($"Error occured while coping content of the currently selected cells. Message: '{ex.Message}'", ex);
+                throw new ApplicationException($"Error occurred while copying content of the currently selected cells. Message: '{ex.Message}'", ex);
             }
         }
     }
