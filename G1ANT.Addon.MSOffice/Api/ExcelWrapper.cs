@@ -131,7 +131,7 @@ namespace G1ANT.Addon.MSOffice
 
         public void Copy()
         {
-            sheet.Application.SendKeys("^c", true);
+            sheet.UsedRange.Copy(Type.Missing);
         }
 
         public void ActivateSheet(string name)
