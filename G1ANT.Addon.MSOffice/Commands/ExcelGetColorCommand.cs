@@ -19,10 +19,10 @@ namespace G1ANT.Addon.MSOffice.Commands
             public TextStructure ColName { get; set; }
 
             [Argument(Tooltip = "Name of a variable where the font color's result will be stored")]
-            public VariableStructure FontColorResult { get; set; } = new VariableStructure("fontcolorresult");
+            public VariableStructure FontColor { get; set; } = new VariableStructure("fontcolorresult");
 
             [Argument(Tooltip = "Name of a variable where the background color's result will be stored")]
-            public VariableStructure BackgroundResult { get; set; } = new VariableStructure("backgroundcolorresult");
+            public VariableStructure BgColor { get; set; } = new VariableStructure("backgroundcolorresult");
 
         }
 
@@ -37,8 +37,8 @@ namespace G1ANT.Addon.MSOffice.Commands
 
                 var colors = ExcelManager.CurrentExcel.GetColor(arguments.Row.Value, col);
 
-                Scripter.Variables.SetVariableValue(arguments.BackgroundResult.Value, new ColorStructure(colors.Item1));
-                Scripter.Variables.SetVariableValue(arguments.FontColorResult.Value,  new ColorStructure(colors.Item2));
+                Scripter.Variables.SetVariableValue(arguments.BgColor.Value, new ColorStructure(colors.Item1));
+                Scripter.Variables.SetVariableValue(arguments.FontColor.Value,  new ColorStructure(colors.Item2));
             }
             catch (Exception ex)
             {

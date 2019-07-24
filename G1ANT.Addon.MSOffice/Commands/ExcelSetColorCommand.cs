@@ -22,7 +22,7 @@ namespace G1ANT.Addon.MSOffice.Commands
             public ColorStructure FontColor { get; set; }
 
             [Argument(Tooltip = "Background color to be set")]
-            public ColorStructure BackgroundColor { get; set; }
+            public ColorStructure BgColor { get; set; }
 
         }
 
@@ -34,7 +34,7 @@ namespace G1ANT.Addon.MSOffice.Commands
             try
             {
                 col = ExcelHelper.GetColumn(arguments.ColIndex, arguments.ColName, true);
-                ExcelManager.CurrentExcel.SetColor(arguments.Row.Value, col, arguments.BackgroundColor?.Value, arguments.FontColor.Value);
+                ExcelManager.CurrentExcel.SetColor(arguments.Row.Value, col, arguments.BgColor?.Value, arguments.FontColor?.Value);
             }
             catch (Exception ex)
             {
