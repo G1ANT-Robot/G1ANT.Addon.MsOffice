@@ -12,6 +12,7 @@ using Microsoft.Vbe.Interop;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -80,6 +81,37 @@ namespace G1ANT.Addon.MSOffice
                 }
             }
             return ret;
+        }
+
+        public Tuple<Color, Color> GetColor(int row, object column)
+        {
+            try
+            {
+                var cell = sheet.Cells[row, column];
+                var fontColor = ColorTranslator.FromOle((int)cell.Font.Color);
+                var backgroundColor = ColorTranslator.FromOle((int)cell.Interior.Color);
+                return new Tuple<Color, Color>(backgroundColor, fontColor);
+            }
+            catch
+            {
+                throw new ArgumentException("Wrong cells position arguments. Row must be a positive integer and column must be either positive integer or alphanumeric address.");
+            }
+        }
+
+        public void SetColor(int row, object column, Color? backgroundColor, Color? fontColor)
+        {
+            try
+            {
+                var cell = sheet.Cells[row, column];
+                if(backgroundColor.HasValue)
+                    cell.Interior.Color = ColorTranslator.ToOle(backgroundColor.Value);
+                if(fontColor.HasValue)
+                    cell.Font.Color = ColorTranslator.ToOle(fontColor.Value);
+            }
+            catch
+            {
+                throw new ArgumentException("Wrong cells position arguments. Row must be a positive integer and column must be either positive integer or alphanumeric address.");
+            }
         }
 
         public string GetFormula(int rowNumber, object columnNumber)
