@@ -25,4 +25,4 @@ foreach ♥email in ♥emails
 end
 ```
 
-Note that two other Outlook structures are used here as well: [outlookfolder](https://manual.g1ant.com/link/G1ANT.Addon/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Structures/outlookfolderstructure.md) (for the `♥inboxFolder` variable) and [outlookmail](https://manual.g1ant.com/link/G1ANT.Addon/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Structures/outlookmailstructure.md) (for the `♥email` variable).
+Note that two other Outlook structures are used here as well: [outlookfolder](https://manual.g1ant.com/link/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Structures/outlookfolderstructure.md) (for the `♥inboxFolder` variable) and [outlookmail](https://manual.g1ant.com/link/G1ANT.Addon.MSOffice/G1ANT.Addon.MSOffice/Structures/outlookmailstructure.md) (for the `♥email` variable).
