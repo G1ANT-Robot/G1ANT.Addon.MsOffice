@@ -30,6 +30,7 @@ namespace G1ANT.Addon.MSOffice
             [Argument(Tooltip = "Cell's column name")]
             public TextStructure ColName { get; set; }
         }
+
         public ExcelInsertFormulaCommand(AbstractScripter scripter) : base(scripter)
         {
         }
@@ -39,11 +40,11 @@ namespace G1ANT.Addon.MSOffice
             object column = null;
             try
             {
-                if(arguments.ColIndex != null)
+                if (arguments.ColIndex != null)
                 {
                     column = arguments.ColIndex.Value;
                 }
-                else if (arguments.ColName !=null)
+                else if (arguments.ColName != null)
                 {
                     column = arguments.ColName.Value;
                 }
