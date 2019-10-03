@@ -128,6 +128,18 @@ namespace G1ANT.Addon.MSOffice
             return range.Formula.ToString();
         }
 
+        public void SetFormula(int rowNumber, object columnNumber, string formula)
+        {
+            try
+            {
+                sheet.Cells[rowNumber, columnNumber].Formula = formula;
+            }
+            catch
+            {
+                throw new ArgumentException("Wrong cells position arguments. Row must be a positive integer and column must be either positive integer or alphanumeric address.");
+            }
+        }
+
         public object RunMacro(string macroName, List<object> args)
         {
             List<object> arguments = new List<object> { macroName };
@@ -276,7 +288,7 @@ namespace G1ANT.Addon.MSOffice
             }
             catch (Exception ex)
             {
-                throw new ApplicationException($"Error occured while closing current Excel Instance. Message: {ex.Message}");
+                throw new ApplicationException($"Error occurred while closing current Excel Instance. Message: {ex.Message}");
             }
         }
 
