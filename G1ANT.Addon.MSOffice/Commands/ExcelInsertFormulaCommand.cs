@@ -8,6 +8,7 @@
 *
 */
 
+using G1ANT.Addon.MSOffice.Helpers;
 using G1ANT.Language;
 using System;
 
@@ -37,27 +38,15 @@ namespace G1ANT.Addon.MSOffice
 
         public void Execute(Arguments arguments)
         {
-            object column = null;
+            var column = ExcelHelper.GetColumn(arguments.ColIndex, arguments.ColName);
+
             try
             {
-                if (arguments.ColIndex != null)
-                {
-                    column = arguments.ColIndex.Value;
-                }
-                else if (arguments.ColName != null)
-                {
-                    column = arguments.ColName.Value;
-                }
-                else
-                {
-                    throw new ArgumentException("One of the ColIndex or ColName arguments have to be set up.");
-                }
-
                 ExcelManager.CurrentExcel.SetFormula(arguments.Row.Value, column, arguments.Formula.Value);
             }
             catch (Exception ex)
             {
-                throw new ApplicationException($"Problem occured while getting formula. Col: '{column}', Row: '{arguments.Row.Value}'. Message: {ex.Message}", ex);
+                throw new ApplicationException($"Problem occured while inserting formula. Col: '{column}', Row: '{arguments.Row.Value}'. Message: {ex.Message}", ex);
             }
         }
     }
