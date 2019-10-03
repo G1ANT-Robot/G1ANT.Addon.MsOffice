@@ -99,6 +99,7 @@
     <Compile Include="Commands\ExcelCopyCommand.cs" />
     <Compile Include="Commands\ExcelExportCommand.cs" />
     <Compile Include="Commands\ExcelGetColorCommand.cs" />
+    <Compile Include="Commands\ExcelInsertFormulaCommand.cs" />
     <Compile Include="Commands\ExcelGetFormulaCommand.cs" />
     <Compile Include="Commands\ExcelGetRowCommand.cs" />
     <Compile Include="Commands\ExcelGetValueCommand.cs" />
