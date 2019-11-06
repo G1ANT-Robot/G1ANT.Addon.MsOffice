@@ -241,6 +241,12 @@ namespace G1ANT.Addon.MSOffice
             {
                 string savingPath = string.IsNullOrEmpty(filePath) ? filePath : path;
                 path = savingPath;
+
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+
                 workbook.SaveAs(filePath, XlFileFormat.xlWorkbookDefault, Type.Missing, Type.Missing, false, false,
                                  XlSaveAsAccessMode.xlNoChange, XlSaveConflictResolution.xlLocalSessionChanges, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
             }
