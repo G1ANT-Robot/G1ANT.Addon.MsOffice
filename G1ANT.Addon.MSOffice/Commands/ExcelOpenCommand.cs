@@ -9,10 +9,8 @@
 */
 
 using G1ANT.Language;
-
-
 using System;
-using System.IO;
+using System.Runtime.InteropServices;
 
 namespace G1ANT.Addon.MSOffice
 {
@@ -37,18 +35,19 @@ namespace G1ANT.Addon.MSOffice
         {
         }
 
-
         public void Execute(Arguments arguments)
         {
             try
             {
                 ExcelWrapper excelWrapper = ExcelManager.CreateInstance();
                 excelWrapper.Open(arguments.Path?.Value, arguments.Sheet?.Value, !arguments.InBackground.Value);
-                Scripter.Variables.SetVariableValue(arguments.Result.Value, new Language.IntegerStructure(excelWrapper.Id));
+                Scripter.Variables.SetVariableValue(arguments.Result.Value, new IntegerStructure(excelWrapper.Id));
             }
             catch (Exception ex)
             {
-                throw new ApplicationException($"Problem occured while opening excel instance. Path: '{arguments.Path.Value}', Sheet: '{arguments.Sheet?.Value}', InBackground: '{arguments.InBackground.Value}'", ex);
+                if (ex.GetType() == typeof(COMException) && ex.Message.Contains("80040154"))
+                    throw new Exception("Could not find Microsoft Office on computer. Please make sure it is installed and try again.");
+                throw new ApplicationException($"Problem occured while opening excel instance. Path: '{arguments.Path?.Value}', Sheet: '{arguments.Sheet?.Value}', InBackground: '{arguments.InBackground.Value}'", ex);
             }           
         }
     }
