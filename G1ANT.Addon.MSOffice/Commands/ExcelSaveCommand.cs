@@ -37,7 +37,7 @@ namespace G1ANT.Addon.MSOffice
             }
             catch (Exception ex)
             {
-                throw new ApplicationException($"Problem occured while saving currently opened excel workbook. Path: '{arguments.Path.Value}'", ex);
+                throw new ApplicationException($"Unable to save file: '{arguments.Path.Value}'", ex);
             }
         }
     }
