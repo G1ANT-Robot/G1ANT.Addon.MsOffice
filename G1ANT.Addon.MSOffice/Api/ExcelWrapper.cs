@@ -173,9 +173,10 @@ namespace G1ANT.Addon.MSOffice
             return result;
         }
 
-        public void Copy()
+        public void CopySelectedCellsToClipboard()
         {
-            sheet.UsedRange.Copy(Type.Missing);
+            if (!sheet.Application.Selection.Copy(Type.Missing))
+                throw new ApplicationException("Sheet.Application.Selection.Copy returned false");
         }
 
         public void ActivateSheet(string name)
