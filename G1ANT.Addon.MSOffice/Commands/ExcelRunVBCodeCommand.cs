@@ -25,6 +25,9 @@ namespace G1ANT.Addon.MSOffice
             [Argument(Required = true, Tooltip = "Visual Basic code of a macro that will be run")]
             public TextStructure Code { get; set; }
 
+            [Argument(Tooltip = "Name of the VBA variable which returns the result of the function")]
+            public TextStructure VBAResultVariable { get; set; } = new TextStructure("g1ant_result");
+
             [Argument]
             public VariableStructure Result { get; set; } = new VariableStructure("result");
         }
@@ -38,7 +41,7 @@ namespace G1ANT.Addon.MSOffice
             try
             {
 
-                var result = ExcelManager.CurrentExcel.RunMacroCode(arguments.Code.Value);
+                var result = ExcelManager.CurrentExcel.RunMacroCode(arguments.Code.Value, arguments.VBAResultVariable.Value);
                 try
                 {
                     Scripter.Variables.SetVariableValue(arguments.Result.Value, Scripter.Structures.CreateStructure(result));

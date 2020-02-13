@@ -149,7 +149,7 @@ namespace G1ANT.Addon.MSOffice
             return result;
         }
 
-        public object RunMacroCode(string macroCode)
+        public object RunMacroCode(string macroCode, string resultVariableName)
         {
             object result = null;
             VBComponent component = null;
@@ -157,7 +157,9 @@ namespace G1ANT.Addon.MSOffice
             {
                 component = workbook.VBProject.VBComponents.Add(vbext_ComponentType.vbext_ct_StdModule);
                 string macroName = $"G1ANT{Guid.NewGuid().ToString("N")}";
-                component.CodeModule.AddFromString($"Sub {macroName}()\r\n{macroCode}\r\nEnd Sub\r\n");
+                if (!string.IsNullOrEmpty(resultVariableName))
+                    macroCode = macroCode.Replace(resultVariableName, macroName);
+                component.CodeModule.AddFromString($"Function {macroName}()\r\n{macroCode}\r\nEnd Function\r\n");
                 result = RunMacro(macroName, new List<object>());
             }
             catch
