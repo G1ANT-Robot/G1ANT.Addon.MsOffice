@@ -22,7 +22,7 @@ namespace G1ANT.Addon.MSOffice
         {
             try
             {
-                ExcelManager.CurrentExcel.Copy();
+                ExcelManager.CurrentExcel.CopySelectedCellsToClipboard();
             }
             catch (Exception ex)
             {
