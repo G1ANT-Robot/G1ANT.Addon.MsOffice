@@ -24,11 +24,12 @@ namespace G1ANT.Addon.MSOffice
             [Argument(Tooltip = "Password required to open Access database")]
             public TextStructure Password { get; set; }
 
-            //[Argument(Tooltip = "Specifies whether Excel should be opened in the background")]
-            //public BooleanStructure InBackground { get; set; } = new BooleanStructure(false);
+            [Argument(Tooltip = "Set to true to open excusively")]
+            public BooleanStructure OpenExclusive { get; set; }
 
             [Argument(Tooltip = "Name of a variable where a currently opened Access process number is stored. It can be used in the `access.switch` command")]
             public VariableStructure Result { get; set; } = new VariableStructure("result");
+           
         }
 
         public AccessOpenCommand(AbstractScripter scripter) : base(scripter)

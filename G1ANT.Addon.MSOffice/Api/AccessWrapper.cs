@@ -7,20 +7,19 @@
 *    See License.txt file in the project root for full license information.
 *
 */
+using G1ANT.Addon.MSOffice.Models.Access;
+using Microsoft.Office.Interop.Access;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using Access = Microsoft.Office.Interop.Access;
+
 
 namespace G1ANT.Addon.MSOffice
 {
-    public class AccessWrapper
+    public partial class AccessWrapper
     {
         private string path;
-        private Access.Application application = null;
-        //private readonly Access.Document document = null;
+        private Application application = null;
 
         internal AccessWrapper()
         {
@@ -29,15 +28,16 @@ namespace G1ANT.Addon.MSOffice
 
         public int Id { get; private set; }
 
-        public void Open(string path, string password = "")
+        public void Open(string path, string password = "", bool openExclusive = false)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
             this.path = path;
 
-            application = new Access.Application();
+            application = new Application();
+            
 
-            application.OpenCurrentDatabase(path, true);
+            application.OpenCurrentDatabase(path, openExclusive);
 
             //Word.Options opt = application.Options;
             //string defaultPath = opt.DefaultFilePath[Word.WdDefaultFilePath.wdDocumentsPath];
@@ -57,6 +57,49 @@ namespace G1ANT.Addon.MSOffice
             //    document.Activate();
             //}
             //this.path = path;
+            
+        }
+
+        public ICollection<AccessObjectModel> GetAllProjectForms()
+        {
+            var result = application.CurrentProject.AllForms
+                .Cast<AccessObject>()
+                .Select(f => new AccessObjectModel(f));
+
+            return result.ToList();
+        }
+
+        //public ICollection<AccessFormModel> GetAllOpenForms() => GetAllForms().Where(f => f.IsLoaded).ToList();
+
+        public ICollection<AccessFormModel> GetAllForms()
+        {
+            var result = application.Forms
+                .Cast<Form>()
+                .Select(f => new AccessFormModel(f));
+
+            return result.ToList();
+        }
+
+
+        public AccessObjectDetailedModel GetForm(string formName)
+        {
+            var form = application.CurrentProject.AllForms[formName];
+            var result = new AccessObjectDetailedModel(form);
+
+            return result;
+        }
+
+
+        public void Test()
+        {
+            var afs = application.CurrentProject.Resources;
+
+            var reports = application.CurrentProject.AllReports.Cast<AccessObject>().ToList();
+
+        //    Access.Forms forms = application.Forms;
+        //    var count = forms.Count;
+        //    Access.Form f = forms[0];
+        //    _Form3 f2 = forms[0];
         }
 
         //public void Show()

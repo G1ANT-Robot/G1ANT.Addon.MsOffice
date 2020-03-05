@@ -34,8 +34,8 @@
     <Reference Include="BouncyCastle.Crypto, Version=1.8.4.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.4\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
-    <Reference Include="G1ANT.Language, Version=4.105.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\G1ANT.Language.4.105.0\lib\net452\G1ANT.Language.dll</HintPath>
+    <Reference Include="G1ANT.Language, Version=4.105.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\G1ANT.Language.4.105.1\lib\net452\G1ANT.Language.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.6.11.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.6.11\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -79,6 +79,10 @@
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\MicrosoftOfficeCore.15.0.0\lib\net35\Office.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
@@ -94,6 +98,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Access\AccessGetFormCommand.cs" />
     <Compile Include="Api\ExcelManager.cs" />
     <Compile Include="Api\ExcelWrapper.cs" />
     <Compile Include="Api\OutlookManager.cs" />
@@ -102,6 +107,8 @@
     <Compile Include="Api\WordManager.cs" />
     <Compile Include="Api\AccessWrapper.cs" />
     <Compile Include="Api\WordWrapper.cs" />
+    <Compile Include="Commands\Access\AccessGetFormsCommand.cs" />
+    <Compile Include="Commands\Access\AccessTestCommand.cs" />
     <Compile Include="Commands\ExcelActivateSheetCommand.cs" />
     <Compile Include="Commands\ExcelAddSheetCommand.cs" />
     <Compile Include="Commands\ExcelCloseCommand.cs" />
@@ -113,7 +120,7 @@
     <Compile Include="Commands\ExcelGetValueCommand.cs" />
     <Compile Include="Commands\ExcelImportTextCommand.cs" />
     <Compile Include="Commands\ExcelDuplicateRowCommand.cs" />
-    <Compile Include="Commands\AccessOpenCommand.cs" />
+    <Compile Include="Commands\Access\AccessOpenCommand.cs" />
     <Compile Include="Commands\ExcelPasteCommand.cs" />
     <Compile Include="Commands\ExcelRemoveRowCommand.cs" />
     <Compile Include="Commands\ExcelRemoveColumnCommand.cs" />
@@ -128,6 +135,11 @@
     <Compile Include="Commands\ExcelSetValueCommand.cs" />
     <Compile Include="Commands\ExcelSwitchCommand.cs" />
     <Compile Include="Helpers\ExcelHelper.cs" />
+    <Compile Include="Models\Access\AccessControlModel.cs" />
+    <Compile Include="Models\Access\AccessFormModel.cs" />
+    <Compile Include="Models\Access\AccessObjectDetailedModel.cs" />
+    <Compile Include="Models\Access\AccessObjectModel.cs" />
+    <Compile Include="Models\Access\AccessObjectPropertyModel.cs" />
     <Compile Include="Structures\OutlookAttachmentStructure.cs" />
     <Compile Include="Commands\OutlookCloseCommand.cs" />
     <Compile Include="Commands\OutlookFindMailsCommand.cs" />
