@@ -48,6 +48,10 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>$(ProgramFiles)\Microsoft Visual Studio\2017\Community\Common7\IDE\PublicAssemblies\Microsoft.mshtml.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Access, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Access.15.0.4420.1017\lib\net20\Microsoft.Office.Interop.Access.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
@@ -94,7 +98,9 @@
     <Compile Include="Api\ExcelWrapper.cs" />
     <Compile Include="Api\OutlookManager.cs" />
     <Compile Include="Api\OutlookWrapper.cs" />
+    <Compile Include="Api\AccessManager.cs" />
     <Compile Include="Api\WordManager.cs" />
+    <Compile Include="Api\AccessWrapper.cs" />
     <Compile Include="Api\WordWrapper.cs" />
     <Compile Include="Commands\ExcelActivateSheetCommand.cs" />
     <Compile Include="Commands\ExcelAddSheetCommand.cs" />
@@ -107,6 +113,7 @@
     <Compile Include="Commands\ExcelGetValueCommand.cs" />
     <Compile Include="Commands\ExcelImportTextCommand.cs" />
     <Compile Include="Commands\ExcelDuplicateRowCommand.cs" />
+    <Compile Include="Commands\AccessOpenCommand.cs" />
     <Compile Include="Commands\ExcelPasteCommand.cs" />
     <Compile Include="Commands\ExcelRemoveRowCommand.cs" />
     <Compile Include="Commands\ExcelRemoveColumnCommand.cs" />
