@@ -148,7 +148,6 @@
     <Compile Include="Models\Access\AccessObjectModel.cs" />
     <Compile Include="Models\Access\AccessObjectPropertyModel.cs" />
     <Compile Include="Models\Access\AccessPropertiesModel.cs" />
-    <Compile Include="Models\Access\Rectangle.cs" />
     <Compile Include="Structures\OutlookAttachmentStructure.cs" />
     <Compile Include="Commands\OutlookCloseCommand.cs" />
     <Compile Include="Commands\OutlookFindMailsCommand.cs" />
