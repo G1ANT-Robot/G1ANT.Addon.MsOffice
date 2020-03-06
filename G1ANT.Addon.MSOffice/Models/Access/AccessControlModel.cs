@@ -8,6 +8,8 @@
 *
 */
 using Microsoft.Office.Interop.Access;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,15 +18,37 @@ namespace G1ANT.Addon.MSOffice.Models.Access
     public class AccessControlModel
     {
         public string Name { get; }
-        public ICollection<AccessControlModel> Children = new List<AccessControlModel>();
 
-        public AccessControlModel(Control control)
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public dynamic Caption { get; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public dynamic Value { get; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public ICollection<AccessControlModel> Children;
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public AccessPropertiesModel Properties;
+
+
+        public AccessControlModel(Control control, bool getProperties = true)
         {
             Name = control.Name;
 
+            if (getProperties && control.Properties.Count > 0)
+            {
+                var properties = control.Properties.OfType<dynamic>().ToList();
+                Caption = properties.FirstOrDefault(p => p.Name == "Caption")?.Value?.ToString();
+                Value = properties.FirstOrDefault(p => p.Name == "Value")?.Value?.ToString();
+                Properties = new AccessPropertiesModel(control.Properties);
+            }
+
             try
             {
-                Children = control.Controls.Cast<Control>().Select(c => new AccessControlModel(c)).ToList();
+                Children = control.Controls.Count == 0 
+                    ? null 
+                    : control.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getProperties)).ToList();
             }
             catch { }
         }

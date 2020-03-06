@@ -75,16 +75,16 @@ namespace G1ANT.Addon.MSOffice
         {
             var result = application.Forms
                 .Cast<Form>()
-                .Select(f => new AccessFormModel(f));
+                .Select(f => new AccessFormModel(f, false));
 
             return result.ToList();
         }
 
 
-        public AccessObjectDetailedModel GetForm(string formName)
+        public AccessFormModel GetForm(string formName)
         {
-            var form = application.CurrentProject.AllForms[formName];
-            var result = new AccessObjectDetailedModel(form);
+            var form = application.Forms[formName];
+            var result = new AccessFormModel(form, true);
 
             return result;
         }
