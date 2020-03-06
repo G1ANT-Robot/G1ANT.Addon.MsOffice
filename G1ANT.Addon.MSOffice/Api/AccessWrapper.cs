@@ -11,6 +11,7 @@ using G1ANT.Addon.MSOffice.Models.Access;
 using Microsoft.Office.Interop.Access;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 
@@ -28,36 +29,30 @@ namespace G1ANT.Addon.MSOffice
 
         public int Id { get; private set; }
 
-        public void Open(string path, string password = "", bool openExclusive = false)
+        public void Open(string path, string password = "", bool openExclusive = false, bool shouldShowApplication = true)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
             this.path = path;
 
-            application = new Application();
-            
+            application = application ?? new Application();
+
+            if (shouldShowApplication)
+                Show();
+            else
+                Hide();
 
             application.OpenCurrentDatabase(path, openExclusive);
+        }
 
-            //Word.Options opt = application.Options;
-            //string defaultPath = opt.DefaultFilePath[Word.WdDefaultFilePath.wdDocumentsPath];
-            //application.DisplayAlerts = Word.WdAlertLevel.wdAlertsAll;
-            //application.Visible = true;
+        public void Show()
+        {
+            application.Visible = true;
+        }
 
-            //if (string.IsNullOrEmpty(path))
-            //{
-            //    document = application.Documents.Add(!string.IsNullOrEmpty(path) ? (object)path : Missing.Value);
-            //    document.Activate();
-            //}
-            //else
-            //{
-            //    if (string.IsNullOrEmpty(Path.GetDirectoryName(path)))
-            //        path = defaultPath + "\\" + path;
-            //    document = application.Documents.Open(path);
-            //    document.Activate();
-            //}
-            //this.path = path;
-            
+        public void Hide()
+        {
+            application.Visible = false;
         }
 
         public ICollection<AccessObjectModel> GetAllProjectForms()
@@ -69,29 +64,43 @@ namespace G1ANT.Addon.MSOffice
             return result.ToList();
         }
 
-        //public ICollection<AccessFormModel> GetAllOpenForms() => GetAllForms().Where(f => f.IsLoaded).ToList();
-
         public ICollection<AccessFormModel> GetAllForms()
         {
             var result = application.Forms
                 .Cast<Form>()
-                .Select(f => new AccessFormModel(f, false));
+                .Select(f => new AccessFormModel(f, true, false, false));
 
             return result.ToList();
         }
 
-
         public AccessFormModel GetForm(string formName)
         {
             var form = application.Forms[formName];
-            var result = new AccessFormModel(form, true);
+            var result = new AccessFormModel(form, true, true, true);
 
             return result;
         }
 
 
+        public void CloseDatabase()
+        {
+            application.DoCmd.CloseDatabase();
+        }
+
+        public void Quit(bool saveChanges)
+        {
+            application.DoCmd.Quit(saveChanges ? AcQuitOption.acQuitSaveAll : AcQuitOption.acQuitSaveNone);
+            AccessManager.Remove(this);
+        }
+
+
+
+
+
         public void Test()
         {
+            
+
             var afs = application.CurrentProject.Resources;
 
             var reports = application.CurrentProject.AllReports.Cast<AccessObject>().ToList();

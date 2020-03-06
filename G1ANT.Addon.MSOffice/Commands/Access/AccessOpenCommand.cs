@@ -11,7 +11,7 @@
 using G1ANT.Language;
 using System;
 
-namespace G1ANT.Addon.MSOffice
+namespace G1ANT.Addon.MSOffice.Access
 {
     [Command(Name = "access.open", Tooltip = "This command opens a new Access instance")]
     public class AccessOpenCommand : Command
@@ -22,14 +22,16 @@ namespace G1ANT.Addon.MSOffice
             public TextStructure Path { get; set; }
 
             [Argument(Tooltip = "Password required to open Access database")]
-            public TextStructure Password { get; set; }
+            public TextStructure Password { get; set; } = new TextStructure("");
 
-            [Argument(Tooltip = "Set to true to open excusively")]
-            public BooleanStructure OpenExclusive { get; set; }
+            [Argument(Tooltip = "Set to true to open excusively. False by default")]
+            public BooleanStructure OpenExclusive { get; set; } = new BooleanStructure(false);
+
+            [Argument(Tooltip = "Set to fale to hide the application. True by default")]
+            public BooleanStructure Show { get; set; } = new BooleanStructure(true);
 
             [Argument(Tooltip = "Name of a variable where a currently opened Access process number is stored. It can be used in the `access.switch` command")]
             public VariableStructure Result { get; set; } = new VariableStructure("result");
-           
         }
 
         public AccessOpenCommand(AbstractScripter scripter) : base(scripter)
@@ -40,7 +42,7 @@ namespace G1ANT.Addon.MSOffice
             try
             {
                 var access = AccessManager.AddAccess();
-                access.Open(arguments.Path.Value, arguments.Password?.Value ?? "");
+                access.Open(arguments.Path.Value, arguments.Password.Value, arguments.OpenExclusive.Value, arguments.Show.Value);
 
                 Scripter.Variables.SetVariableValue(arguments.Result.Value, new IntegerStructure(access.Id));
             }

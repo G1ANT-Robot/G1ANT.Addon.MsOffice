@@ -12,19 +12,19 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Access
 {
-    [Command(Name = "access.test", Tooltip = "")]
-    public class AccessTestCommand : Command
+    [Command(Name = "access.show", Tooltip = "Show current Access application")]
+    public class AccessShowCommand : Command
     {
         public class Arguments : CommandArguments
         {
         }
 
-        public AccessTestCommand(AbstractScripter scripter) : base(scripter)
+        public AccessShowCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.Test();
+            AccessManager.CurrentAccess.Show();
         }
     }
 }

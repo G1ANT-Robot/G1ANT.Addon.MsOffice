@@ -27,30 +27,30 @@ namespace G1ANT.Addon.MSOffice
             //    throw new Exception("Can't determine path to msaccess.exe");
             //}
 
-
             var wrapper = new AccessWrapper();
             launchedAccesses.Add(wrapper);
             CurrentAccess = wrapper;
             return wrapper;
         }
 
-        internal static int GetFreeId()
+        public static int GetFreeId()
         {
             return launchedAccesses.Select(x => x.Id).DefaultIfEmpty(-1).Max() + 1;
         }
 
-        //internal static bool Switch(int id)
-        //{
-        //    var wrapper = launchedAccesses.Where(x => x.Id == id).FirstOrDefault();
-        //    CurrentAccess = wrapper ?? CurrentAccess;
-        //    CurrentAccess.Show();
-        //    return wrapper != null;
-        //}
+        public static bool Switch(int id)
+        {
+            var wrapper = launchedAccesses.Where(x => x.Id == id).FirstOrDefault();
+            CurrentAccess = wrapper ?? CurrentAccess;
+            CurrentAccess.Show();
+            return wrapper != null;
+        }
 
-        //public static void Remove(AccessWrapper AccessWrapper)
-        //{
-        //    launchedAccesses.Remove(AccessWrapper);
-        //}
+        public static void Remove(AccessWrapper accessWrapper)
+        {
+            launchedAccesses.Remove(accessWrapper);
+            CurrentAccess = launchedAccesses.FirstOrDefault();
+        }
 
         //private static string GetOfficeAppPath(string progId, string executableName)
         //{

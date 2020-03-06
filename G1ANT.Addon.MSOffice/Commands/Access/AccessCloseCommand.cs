@@ -9,22 +9,23 @@
 */
 
 using G1ANT.Language;
+using System;
 
 namespace G1ANT.Addon.MSOffice.Access
 {
-    [Command(Name = "access.test", Tooltip = "")]
-    public class AccessTestCommand : Command
+    [Command(Name = "access.close", Tooltip = "This command closes Access database leaving the Access instance open")]
+    public class AccessCloseCommand : Command
     {
         public class Arguments : CommandArguments
         {
         }
 
-        public AccessTestCommand(AbstractScripter scripter) : base(scripter)
+        public AccessCloseCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.Test();
+            AccessManager.CurrentAccess.CloseDatabase();
         }
     }
 }

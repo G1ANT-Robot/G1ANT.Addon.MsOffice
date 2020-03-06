@@ -108,7 +108,12 @@
     <Compile Include="Api\AccessWrapper.cs" />
     <Compile Include="Api\WordWrapper.cs" />
     <Compile Include="Commands\Access\AccessGetFormsCommand.cs" />
+    <Compile Include="Commands\Access\AccessHideCommand.cs" />
+    <Compile Include="Commands\Access\AccessCloseCommand.cs" />
+    <Compile Include="Commands\Access\AccessQuitCommand.cs" />
+    <Compile Include="Commands\Access\AccessShowCommand.cs" />
     <Compile Include="Commands\Access\AccessTestCommand.cs" />
+    <Compile Include="Commands\Access\AccessSwitchCommand.cs" />
     <Compile Include="Commands\ExcelActivateSheetCommand.cs" />
     <Compile Include="Commands\ExcelAddSheetCommand.cs" />
     <Compile Include="Commands\ExcelCloseCommand.cs" />

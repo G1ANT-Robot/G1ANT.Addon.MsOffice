@@ -7,24 +7,25 @@
 *    See License.txt file in the project root for full license information.
 *
 */
-
 using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Access
 {
-    [Command(Name = "access.test", Tooltip = "")]
-    public class AccessTestCommand : Command
+    [Command(Name = "access.quit", Tooltip = "This command quits Access instance")]
+    public class AccessQuitCommand : Command
     {
         public class Arguments : CommandArguments
         {
+            [Argument(Tooltip = "Set to false to discard any changes. True by default")]
+            public BooleanStructure SaveAllChanges { get; set; } = new BooleanStructure(true);
         }
 
-        public AccessTestCommand(AbstractScripter scripter) : base(scripter)
+        public AccessQuitCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.Test();
+            AccessManager.CurrentAccess.Quit(arguments.SaveAllChanges.Value);
         }
     }
 }
