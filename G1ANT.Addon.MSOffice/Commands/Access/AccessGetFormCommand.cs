@@ -12,7 +12,7 @@ using G1ANT.Language;
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace G1ANT.Addon.MSOffice
+namespace G1ANT.Addon.MSOffice.Access
 {
     [Command(Name = "access.getform", Tooltip = "Get detailed information about form defined in current project")]
     public class AccessGetFormCommand : Command

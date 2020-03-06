@@ -11,7 +11,7 @@
 using G1ANT.Language;
 using Newtonsoft.Json.Linq;
 
-namespace G1ANT.Addon.MSOffice
+namespace G1ANT.Addon.MSOffice.Access
 {
     [Command(Name = "access.getforms", Tooltip = "Get list of all forms in current project")]
     public class AccessGetFormsCommand : Command

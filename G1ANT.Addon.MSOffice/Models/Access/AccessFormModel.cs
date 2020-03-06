@@ -17,11 +17,19 @@ namespace G1ANT.Addon.MSOffice.Models.Access
     public class AccessFormModel
     {
         public string Name { get; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Value { get; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Caption { get; }
+
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public AccessFormModel Form { get; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string FormName { get; }
+
         public int Hwnd { get; }
         public int InsideWidth { get; }
         public short Width { get; }
@@ -31,19 +39,19 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public int InsideHeight { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public ICollection<AccessControlModel> Controls;
+        public ICollection<AccessControlModel> Controls { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public AccessPropertiesModel Properties { get; }
 
 
-        public AccessFormModel(Form form, bool getProperties)
+        public AccessFormModel(Form form, bool getFormProperties, bool getControls, bool getControlsProperties)
         {
             Name = form.Name;
             Value = form.accValue;
 
             Caption = form.Caption;
-            Form = form.Form != null && form.Form != form ? new AccessFormModel(form.Form, getProperties) : null;
+            Form = form.Form != null && form.Form != form ? new AccessFormModel(form.Form, getFormProperties, getControls, getControlsProperties) : null;
             FormName = form.FormName;
             Hwnd = form.Hwnd;
             InsideWidth = form.InsideWidth;
@@ -53,8 +61,8 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             X = form.WindowLeft;
             Y = form.WindowTop;
 
-            Properties = getProperties && form.Properties.Count == 0 ? null : new AccessPropertiesModel(form.Properties);
-            Controls = form.Controls.Count == 0 ? null : form.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getProperties)).ToList();
+            Properties = !getFormProperties || form.Properties.Count == 0 ? null : new AccessPropertiesModel(form.Properties);
+            Controls = !getControls || form.Controls.Count == 0 ? null : form.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getControlsProperties)).ToList();
         }
     }
 }
