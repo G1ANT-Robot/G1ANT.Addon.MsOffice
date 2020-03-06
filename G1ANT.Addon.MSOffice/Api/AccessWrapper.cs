@@ -11,7 +11,6 @@ using G1ANT.Addon.MSOffice.Models.Access;
 using Microsoft.Office.Interop.Access;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 
@@ -82,6 +81,62 @@ namespace G1ANT.Addon.MSOffice
         }
 
 
+        public AccessControlModel GetAccessControlByPath(string path)
+        {
+            var pathElements = path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var formName = pathElements[0];
+            var form = application.Forms[formName];
+
+            AccessControlModel controlFound = null;
+
+            ICollection<AccessControlModel> controls = form.Controls.OfType<Control>().Select(c => new AccessControlModel(c, true, false)).ToList();
+
+
+            foreach (var pathElement in pathElements.Skip(1))
+            {
+                controlFound = GetMatchingControl(controls, pathElement);
+                controlFound.LoadChildren();
+                controls = controlFound.Children;
+            }
+
+            return controlFound;
+        }
+
+
+        private AccessControlModel GetMatchingControl(ICollection<AccessControlModel> controls, string pathElement)
+        {
+            if (string.IsNullOrEmpty(pathElement))
+                throw new ArgumentNullException(nameof(pathElement));
+
+            var pathParts = pathElement.Split('=');
+            var propertyName = pathParts.Length > 1 ? pathParts[0] : "Name";
+            var propertyValue = pathParts.Last();
+            var childIndex = -1;
+
+            if (propertyValue.Contains("[") && propertyValue.Contains("]"))
+            {
+                var childIndexValue = propertyValue.Substring(propertyValue.IndexOf("["));
+                childIndexValue = childIndexValue.Substring(childIndexValue.IndexOf("]"));
+                childIndex = int.Parse(childIndexValue);
+            }
+
+            IEnumerable<AccessControlModel> controlsFound = controls;
+            if (pathParts.Contains("=") || childIndex < 0)
+                controlsFound = controlsFound.Where(c => c.Properties.Any(p => p.Key == propertyName && p.Value == propertyValue));
+
+            if (childIndex >= 0)
+                controlsFound = controlsFound.Skip(childIndex);
+
+            var controlFound = controlsFound.FirstOrDefault();
+
+            if (controlFound == null)
+                throw new Exception($"Element {pathElement} not found (index is {childIndex})");
+
+            return controlFound;
+        }
+
+
         public void CloseDatabase()
         {
             application.DoCmd.CloseDatabase();
@@ -93,30 +148,30 @@ namespace G1ANT.Addon.MSOffice
             AccessManager.Remove(this);
         }
 
+        public void Save(string objectType, string objectName)
+        {
+            var acObjectType = (AcObjectType)Enum.Parse(typeof(AcObjectType), objectType);
+            application.DoCmd.Save(acObjectType, objectName);
+        }
+
 
 
 
 
         public void Test()
         {
-            
+
 
             var afs = application.CurrentProject.Resources;
 
             var reports = application.CurrentProject.AllReports.Cast<AccessObject>().ToList();
 
-        //    Access.Forms forms = application.Forms;
-        //    var count = forms.Count;
-        //    Access.Form f = forms[0];
-        //    _Form3 f2 = forms[0];
+            //    Access.Forms forms = application.Forms;
+            //    var count = forms.Count;
+            //    Access.Form f = forms[0];
+            //    _Form3 f2 = forms[0];
         }
 
-        //public void Show()
-        //{
-        //    document.Activate();
-        //    document.Application.ShowMe();
-        //    Language.RobotWin32.BringWindowToFront((IntPtr)document.Application.ActiveWindow.Hwnd);
-        //}
 
         //public object RunMacro(string macroName, string args = null)
         //{

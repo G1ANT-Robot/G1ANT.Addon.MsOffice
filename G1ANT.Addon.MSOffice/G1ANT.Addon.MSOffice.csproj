@@ -98,6 +98,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Access\AccessFindFormControlCommand.cs" />
+    <Compile Include="Commands\Access\AccessSaveCommand.cs" />
     <Compile Include="Commands\Access\AccessGetFormCommand.cs" />
     <Compile Include="Api\ExcelManager.cs" />
     <Compile Include="Api\ExcelWrapper.cs" />

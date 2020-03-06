@@ -25,6 +25,9 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public dynamic Value { get; }
 
+        [JsonIgnore]
+        public Control Control { get; }
+
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public ICollection<AccessControlModel> Children;
 
@@ -32,9 +35,10 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public AccessPropertiesModel Properties;
 
 
-        public AccessControlModel(Control control, bool getProperties = true)
+        public AccessControlModel(Control control, bool getProperties = true, bool getChildren = true)
         {
             Name = control.Name;
+            Control = control;
 
             if (getProperties && control.Properties.Count > 0)
             {
@@ -44,11 +48,17 @@ namespace G1ANT.Addon.MSOffice.Models.Access
                 Properties = new AccessPropertiesModel(control.Properties);
             }
 
+            if (getChildren)
+                LoadChildren(getProperties);
+        }
+
+
+        public void LoadChildren(bool getProperties = true)
+        {
             try
             {
-                Children = control.Controls.Count == 0 
-                    ? null 
-                    : control.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getProperties)).ToList();
+                if (Control.Controls.Count > 0)
+                    Control.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getProperties)).ToList();
             }
             catch { }
         }
