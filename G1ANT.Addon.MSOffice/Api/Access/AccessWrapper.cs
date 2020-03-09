@@ -7,6 +7,7 @@
 *    See License.txt file in the project root for full license information.
 *
 */
+using G1ANT.Addon.MSOffice.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
 using Microsoft.Office.Interop.Access;
 using System;
@@ -20,10 +21,12 @@ namespace G1ANT.Addon.MSOffice
     {
         private string path;
         private Application application = null;
+        private readonly IAccessFormControlsTreeWalker accessFormControlsTreeWalker;
 
-        internal AccessWrapper()
+        internal AccessWrapper(IAccessFormControlsTreeWalker accessFormControlsTreeWalker)
         {
             Id = AccessManager.GetFreeId();
+            this.accessFormControlsTreeWalker = accessFormControlsTreeWalker;
         }
 
         public int Id { get; private set; }
@@ -48,6 +51,17 @@ namespace G1ANT.Addon.MSOffice
         {
             application.Visible = true;
         }
+
+        public AccessControlModel GetAccessControlByPath(string path)
+        {
+            return accessFormControlsTreeWalker.GetAccessControlByPath(application, path);
+        }
+
+        //public int GetSelected(string path)
+        //{
+        //    var control = accessFormControlsTreeWalker.GetAccessControlByPath(application, path);
+        //    return control.Selected;
+        //}
 
         public void Hide()
         {
@@ -81,66 +95,6 @@ namespace G1ANT.Addon.MSOffice
         }
 
 
-        public AccessControlModel GetAccessControlByPath(string path)
-        {
-            var pathElements = path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-
-            var formName = pathElements[0];
-            var form = application.Forms[formName];
-
-            Control controlFound = null;
-
-            var controls = form.Controls.OfType<Control>()/*.Select(c => new AccessControlModel(c, true, false))*/.ToList();
-
-            pathElements = pathElements.Skip(1).ToArray();
-
-            for (var i = 0; i < pathElements.Length; i++)
-            {
-                controlFound = GetMatchingControl(controls, pathElements[i]);
-
-                if (i == pathElements.Length - 1)
-                    break; // don't load children of last element of path
-                controls = controlFound.Controls.OfType<Control>().ToList();
-            }
-
-            return new AccessControlModel(controlFound, true, false);
-        }
-
-
-        private Control GetMatchingControl(ICollection<Control> controls, string pathElement)
-        {
-            if (string.IsNullOrEmpty(pathElement))
-                throw new ArgumentNullException(nameof(pathElement));
-
-            var pathParts = pathElement.Split('=');
-            var propertyName = pathParts.Length > 1 ? pathParts[0] : "Name";
-            var propertyValue = pathParts.Last();
-            var childIndex = -1;
-
-            if (propertyValue.Contains("[") && propertyValue.Contains("]"))
-            {
-                var childIndexValue = propertyValue.Substring(propertyValue.IndexOf("[") + 1);
-                childIndexValue = childIndexValue.Substring(0, childIndexValue.IndexOf("]"));
-                childIndex = int.Parse(childIndexValue);
-                propertyValue = propertyValue.Substring(0, propertyValue.IndexOf("["));
-            }
-
-            IEnumerable<Control> controlsFound = controls;
-            if (pathParts.Contains("=") || childIndex < 0)
-                controlsFound = controlsFound.Where(c => c.Properties[propertyName]?.Value?.ToString() == propertyValue);
-
-            if (childIndex >= 0)
-                controlsFound = controlsFound.Skip(childIndex);
-
-            var controlFound = controlsFound.FirstOrDefault();
-
-            if (controlFound == null)
-                throw new Exception($"Element {pathElement} not found (index is {childIndex})");
-
-            return controlFound;
-        }
-
-
         public void CloseDatabase()
         {
             application.DoCmd.CloseDatabase();
@@ -158,13 +112,49 @@ namespace G1ANT.Addon.MSOffice
             application.DoCmd.Save(acObjectType, objectName);
         }
 
+        public void RunMacro(string macroName)
+        {
+            application.DoCmd.RunMacro(macroName, 1, true);
+            //var me = application.MacroError;
+        }
 
+
+        //public void RunCommand(string command)
+        //{
+        //    application.RunCommand(AcCommand. command)
+        //}
+
+        public dynamic Run(string procedure)
+        {
+            var result = application.Run(procedure);
+
+            return result;
+        }
+
+        public IReadOnlyCollection<AccessMacroModel> GetMacros()
+        {
+            var macros = application.CurrentProject.AllMacros;
+            var result = new List<AccessMacroModel>();
+
+            foreach (var macro in macros)
+            {
+                var model = new AccessMacroModel(macro);
+                result.Add(model);
+            }
+
+            return result;
+        }
 
 
 
         public void Test()
         {
+            //var control = accessFormControlsTreeWalker.GetAccessControlByPath(application, "/Start/TabCtl52/Caption=Configuration login/");
+            var control = accessFormControlsTreeWalker.GetAccessControlByPath(application, "/Start/TabCtl55/Production/Command147/");
 
+            
+
+            //var c = control.Control;
 
             var afs = application.CurrentProject.Resources;
 

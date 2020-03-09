@@ -98,18 +98,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\Access\AccessFindFormControlCommand.cs" />
+    <Compile Include="Api\Access\AccessFormControlsTreeWalker.cs" />
+    <Compile Include="Commands\Access\Controls\AccessGetControlParent.cs" />
+    <Compile Include="Commands\Access\Controls\AccessGetItemsCommand.cs" />
+    <Compile Include="Commands\Access\Controls\AccessGetSelectedIndexCommand.cs" />
+    <Compile Include="Commands\Access\Controls\AccessGetItemsSelectedCommand.cs" />
+    <Compile Include="Commands\Access\Macros\AccessGetMacrosCommand.cs" />
+    <Compile Include="Commands\Access\Macros\AccessRunCommand.cs" />
+    <Compile Include="Commands\Access\Macros\AccessRunMacroCommand.cs" />
+    <Compile Include="Commands\Access\Controls\AccessSetFocusCommand.cs" />
+    <Compile Include="Commands\Access\Controls\AccessFindControlCommand.cs" />
     <Compile Include="Commands\Access\AccessSaveCommand.cs" />
-    <Compile Include="Commands\Access\AccessGetFormCommand.cs" />
+    <Compile Include="Commands\Access\Forms\AccessGetFormCommand.cs" />
     <Compile Include="Api\ExcelManager.cs" />
     <Compile Include="Api\ExcelWrapper.cs" />
     <Compile Include="Api\OutlookManager.cs" />
     <Compile Include="Api\OutlookWrapper.cs" />
-    <Compile Include="Api\AccessManager.cs" />
+    <Compile Include="Api\Access\AccessManager.cs" />
     <Compile Include="Api\WordManager.cs" />
-    <Compile Include="Api\AccessWrapper.cs" />
+    <Compile Include="Api\Access\AccessWrapper.cs" />
     <Compile Include="Api\WordWrapper.cs" />
-    <Compile Include="Commands\Access\AccessGetFormsCommand.cs" />
+    <Compile Include="Commands\Access\Forms\AccessGetFormsCommand.cs" />
     <Compile Include="Commands\Access\AccessHideCommand.cs" />
     <Compile Include="Commands\Access\AccessCloseCommand.cs" />
     <Compile Include="Commands\Access\AccessQuitCommand.cs" />
@@ -142,6 +151,7 @@
     <Compile Include="Commands\ExcelSetValueCommand.cs" />
     <Compile Include="Commands\ExcelSwitchCommand.cs" />
     <Compile Include="Helpers\ExcelHelper.cs" />
+    <Compile Include="Models\Access\AccessMacroModel.cs" />
     <Compile Include="Models\Access\AccessControlModel.cs" />
     <Compile Include="Models\Access\AccessFormModel.cs" />
     <Compile Include="Models\Access\AccessObjectDetailedModel.cs" />

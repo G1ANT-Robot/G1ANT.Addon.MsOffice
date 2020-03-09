@@ -10,12 +10,11 @@
 
 using G1ANT.Language;
 using Newtonsoft.Json.Linq;
-using System;
 
 namespace G1ANT.Addon.MSOffice.Access
 {
-    [Command(Name = "access.findformcontrol", Tooltip = "Get detailed information about control by path")]
-    public class AccessFindFormControlCommand : Command
+    [Command(Name = "access.getcontrolparent", Tooltip = "Get detailed information about control by path")]
+    public class AccessGetControlParentCommand : Command
     {
         public class Arguments : CommandArguments
         {
@@ -26,12 +25,12 @@ namespace G1ANT.Addon.MSOffice.Access
             public VariableStructure Result { get; set; } = new VariableStructure("result");
         }
 
-        public AccessFindFormControlCommand(AbstractScripter scripter) : base(scripter)
+        public AccessGetControlParentCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            var result = AccessManager.CurrentAccess.GetAccessControlByPath(arguments.Path.Value);
+            var result = AccessManager.CurrentAccess.GetAccessControlByPath(arguments.Path.Value).GetParent();
 
             Scripter.Variables.SetVariableValue(arguments.Result.Value, new JsonStructure(JObject.FromObject(result)));
         }

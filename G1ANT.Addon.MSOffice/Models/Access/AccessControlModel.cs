@@ -34,11 +34,49 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public AccessPropertiesModel Properties;
 
+        public void SetFocus() => Control.SetFocus();
 
-        public AccessControlModel(Control control, bool getProperties = true, bool getChildren = true)
+        public AccessControlModel GetParent() => new AccessControlModel(Control.Parent);
+
+        public IDictionary<int, string> GetItemsSelected()
         {
+            var result = new Dictionary<int, string>();
+
+            for (var i = 0; i < Control.ItemsSelected.Count; ++i)
+            {
+                var item = Control.ItemsSelected[i];
+                result[i] = item.ToString();
+            }
+
+            return result;
+        }
+
+        public IDictionary<int, string> GetItems()
+        {
+            var result = new Dictionary<int, string>();
+
+            //Control.ListCount
+            var i = 0;
+            while (true)
+            {
+                var item = Control.ItemData[i]?.ToString();
+                if (item == "{}" || string.IsNullOrEmpty(item))
+                    break;
+                result[i] = item.ToString();
+                ++i;
+            }
+
+            return result;
+        }
+
+        public bool IsItemSelected(int index) => Control.Selected[index] != 0;
+        public void SetItemSelected(int index, bool selected) => Control.Selected[index] = selected ? 1 : 0;
+        //public void GetItems() => Control.ItemData.
+
+        public AccessControlModel(Control control, bool getProperties = true, bool getChildrenRecursively = true)
+        {
+            Control = control ?? throw new ArgumentNullException(nameof(control));
             Name = control.Name;
-            Control = control;
 
             if (getProperties && control.Properties.Count > 0)
             {
@@ -48,7 +86,16 @@ namespace G1ANT.Addon.MSOffice.Models.Access
                 Properties = new AccessPropertiesModel(control.Properties);
             }
 
-            if (getChildren)
+
+            //try
+            //{
+            //    control.Dropdown();
+            //    var si = control.ItemsSelected;
+            //    var id = control.ItemData[0];
+            //}
+            //catch { }
+
+            if (getChildrenRecursively)
                 LoadChildren(getProperties);
         }
 
@@ -58,7 +105,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             try
             {
                 if (Control.Controls.Count > 0)
-                    Control.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getProperties)).ToList();
+                    Control.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getProperties, true)).ToList();
             }
             catch { }
         }

@@ -7,8 +7,7 @@
 *    See License.txt file in the project root for full license information.
 *
 */
-using Microsoft.Win32;
-using System;
+using G1ANT.Addon.MSOffice.Access;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,7 +26,7 @@ namespace G1ANT.Addon.MSOffice
             //    throw new Exception("Can't determine path to msaccess.exe");
             //}
 
-            var wrapper = new AccessWrapper();
+            var wrapper = new AccessWrapper(new AccessFormControlsTreeWalker());
             launchedAccesses.Add(wrapper);
             CurrentAccess = wrapper;
             return wrapper;
