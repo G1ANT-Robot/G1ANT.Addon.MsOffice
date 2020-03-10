@@ -19,8 +19,8 @@ namespace G1ANT.Addon.MSOffice.Models.Access
     {
         public ItemDataCollectionModel(AccessControlModel control)
         {
-            var isHeaderVisible = AccessControlPropertyHelper.TryGetPropertyValue<bool>(control.Control, "ColumnHeads");
-            var hasItemCount = AccessControlPropertyHelper.TryGetPropertyValue(control.Control, "ListCount", out int itemCount);
+            var isHeaderVisible = control.Control.TryGetPropertyValue<bool>("ColumnHeads");
+            var hasItemCount = control.Control.TryGetPropertyValue("ListCount", out int itemCount);
 
             if (hasItemCount)
                 LoadData(control, isHeaderVisible, itemCount);

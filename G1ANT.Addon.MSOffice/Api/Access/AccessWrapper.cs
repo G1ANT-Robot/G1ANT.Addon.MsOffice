@@ -151,6 +151,7 @@ namespace G1ANT.Addon.MSOffice
 
 
 
+
         public void Test()
         {
             //var control = accessFormControlsTreeWalker.GetAccessControlByPath(application, "/Start/TabCtl52/Caption=Configuration login/");
@@ -164,10 +165,6 @@ namespace G1ANT.Addon.MSOffice
 
             var reports = application.CurrentProject.AllReports.Cast<AccessObject>().ToList();
 
-            //    Access.Forms forms = application.Forms;
-            //    var count = forms.Count;
-            //    Access.Form f = forms[0];
-            //    _Form3 f2 = forms[0];
         }
 
 

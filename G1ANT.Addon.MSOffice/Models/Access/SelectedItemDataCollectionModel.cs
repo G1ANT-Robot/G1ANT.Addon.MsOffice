@@ -18,11 +18,11 @@ namespace G1ANT.Addon.MSOffice.Models.Access
     {
         public SelectedItemDataCollectionModel(AccessControlModel control)
         {
-            var isHeaderVisible = AccessControlPropertyHelper.TryGetPropertyValue<bool>(control.Control, "ColumnHeads");
+            var isHeaderVisible = control.Control.TryGetPropertyValue<bool>("ColumnHeads");
 
             AddRange(
                 Enumerable
-                    .Range(isHeaderVisible ? 1 : 0, control.Control.ItemsSelected.Count)
+                    .Range(0, control.Control.ItemsSelected.Count)
                     .Select(i =>
                     {
                         var itemIndex = control.Control.ItemsSelected[i];

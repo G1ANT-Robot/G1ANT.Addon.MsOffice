@@ -19,7 +19,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
     public class AccessControlModel
     {
         public string Name { get; }
-
+        public string Type { get; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public dynamic Caption { get; }
 
@@ -50,12 +50,13 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         {
             Control = control ?? throw new ArgumentNullException(nameof(control));
             Name = control.Name;
+            Type = ((AcControlType)control.TryGetPropertyValue<int>("ControlType")).ToString();
 
             if (getProperties && control.Properties.Count > 0)
             {
                 var properties = control.Properties.OfType<dynamic>().ToList();
-                Caption = properties.FirstOrDefault(p => p.Name == "Caption")?.Value?.ToString();
-                Value = properties.FirstOrDefault(p => p.Name == "Value")?.Value?.ToString();
+                Caption = control.TryGetPropertyValue<string>("Caption");
+                Value = control.TryGetPropertyValue<string>("Value");
                 Properties = new AccessPropertiesModel(control.Properties);
             }
 
