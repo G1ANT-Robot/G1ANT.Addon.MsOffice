@@ -11,7 +11,7 @@
 using G1ANT.Language;
 using Newtonsoft.Json.Linq;
 
-namespace G1ANT.Addon.MSOffice.Access.Forms
+namespace G1ANT.Addon.MSOffice.Commands.Access.Forms
 {
     [Command(Name = "access.forms.active.get", Tooltip = "Get detailed information about active form of Access application")]
     public class AccessGetActiveFormCommand : Command

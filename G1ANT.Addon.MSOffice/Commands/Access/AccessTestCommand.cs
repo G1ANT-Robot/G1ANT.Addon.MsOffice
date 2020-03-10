@@ -10,7 +10,7 @@
 
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access
 {
     [Command(Name = "access.test", Tooltip = "")]
     public class AccessTestCommand : Command

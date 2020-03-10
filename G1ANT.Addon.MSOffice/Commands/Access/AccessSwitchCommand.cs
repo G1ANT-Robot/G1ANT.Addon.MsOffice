@@ -9,7 +9,7 @@
 */
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access
 {
     [Command(Name = "access.switch",Tooltip = "This command switches between Access instances open with `access.open` command", NeedsDelay = true)]
     public class AccessSwitchCommand : Command

@@ -11,7 +11,7 @@
 using G1ANT.Language;
 using Newtonsoft.Json.Linq;
 
-namespace G1ANT.Addon.MSOffice.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
 {
     [Command(Name = "access.controls.find", Tooltip = "Get detailed information about control by path")]
     public class AccessFindControlCommand : Command

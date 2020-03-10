@@ -11,7 +11,7 @@
 using G1ANT.Language;
 using System;
 
-namespace G1ANT.Addon.MSOffice.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access
 {
     [Command(Name = "access.open", Tooltip = "This command opens a new Access instance")]
     public class AccessOpenCommand : Command

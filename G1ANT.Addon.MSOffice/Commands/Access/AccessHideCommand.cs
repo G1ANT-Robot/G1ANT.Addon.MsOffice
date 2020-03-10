@@ -7,9 +7,10 @@
 *    See License.txt file in the project root for full license information.
 *
 */
+
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access
 {
     [Command(Name = "access.hide", Tooltip = "Hide current Access application")]
     public class AccessHideCommand : Command

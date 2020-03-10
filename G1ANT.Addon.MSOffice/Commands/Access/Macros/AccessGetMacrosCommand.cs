@@ -11,7 +11,7 @@
 using G1ANT.Language;
 using Newtonsoft.Json.Linq;
 
-namespace G1ANT.Addon.MSOffice.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access.Macros
 {
     [Command(Name = "access.macros.getlist", Tooltip = "Get list of all macros defined in the current project")]
     public class AccessGetMacrosCommand : Command

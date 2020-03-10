@@ -9,7 +9,7 @@
 */
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
 {
     [Command(Name = "access.controls.focus.set", Tooltip = "Set focus on control selected by path")]
     public class AccessSetFocusCommand : Command

@@ -10,7 +10,7 @@
 
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access.Macros
 {
     [Command(Name = "access.macros.run", Tooltip = "This command runs an existing Access macro")]
     public class AccessRunMacroCommand : Command

@@ -108,6 +108,7 @@
     <Compile Include="Commands\Access\Controls\Items\AccessDeselectItemCommand.cs" />
     <Compile Include="Commands\Access\Controls\Items\AccessSelectItemCommand.cs" />
     <Compile Include="Commands\Access\Controls\Items\AccessSetSelectedItemCommand.cs" />
+    <Compile Include="Commands\Access\Forms\AccessGetActiveFormCommand.cs" />
     <Compile Include="Commands\Access\Macros\AccessGetMacrosCommand.cs" />
     <Compile Include="Commands\Access\Macros\AccessRunCommand.cs" />
     <Compile Include="Commands\Access\Macros\AccessRunMacroCommand.cs" />

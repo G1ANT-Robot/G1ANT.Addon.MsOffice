@@ -9,9 +9,8 @@
 */
 
 using G1ANT.Language;
-using System;
 
-namespace G1ANT.Addon.MSOffice.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access
 {
     [Command(Name = "access.close", Tooltip = "This command closes Access database leaving the Access instance open")]
     public class AccessCloseCommand : Command

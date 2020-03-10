@@ -10,7 +10,7 @@
 using G1ANT.Language;
 using Newtonsoft.Json.Linq;
 
-namespace G1ANT.Addon.MSOffice.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access.Controls.Items
 {
     [Command(Name = "access.controls.items.getlist", Tooltip = "Get items (indexes and values) of Access control")]
     public class AccessGetItemsCommand : Command

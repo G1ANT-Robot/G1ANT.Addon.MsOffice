@@ -9,7 +9,7 @@
 */
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access
 {
     [Command(Name = "access.save", Tooltip = "This command save changes in Access objects")]
     public class AccessSaveCommand : Command

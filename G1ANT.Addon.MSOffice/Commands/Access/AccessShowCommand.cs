@@ -10,7 +10,7 @@
 
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access
 {
     [Command(Name = "access.show", Tooltip = "Show current Access application")]
     public class AccessShowCommand : Command

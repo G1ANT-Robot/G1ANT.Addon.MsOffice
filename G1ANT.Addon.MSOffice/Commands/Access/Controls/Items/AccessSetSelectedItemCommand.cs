@@ -10,7 +10,7 @@
 
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access.Controls.Items
 {
     [Command(Name = "access.controls.items.selected.setbyindex", Tooltip = "Set if item of Access control selected by path is selected")]
     public class AccessSetSelectedItemCommand : Command
