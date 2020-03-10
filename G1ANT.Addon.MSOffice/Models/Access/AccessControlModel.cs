@@ -27,7 +27,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public dynamic Value { get; }
 
         [JsonIgnore]
-        public Control Control { get; }
+        public _Control Control { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public ICollection<AccessControlModel> Children;
@@ -46,7 +46,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public void SetItemSelected(int index, bool selected) => Control.Selected[index] = selected ? 1 : 0;
 
 
-        public AccessControlModel(Control control, bool getProperties = true, bool getChildrenRecursively = true)
+        public AccessControlModel(_Control control, bool getProperties = true, bool getChildrenRecursively = true)
         {
             Control = control ?? throw new ArgumentNullException(nameof(control));
             Name = control.Name;

@@ -11,10 +11,10 @@
 using G1ANT.Language;
 using Newtonsoft.Json.Linq;
 
-namespace G1ANT.Addon.MSOffice.Access
+namespace G1ANT.Addon.MSOffice.Access.Forms
 {
-    [Command(Name = "access.forms.getlist", Tooltip = "Get list of all forms in current project")]
-    public class AccessGetFormsCommand : Command
+    [Command(Name = "access.forms.active.get", Tooltip = "Get detailed information about active form of Access application")]
+    public class AccessGetActiveFormCommand : Command
     {
         public class Arguments : CommandArguments
         {
@@ -22,15 +22,13 @@ namespace G1ANT.Addon.MSOffice.Access
             public VariableStructure Result { get; set; } = new VariableStructure("result");
         }
 
-        public AccessGetFormsCommand(AbstractScripter scripter) : base(scripter)
+        public AccessGetActiveFormCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            var currentAccess = AccessManager.CurrentAccess;
-            var result = currentAccess.GetAllForms();
-
-            Scripter.Variables.SetVariableValue(arguments.Result.Value, new JsonStructure(JArray.FromObject(result)));
+            var result = AccessManager.CurrentAccess.GetActiveForm();
+            Scripter.Variables.SetVariableValue(arguments.Result.Value, new JsonStructure(JObject.FromObject(result)));
         }
     }
 }

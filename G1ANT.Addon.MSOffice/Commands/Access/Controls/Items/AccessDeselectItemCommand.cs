@@ -11,12 +11,12 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Access
 {
-    [Command(Name = "access.deselecteditem", Tooltip = "Mark item of Access control selected by path as selected")]
+    [Command(Name = "access.controls.items.selected.clear", Tooltip = "Mark item of Access control selected by path as selected")]
     public class AccessDeselectItemCommand : Command
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Required = true, Tooltip = "Path to the control. See `access.findcontrol` tooltip for path examples")]
+            [Argument(Required = true, Tooltip = "Path to the control. See `access.control.find` tooltip for path examples")]
             public TextStructure Path { get; set; }
 
             [Argument(Required = true, Tooltip = "Index of item starting from 0")]

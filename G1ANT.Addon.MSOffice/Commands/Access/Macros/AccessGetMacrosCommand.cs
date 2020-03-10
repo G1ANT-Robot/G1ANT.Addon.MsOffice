@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 
 namespace G1ANT.Addon.MSOffice.Access
 {
-    [Command(Name = "access.getmacros", Tooltip = "This command runs an existing Access macro")]
+    [Command(Name = "access.macros.getlist", Tooltip = "Get list of all macros defined in the current project")]
     public class AccessGetMacrosCommand : Command
     {
         public class Arguments : CommandArguments

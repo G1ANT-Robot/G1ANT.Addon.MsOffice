@@ -7,16 +7,17 @@
 *    See License.txt file in the project root for full license information.
 *
 */
+
 using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Access
 {
-    [Command(Name = "access.setselecteditem", Tooltip = "Set if item of Access control selected by path is selected")]
+    [Command(Name = "access.controls.items.selected.setbyindex", Tooltip = "Set if item of Access control selected by path is selected")]
     public class AccessSetSelectedItemCommand : Command
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Required = true, Tooltip = "Path to the control. See `access.findcontrol` tooltip for path examples")]
+            [Argument(Required = true, Tooltip = "Path to the control. See `access.control.find` tooltip for path examples")]
             public TextStructure Path { get; set; }
 
             [Argument(Required = true, Tooltip = "Index of item starting from 0")]

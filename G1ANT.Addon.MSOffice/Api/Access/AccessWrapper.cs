@@ -57,11 +57,15 @@ namespace G1ANT.Addon.MSOffice
             return accessFormControlsTreeWalker.GetAccessControlByPath(application, path);
         }
 
-        //public int GetSelected(string path)
-        //{
-        //    var control = accessFormControlsTreeWalker.GetAccessControlByPath(application, path);
-        //    return control.Selected;
-        //}
+        public AccessControlModel GetActiveControl(bool getProperties = true, bool getChildrenRecursively = true)
+        {
+            return new AccessControlModel(application.Screen.ActiveControl, getProperties, getChildrenRecursively);
+        }
+
+        public AccessFormModel GetActiveForm()
+        {
+            return new AccessFormModel(application.Screen.ActiveForm, true, true, false);
+        }
 
         public void Hide()
         {

@@ -12,7 +12,7 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Access
 {
-    [Command(Name = "access.run", Tooltip = "This command runs an existing Access procedure (sub) or function")]
+    [Command(Name = "access.procedures.run", Tooltip = "This command runs an existing Access procedure (sub) or function")]
     public class AccessRunCommand : Command
     {
         public class Arguments : CommandArguments
