@@ -98,11 +98,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\Access\AccessControlPropertyHelper.cs" />
     <Compile Include="Api\Access\AccessFormControlsTreeWalker.cs" />
-    <Compile Include="Commands\Access\Controls\AccessGetControlParent.cs" />
-    <Compile Include="Commands\Access\Controls\AccessGetItemsCommand.cs" />
-    <Compile Include="Commands\Access\Controls\AccessGetSelectedIndexCommand.cs" />
-    <Compile Include="Commands\Access\Controls\AccessGetItemsSelectedCommand.cs" />
+    <Compile Include="Commands\Access\Controls\AccessGetControlParentCommand.cs" />
+    <Compile Include="Commands\Access\Controls\Items\AccessGetItemsCommand.cs" />
+    <Compile Include="Commands\Access\Controls\Items\AccessGetItemsSelectedCommand.cs" />
+    <Compile Include="Commands\Access\Controls\Items\AccessDeselectItemCommand.cs" />
+    <Compile Include="Commands\Access\Controls\Items\AccessSelectItemCommand.cs" />
+    <Compile Include="Commands\Access\Controls\Items\AccessSetSelectedItemCommand.cs" />
     <Compile Include="Commands\Access\Macros\AccessGetMacrosCommand.cs" />
     <Compile Include="Commands\Access\Macros\AccessRunCommand.cs" />
     <Compile Include="Commands\Access\Macros\AccessRunMacroCommand.cs" />
@@ -151,6 +154,7 @@
     <Compile Include="Commands\ExcelSetValueCommand.cs" />
     <Compile Include="Commands\ExcelSwitchCommand.cs" />
     <Compile Include="Helpers\ExcelHelper.cs" />
+    <Compile Include="Models\Access\ItemDataModel.cs" />
     <Compile Include="Models\Access\AccessMacroModel.cs" />
     <Compile Include="Models\Access\AccessControlModel.cs" />
     <Compile Include="Models\Access\AccessFormModel.cs" />
@@ -158,6 +162,8 @@
     <Compile Include="Models\Access\AccessObjectModel.cs" />
     <Compile Include="Models\Access\AccessObjectPropertyModel.cs" />
     <Compile Include="Models\Access\AccessPropertiesModel.cs" />
+    <Compile Include="Models\Access\ItemDataCollectionModel.cs" />
+    <Compile Include="Models\Access\SelectedItemDataCollectionModel.cs" />
     <Compile Include="Structures\OutlookAttachmentStructure.cs" />
     <Compile Include="Commands\OutlookCloseCommand.cs" />
     <Compile Include="Commands\OutlookFindMailsCommand.cs" />

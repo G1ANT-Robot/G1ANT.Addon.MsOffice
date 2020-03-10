@@ -7,6 +7,7 @@
 *    See License.txt file in the project root for full license information.
 *
 */
+using G1ANT.Addon.MSOffice.Api.Access;
 using Microsoft.Office.Interop.Access;
 using Newtonsoft.Json;
 using System;
@@ -34,44 +35,16 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public AccessPropertiesModel Properties;
 
+
         public void SetFocus() => Control.SetFocus();
 
         public AccessControlModel GetParent() => new AccessControlModel(Control.Parent);
 
-        public IDictionary<int, string> GetItemsSelected()
-        {
-            var result = new Dictionary<int, string>();
-
-            for (var i = 0; i < Control.ItemsSelected.Count; ++i)
-            {
-                var item = Control.ItemsSelected[i];
-                result[i] = item.ToString();
-            }
-
-            return result;
-        }
-
-        public IDictionary<int, string> GetItems()
-        {
-            var result = new Dictionary<int, string>();
-
-            //Control.ListCount
-            var i = 0;
-            while (true)
-            {
-                var item = Control.ItemData[i]?.ToString();
-                if (item == "{}" || string.IsNullOrEmpty(item))
-                    break;
-                result[i] = item.ToString();
-                ++i;
-            }
-
-            return result;
-        }
-
+        public List<ItemDataModel> GetItemsSelected() => new SelectedItemDataCollectionModel(this);
+        public ItemDataCollectionModel GetItems() => new ItemDataCollectionModel(this);
         public bool IsItemSelected(int index) => Control.Selected[index] != 0;
         public void SetItemSelected(int index, bool selected) => Control.Selected[index] = selected ? 1 : 0;
-        //public void GetItems() => Control.ItemData.
+
 
         public AccessControlModel(Control control, bool getProperties = true, bool getChildrenRecursively = true)
         {
@@ -85,15 +58,6 @@ namespace G1ANT.Addon.MSOffice.Models.Access
                 Value = properties.FirstOrDefault(p => p.Name == "Value")?.Value?.ToString();
                 Properties = new AccessPropertiesModel(control.Properties);
             }
-
-
-            //try
-            //{
-            //    control.Dropdown();
-            //    var si = control.ItemsSelected;
-            //    var id = control.ItemData[0];
-            //}
-            //catch { }
 
             if (getChildrenRecursively)
                 LoadChildren(getProperties);

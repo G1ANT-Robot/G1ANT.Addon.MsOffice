@@ -12,8 +12,8 @@ using Newtonsoft.Json.Linq;
 
 namespace G1ANT.Addon.MSOffice.Access
 {
-    [Command(Name = "access.getitems", Tooltip = "Get items indexes and values")]
-    public class AccessGetItemsCommand : Command
+    [Command(Name = "access.getitemsselected", Tooltip = "Get selected items indexes and values")]
+    public class AccessGetItemsSelectedCommand : Command
     {
         public class Arguments : CommandArguments
         {
@@ -24,15 +24,15 @@ namespace G1ANT.Addon.MSOffice.Access
             public VariableStructure Result { get; set; } = new VariableStructure("result");
         }
 
-        public AccessGetItemsCommand(AbstractScripter scripter) : base(scripter)
+        public AccessGetItemsSelectedCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
             var control = AccessManager.CurrentAccess.GetAccessControlByPath(arguments.Path.Value);
-            var result = control.GetItems();
+            var result = control.GetItemsSelected();
 
-            Scripter.Variables.SetVariableValue(arguments.Result.Value, new JsonStructure(JObject.FromObject(result)));
+            Scripter.Variables.SetVariableValue(arguments.Result.Value, new JsonStructure(JArray.FromObject(result)));
         }
     }
 }
