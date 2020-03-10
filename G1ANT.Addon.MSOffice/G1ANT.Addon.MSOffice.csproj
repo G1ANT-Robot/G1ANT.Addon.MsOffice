@@ -103,6 +103,7 @@
     <Compile Include="Api\Access\IAccessFormControlsTreeWalker.cs" />
     <Compile Include="Commands\Access\Controls\AccessGetActiveControlCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessGetControlParentCommand.cs" />
+    <Compile Include="Commands\Access\Controls\AccessControlClickCommand.cs" />
     <Compile Include="Commands\Access\Controls\Items\AccessGetItemsCommand.cs" />
     <Compile Include="Commands\Access\Controls\Items\AccessGetItemsSelectedCommand.cs" />
     <Compile Include="Commands\Access\Controls\Items\AccessDeselectItemCommand.cs" />

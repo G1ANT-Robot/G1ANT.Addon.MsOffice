@@ -8,12 +8,15 @@
 *
 */
 using G1ANT.Addon.MSOffice.Access;
+using G1ANT.Addon.MSOffice.Api.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
+using G1ANT.Language;
 using Microsoft.Office.Interop.Access;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-
+using System.Runtime.InteropServices;
 
 namespace G1ANT.Addon.MSOffice
 {
@@ -150,6 +153,73 @@ namespace G1ANT.Addon.MSOffice
         }
 
 
+        ///// <summary>
+        ///// Converts an integer value in twips to the corresponding integer value in pixels on the x-axis.
+        ///// </summary>
+        ///// <param name="source">The Graphics context to use</param>
+        ///// <param name="inTwips">The number of twips to be converted</param>
+        ///// <returns>The number of pixels in that many twips</returns>
+        //public static int ConvertTwipsToXPixels(Graphics source, int twips)
+        //{
+        //    return (int)(twips * source.DpiX / 1440.0);
+        //}
+
+        ///// <summary>
+        ///// Converts an integer value in twips to the corresponding integer value in pixels on the y-axis.
+        ///// </summary>
+        ///// <param name="source">The Graphics context to use</param>
+        ///// <param name="inTwips">The number of twips to be converted</param>
+        ///// <returns>The number of pixels in that many twips</returns>
+        //public static int ConvertTwipsToYPixels(Graphics source, int twips)
+        //{
+        //    return (int)(twips * source.DpiY / 1440.0);
+        //}
+
+        public static int ConvertTwipsToPixels(int twips, MeasureDirection direction)
+        {
+            return (int)(twips * GetPPI(direction) / 1440.0);
+        }
+
+        public enum MeasureDirection
+        {
+            Horizontal,
+            Vertical
+        }
+
+        public static int GetPPI(MeasureDirection direction)
+        {
+            int ppi;
+            IntPtr dc = GetDC(IntPtr.Zero);
+
+            if (direction == MeasureDirection.Horizontal)
+                ppi = GetDeviceCaps(dc, 88); //DEVICECAP LOGPIXELSX
+            else
+                ppi = GetDeviceCaps(dc, 90); //DEVICECAP LOGPIXELSY
+
+            ReleaseDC(IntPtr.Zero, dc);
+            return ppi;
+        }
+
+        [DllImport("user32.dll")]
+        static extern IntPtr GetDC(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        static extern bool ReleaseDC(IntPtr hWnd, IntPtr hDC);
+
+        [DllImport("gdi32.dll")]
+        static extern int GetDeviceCaps(IntPtr hdc, int devCap);
+
+        public void Click(AccessControlModel control)
+        {
+            var xTwips = control.Control.TryGetPropertyValue<int>("Left");
+            var yTwips = control.Control.TryGetPropertyValue<int>("Top");
+
+            var x = ConvertTwipsToPixels(xTwips, MeasureDirection.Horizontal) + 60;
+            var y = ConvertTwipsToPixels(xTwips, MeasureDirection.Vertical) + 2;
+
+            var args = MouseStr.ToMouseEventsArgs(x, y, 0,0, MouseStr.Action.Left.ToString());
+            args.ForEach(arg => MouseWin32.MouseEvent(arg.dwFlags, arg.dx, arg.dy, arg.dwData));
+        }
 
 
         public void Test()
