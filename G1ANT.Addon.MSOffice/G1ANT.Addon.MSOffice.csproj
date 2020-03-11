@@ -101,6 +101,7 @@
     <Compile Include="Api\Access\AccessControlPropertyHelper.cs" />
     <Compile Include="Api\Access\AccessFormControlsTreeWalker.cs" />
     <Compile Include="Api\Access\IAccessFormControlsTreeWalker.cs" />
+    <Compile Include="Commands\Access\Controls\AccessControlExecuteOnClickCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessGetActiveControlCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessGetControlParentCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessControlClickCommand.cs" />

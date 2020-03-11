@@ -38,7 +38,13 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 
         public void SetFocus() => Control.SetFocus();
 
-        public AccessControlModel GetParent() => new AccessControlModel(Control.Parent);
+        public AccessControlModel GetParent()
+        {
+            if (Control.Parent is _Control)
+                return new AccessControlModel(Control.Parent, false, false);
+
+            return null;
+        }
 
         public List<ItemDataModel> GetItemsSelected() => new SelectedItemDataCollectionModel(this);
         public ItemDataCollectionModel GetItems() => new ItemDataCollectionModel(this);
@@ -74,5 +80,12 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             }
             catch { }
         }
+
+        public AccessFormModel GetForm()
+        {
+            return Control.Form != null ? new AccessFormModel(Control.Form, false, false, false) : null;
+        }
+
+
     }
 }

@@ -14,7 +14,6 @@ using G1ANT.Language;
 using Microsoft.Office.Interop.Access;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -33,6 +32,43 @@ namespace G1ANT.Addon.MSOffice
         }
 
         public int Id { get; private set; }
+
+
+        [DllImport("user32.dll")]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        internal void ExecuteOnClick(string path)
+        {
+            var control = GetAccessControlByPath(path);
+
+            var onClickCode = control.Control.TryGetPropertyValue<string>("OnClick");
+            if (onClickCode == "[Event Procedure]")
+            {
+                var formName = path.Split(new char[] { '/' }, 2, StringSplitOptions.RemoveEmptyEntries)[0];
+
+                var form = application.Forms[formName];
+
+                form.SetFocus();
+                //control.Control.Form.SetFocus();
+                control.Control.SetFocus();
+
+                SetForegroundWindow((IntPtr)form.Hwnd);
+
+                RobotSend32.KeyDown(System.Windows.Forms.Keys.Enter);
+                RobotSend32.KeyUp(System.Windows.Forms.Keys.Enter);
+                //Control.Form.Hwnd
+                //Control.Application.hWndAccessApp
+
+
+                //throw new NotImplementedException("Damn, need to focus and send enter");
+            }
+            else
+            {
+                control.Control.Application.DoCmd.RunMacro(onClickCode);
+            }
+        }
+
+
 
         public void Open(string path, string password = "", bool openExclusive = false, bool shouldShowApplication = true)
         {
@@ -177,24 +213,20 @@ namespace G1ANT.Addon.MSOffice
 
         public static int ConvertTwipsToPixels(int twips, MeasureDirection direction)
         {
-            return (int)(twips * GetPPI(direction) / 1440.0);
+            return twips * GetPPI(direction) / 1440;
         }
 
         public enum MeasureDirection
         {
-            Horizontal,
-            Vertical
+            Horizontal = 88,
+            Vertical = 90
         }
 
         public static int GetPPI(MeasureDirection direction)
         {
-            int ppi;
             IntPtr dc = GetDC(IntPtr.Zero);
 
-            if (direction == MeasureDirection.Horizontal)
-                ppi = GetDeviceCaps(dc, 88); //DEVICECAP LOGPIXELSX
-            else
-                ppi = GetDeviceCaps(dc, 90); //DEVICECAP LOGPIXELSY
+            var ppi = GetDeviceCaps(dc, (int)direction); //DEVICECAP LOGPIXELSY
 
             ReleaseDC(IntPtr.Zero, dc);
             return ppi;
@@ -211,13 +243,44 @@ namespace G1ANT.Addon.MSOffice
 
         public void Click(AccessControlModel control)
         {
-            var xTwips = control.Control.TryGetPropertyValue<int>("Left");
-            var yTwips = control.Control.TryGetPropertyValue<int>("Top");
+            var xTwips = 0;
+            var yTwips = 0;
 
-            var x = ConvertTwipsToPixels(xTwips, MeasureDirection.Horizontal) + 60;
-            var y = ConvertTwipsToPixels(xTwips, MeasureDirection.Vertical) + 2;
+            var topMostControl = control;
+            var c = control;
+            while (c != null)
+            {
+                xTwips += c.Control.TryGetPropertyValue<int>("Left");
+                yTwips += c.Control.TryGetPropertyValue<int>("Top");
 
-            var args = MouseStr.ToMouseEventsArgs(x, y, 0,0, MouseStr.Action.Left.ToString());
+                xTwips += c.Control.TryGetPropertyValue<int>("LeftMargin");
+                yTwips += c.Control.TryGetPropertyValue<int>("TopMargin");
+                xTwips += c.Control.TryGetPropertyValue<int>("LeftPadding");
+                yTwips += c.Control.TryGetPropertyValue<int>("TopPadding");
+
+
+                topMostControl = c;
+                c = c.GetParent();
+
+                if (c != null)
+                {
+                    xTwips += c.Control.TryGetPropertyValue<int>("RightMargin");
+                    yTwips += c.Control.TryGetPropertyValue<int>("BottomMargin");
+                    xTwips += c.Control.TryGetPropertyValue<int>("RightPadding");
+                    yTwips += c.Control.TryGetPropertyValue<int>("BottomPadding");
+                }
+            }
+
+            var form = new AccessFormModel(control.Control.Application.Screen.ActiveForm, false, false, false);
+            //var form = topMostControl.GetForm();
+            xTwips += form.X;
+            yTwips += form.Y;
+
+
+            var x = ConvertTwipsToPixels(xTwips, MeasureDirection.Horizontal);
+            var y = ConvertTwipsToPixels(yTwips, MeasureDirection.Vertical);
+
+            var args = MouseStr.ToMouseEventsArgs(x, y, 0, 0, MouseStr.Action.Left.ToString());
             args.ForEach(arg => MouseWin32.MouseEvent(arg.dwFlags, arg.dx, arg.dy, arg.dwData));
         }
 
@@ -227,7 +290,7 @@ namespace G1ANT.Addon.MSOffice
             //var control = accessFormControlsTreeWalker.GetAccessControlByPath(application, "/Start/TabCtl52/Caption=Configuration login/");
             var control = accessFormControlsTreeWalker.GetAccessControlByPath(application, "/Start/TabCtl55/Production/Command147/");
 
-            
+
 
             //var c = control.Control;
 

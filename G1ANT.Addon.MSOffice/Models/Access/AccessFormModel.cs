@@ -24,8 +24,8 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Caption { get; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public AccessFormModel Form { get; }
+        [JsonIgnore]
+        public Form Form { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string FormName { get; }
@@ -51,7 +51,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             Value = form.accValue;
 
             Caption = form.Caption;
-            Form = form.Form != null && form.Form != form ? new AccessFormModel(form.Form, getFormProperties, getControls, getControlsProperties) : null;
+            Form = form;// new AccessFormModel(form.Form, getFormProperties, getControls, getControlsProperties) : null;
             FormName = form.FormName;
             Hwnd = form.Hwnd;
             InsideWidth = form.InsideWidth;

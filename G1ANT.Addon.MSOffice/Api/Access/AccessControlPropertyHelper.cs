@@ -1,13 +1,14 @@
-﻿using Microsoft.Office.Interop.Access;
+﻿using G1ANT.Addon.MSOffice.Models.Access;
+using Microsoft.Office.Interop.Access;
 using System;
 
 namespace G1ANT.Addon.MSOffice.Api.Access
 {
     static class AccessControlPropertyHelper
     {
-        public static T GetPropertyValue<T>(_Control control, string propertyName)
+        public static T GetPropertyValue<T>(Microsoft.Office.Interop.Access.Properties properties, string propertyName)
         {
-            var value = control.Properties[propertyName].Value;
+            var value = properties[propertyName].Value;
             return (T)Convert.ChangeType(value, typeof(T));
         }
 
@@ -15,7 +16,7 @@ namespace G1ANT.Addon.MSOffice.Api.Access
         {
             try
             {
-                return GetPropertyValue<T>(control, propertyName);
+                return GetPropertyValue<T>(control.Properties, propertyName);
             }
             catch
             {
@@ -27,7 +28,33 @@ namespace G1ANT.Addon.MSOffice.Api.Access
         {
             try
             {
-                value = GetPropertyValue<T>(control, propertyName);
+                value = GetPropertyValue<T>(control.Properties, propertyName);
+                return true;
+            }
+            catch
+            {
+                value = default(T);
+                return false;
+            }
+        }
+
+        public static T TryGetPropertyValue<T>(this AccessFormModel form, string propertyName)
+        {
+            try
+            {
+                return GetPropertyValue<T>(form.Form.Properties, propertyName);
+            }
+            catch
+            {
+                return default(T);
+            }
+        }
+
+        public static bool TryGetPropertyValue<T>(this AccessFormModel form, string propertyName, out T value)
+        {
+            try
+            {
+                value = GetPropertyValue<T>(form.Form.Properties, propertyName);
                 return true;
             }
             catch
