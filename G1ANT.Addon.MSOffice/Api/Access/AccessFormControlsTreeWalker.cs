@@ -20,22 +20,20 @@ namespace G1ANT.Addon.MSOffice.Access
     {
         public AccessControlModel GetAccessControlByPath(Application application, string path)
         {
-            var pathElements = path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var controlPath = new ControlPathModel(path);
 
-            var formName = pathElements[0];
-            var form = application.Forms[formName];
+            var form = application.Forms[controlPath.FormName];
 
             Control controlFound = null;
 
             var controls = form.Controls.OfType<Control>().ToList();
 
-            pathElements = pathElements.Skip(1).ToArray();
-
-            for (var i = 0; i < pathElements.Length; i++)
+            for (var i = 0; i < controlPath.Count; i++)
             {
-                controlFound = GetMatchingControl(controls, pathElements[i]);
+                var pathElement = controlPath[i];
+                controlFound = GetMatchingControl(controls, controlPath[i]);
 
-                if (i == pathElements.Length - 1)
+                if (i == controlPath.Count - 1)
                     break; // don't load children of last element of path, it's probably not a container and wil throw a COM exception
                 controls = controlFound.Controls.OfType<Control>().ToList();
             }
@@ -46,33 +44,19 @@ namespace G1ANT.Addon.MSOffice.Access
 
         private Control GetMatchingControl(ICollection<Control> controls, string pathElement)
         {
-            if (string.IsNullOrEmpty(pathElement))
-                throw new ArgumentNullException(nameof(pathElement));
-
-            var pathParts = pathElement.Split('=');
-            var propertyName = pathParts.Length > 1 ? pathParts[0] : "Name";
-            var propertyValue = pathParts.Last();
-            var childIndex = -1;
-
-            if (propertyValue.Contains("[") && propertyValue.Contains("]"))
-            {
-                var childIndexValue = propertyValue.Substring(propertyValue.IndexOf("[") + 1);
-                childIndexValue = childIndexValue.Substring(0, childIndexValue.IndexOf("]"));
-                childIndex = int.Parse(childIndexValue);
-                propertyValue = propertyValue.Substring(0, propertyValue.IndexOf("["));
-            }
+            var element = new ControlPathElementModel(pathElement);
 
             IEnumerable<Control> controlsFound = controls;
-            if (pathParts.Contains("=") || childIndex < 0)
-                controlsFound = controlsFound.Where(c => c.Properties[propertyName]?.Value?.ToString() == propertyValue);
+            if (element.ShouldFilterByPropertyNameAndValue())
+                controlsFound = controlsFound.Where(c => c.Properties[element.PropertyName]?.Value?.ToString() == element.PropertyValue);
 
-            if (childIndex >= 0)
-                controlsFound = controlsFound.Skip(childIndex);
+            if (element.ShouldFilterByIndex())
+                controlsFound = controlsFound.Skip(element.ChildIndex);
 
             var controlFound = controlsFound.FirstOrDefault();
 
             if (controlFound == null)
-                throw new Exception($"Element {pathElement} not found (index is {childIndex})");
+                throw new Exception($"Element {element} not found (name={element.PropertyName}, value={element.PropertyValue}, index={element.ChildIndex})");
 
             return controlFound;
         }

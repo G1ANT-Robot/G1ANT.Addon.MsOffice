@@ -159,6 +159,8 @@
     <Compile Include="Commands\ExcelSetValueCommand.cs" />
     <Compile Include="Commands\ExcelSwitchCommand.cs" />
     <Compile Include="Helpers\ExcelHelper.cs" />
+    <Compile Include="Models\Access\ControlPathElementModel.cs" />
+    <Compile Include="Models\Access\ControlPathModel.cs" />
     <Compile Include="Models\Access\ItemDataModel.cs" />
     <Compile Include="Models\Access\AccessMacroModel.cs" />
     <Compile Include="Models\Access\AccessControlModel.cs" />
