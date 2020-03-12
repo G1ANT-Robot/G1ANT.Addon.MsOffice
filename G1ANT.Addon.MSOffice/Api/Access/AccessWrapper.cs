@@ -48,19 +48,12 @@ namespace G1ANT.Addon.MSOffice
 
                 var form = application.Forms[formName];
 
-                form.SetFocus();
+                //form.SetFocus();
                 //control.Control.Form.SetFocus();
                 control.Control.SetFocus();
 
                 SetForegroundWindow((IntPtr)form.Hwnd);
-
-                RobotSend32.KeyDown(System.Windows.Forms.Keys.Enter);
-                RobotSend32.KeyUp(System.Windows.Forms.Keys.Enter);
-                //Control.Form.Hwnd
-                //Control.Application.hWndAccessApp
-
-
-                //throw new NotImplementedException("Damn, need to focus and send enter");
+                System.Windows.Forms.SendKeys.SendWait("{ENTER}");
             }
             else
             {
