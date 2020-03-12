@@ -15,18 +15,20 @@ using System.Linq;
 
 namespace G1ANT.Addon.MSOffice.Access
 {
-
     public class AccessFormControlsTreeWalker : IAccessFormControlsTreeWalker
     {
         public AccessControlModel GetAccessControlByPath(Application application, string path)
         {
-            var controlPath = new ControlPathModel(path);
+            return GetAccessControlByPath(application, new ControlPathModel(path));
+        }
 
+        public AccessControlModel GetAccessControlByPath(Application application, ControlPathModel controlPath)
+        {
             var form = application.Forms[controlPath.FormName];
 
-            Control controlFound = null;
+            _Control controlFound = null;
 
-            var controls = form.Controls.OfType<Control>().ToList();
+            var controls = form.Controls.OfType<_Control>().ToList();
 
             for (var i = 0; i < controlPath.Count; i++)
             {
@@ -35,28 +37,27 @@ namespace G1ANT.Addon.MSOffice.Access
 
                 if (i == controlPath.Count - 1)
                     break; // don't load children of last element of path, it's probably not a container and wil throw a COM exception
-                controls = controlFound.Controls.OfType<Control>().ToList();
+                controls = controlFound.Controls.OfType<_Control>().ToList();
             }
 
             return new AccessControlModel(controlFound, true, false);
         }
 
 
-        private Control GetMatchingControl(ICollection<Control> controls, string pathElement)
+        private _Control GetMatchingControl(ICollection<_Control> controls, ControlPathElementModel pathElement)
         {
-            var element = new ControlPathElementModel(pathElement);
 
-            IEnumerable<Control> controlsFound = controls;
-            if (element.ShouldFilterByPropertyNameAndValue())
-                controlsFound = controlsFound.Where(c => c.Properties[element.PropertyName]?.Value?.ToString() == element.PropertyValue);
+            IEnumerable<_Control> controlsFound = controls;
+            if (pathElement.ShouldFilterByPropertyNameAndValue())
+                controlsFound = controlsFound.Where(c => c.Properties[pathElement.PropertyName]?.Value?.ToString() == pathElement.PropertyValue);
 
-            if (element.ShouldFilterByIndex())
-                controlsFound = controlsFound.Skip(element.ChildIndex);
+            if (pathElement.ShouldFilterByIndex())
+                controlsFound = controlsFound.Skip(pathElement.ChildIndex);
 
             var controlFound = controlsFound.FirstOrDefault();
 
             if (controlFound == null)
-                throw new Exception($"Element {element} not found (name={element.PropertyName}, value={element.PropertyValue}, index={element.ChildIndex})");
+                throw new Exception($"Element {pathElement} not found (name={pathElement.PropertyName}, value={pathElement.PropertyValue}, index={pathElement.ChildIndex})");
 
             return controlFound;
         }

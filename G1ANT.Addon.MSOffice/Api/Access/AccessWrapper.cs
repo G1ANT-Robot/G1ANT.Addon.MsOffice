@@ -7,6 +7,7 @@
 *    See License.txt file in the project root for full license information.
 *
 */
+
 using G1ANT.Addon.MSOffice.Access;
 using G1ANT.Addon.MSOffice.Api.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
@@ -15,7 +16,7 @@ using Microsoft.Office.Interop.Access;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace G1ANT.Addon.MSOffice
 {
@@ -25,26 +26,24 @@ namespace G1ANT.Addon.MSOffice
         private Application application = null;
         private readonly IAccessFormControlsTreeWalker accessFormControlsTreeWalker;
 
+        public int Id { get; }
+
         internal AccessWrapper(IAccessFormControlsTreeWalker accessFormControlsTreeWalker)
         {
             Id = AccessManager.GetFreeId();
             this.accessFormControlsTreeWalker = accessFormControlsTreeWalker;
         }
 
-        public int Id { get; private set; }
-
-
-        [DllImport("user32.dll")]
-        static extern bool SetForegroundWindow(IntPtr hWnd);
 
         internal void ExecuteOnClick(string path)
         {
-            var control = GetAccessControlByPath(path);
+            var controlPath = new ControlPathModel(path);
+            var control = accessFormControlsTreeWalker.GetAccessControlByPath(application, controlPath);
 
-            var onClickCode = control.Control.TryGetPropertyValue<string>("OnClick");
+            var onClickCode = control.TryGetPropertyValue<string>("OnClick");
             if (onClickCode == "[Event Procedure]")
             {
-                var formName = path.Split(new char[] { '/' }, 2, StringSplitOptions.RemoveEmptyEntries)[0];
+                var formName = controlPath.FormName;
 
                 var form = application.Forms[formName];
 
@@ -52,7 +51,7 @@ namespace G1ANT.Addon.MSOffice
                 //control.Control.Form.SetFocus();
                 control.Control.SetFocus();
 
-                SetForegroundWindow((IntPtr)form.Hwnd);
+                RobotWin32.SetForegroundWindow((IntPtr)form.Hwnd);
                 System.Windows.Forms.SendKeys.SendWait("{ENTER}");
             }
             else
@@ -182,116 +181,88 @@ namespace G1ANT.Addon.MSOffice
         }
 
 
-        ///// <summary>
-        ///// Converts an integer value in twips to the corresponding integer value in pixels on the x-axis.
-        ///// </summary>
-        ///// <param name="source">The Graphics context to use</param>
-        ///// <param name="inTwips">The number of twips to be converted</param>
-        ///// <returns>The number of pixels in that many twips</returns>
-        //public static int ConvertTwipsToXPixels(Graphics source, int twips)
+        //public static int ConvertTwipsToPixels(int twips, MeasureDirection direction)
         //{
-        //    return (int)(twips * source.DpiX / 1440.0);
+        //    return twips * GetPPI(direction) / 1440;
         //}
 
-        ///// <summary>
-        ///// Converts an integer value in twips to the corresponding integer value in pixels on the y-axis.
-        ///// </summary>
-        ///// <param name="source">The Graphics context to use</param>
-        ///// <param name="inTwips">The number of twips to be converted</param>
-        ///// <returns>The number of pixels in that many twips</returns>
-        //public static int ConvertTwipsToYPixels(Graphics source, int twips)
+        //public enum MeasureDirection
         //{
-        //    return (int)(twips * source.DpiY / 1440.0);
+        //    Horizontal = 88,
+        //    Vertical = 90
         //}
 
-        public static int ConvertTwipsToPixels(int twips, MeasureDirection direction)
-        {
-            return twips * GetPPI(direction) / 1440;
-        }
+        //public static int GetPPI(MeasureDirection direction)
+        //{
+        //    IntPtr dc = GetDC(IntPtr.Zero);
 
-        public enum MeasureDirection
-        {
-            Horizontal = 88,
-            Vertical = 90
-        }
+        //    var ppi = GetDeviceCaps(dc, (int)direction); //DEVICECAP LOGPIXELSY
 
-        public static int GetPPI(MeasureDirection direction)
-        {
-            IntPtr dc = GetDC(IntPtr.Zero);
+        //    ReleaseDC(IntPtr.Zero, dc);
+        //    return ppi;
+        //}
 
-            var ppi = GetDeviceCaps(dc, (int)direction); //DEVICECAP LOGPIXELSY
+        //[DllImport("user32.dll")]
+        //static extern IntPtr GetDC(IntPtr hWnd);
 
-            ReleaseDC(IntPtr.Zero, dc);
-            return ppi;
-        }
+        //[DllImport("user32.dll")]
+        //static extern bool ReleaseDC(IntPtr hWnd, IntPtr hDC);
 
-        [DllImport("user32.dll")]
-        static extern IntPtr GetDC(IntPtr hWnd);
+        //[DllImport("gdi32.dll")]
+        //static extern int GetDeviceCaps(IntPtr hdc, int devCap);
 
-        [DllImport("user32.dll")]
-        static extern bool ReleaseDC(IntPtr hWnd, IntPtr hDC);
+        //public void Click(AccessControlModel control)
+        //{
+        //    var xTwips = 0;
+        //    var yTwips = 0;
 
-        [DllImport("gdi32.dll")]
-        static extern int GetDeviceCaps(IntPtr hdc, int devCap);
+        //    var topMostControl = control;
+        //    var c = control;
+        //    while (c != null)
+        //    {
+        //        xTwips += c.TryGetPropertyValue<int>("Left");
+        //        yTwips += c.TryGetPropertyValue<int>("Top");
 
-        public void Click(AccessControlModel control)
-        {
-            var xTwips = 0;
-            var yTwips = 0;
-
-            var topMostControl = control;
-            var c = control;
-            while (c != null)
-            {
-                xTwips += c.Control.TryGetPropertyValue<int>("Left");
-                yTwips += c.Control.TryGetPropertyValue<int>("Top");
-
-                xTwips += c.Control.TryGetPropertyValue<int>("LeftMargin");
-                yTwips += c.Control.TryGetPropertyValue<int>("TopMargin");
-                xTwips += c.Control.TryGetPropertyValue<int>("LeftPadding");
-                yTwips += c.Control.TryGetPropertyValue<int>("TopPadding");
+        //        xTwips += c.TryGetPropertyValue<int>("LeftMargin");
+        //        yTwips += c.TryGetPropertyValue<int>("TopMargin");
+        //        xTwips += c.TryGetPropertyValue<int>("LeftPadding");
+        //        yTwips += c.TryGetPropertyValue<int>("TopPadding");
 
 
-                topMostControl = c;
-                c = c.GetParent();
+        //        topMostControl = c;
+        //        c = c.GetParent();
 
-                if (c != null)
-                {
-                    xTwips += c.Control.TryGetPropertyValue<int>("RightMargin");
-                    yTwips += c.Control.TryGetPropertyValue<int>("BottomMargin");
-                    xTwips += c.Control.TryGetPropertyValue<int>("RightPadding");
-                    yTwips += c.Control.TryGetPropertyValue<int>("BottomPadding");
-                }
-            }
+        //        if (c != null)
+        //        {
+        //            xTwips += c.TryGetPropertyValue<int>("RightMargin");
+        //            yTwips += c.TryGetPropertyValue<int>("BottomMargin");
+        //            xTwips += c.TryGetPropertyValue<int>("RightPadding");
+        //            yTwips += c.TryGetPropertyValue<int>("BottomPadding");
+        //        }
+        //    }
 
-            var form = new AccessFormModel(control.Control.Application.Screen.ActiveForm, false, false, false);
-            //var form = topMostControl.GetForm();
-            xTwips += form.X;
-            yTwips += form.Y;
+        //    var form = new AccessFormModel(control.Control.Application.Screen.ActiveForm, false, false, false);
+        //    //var form = topMostControl.GetForm();
+        //    xTwips += form.X;
+        //    yTwips += form.Y;
 
 
-            var x = ConvertTwipsToPixels(xTwips, MeasureDirection.Horizontal);
-            var y = ConvertTwipsToPixels(yTwips, MeasureDirection.Vertical);
+        //    var x = ConvertTwipsToPixels(xTwips, MeasureDirection.Horizontal);
+        //    var y = ConvertTwipsToPixels(yTwips, MeasureDirection.Vertical);
 
-            var args = MouseStr.ToMouseEventsArgs(x, y, 0, 0, MouseStr.Action.Left.ToString());
-            args.ForEach(arg => MouseWin32.MouseEvent(arg.dwFlags, arg.dx, arg.dy, arg.dwData));
-        }
+        //    var args = MouseStr.ToMouseEventsArgs(x, y, 0, 0, MouseStr.Action.Left.ToString());
+        //    args.ForEach(arg => MouseWin32.MouseEvent(arg.dwFlags, arg.dx, arg.dy, arg.dwData));
+        //}
 
 
         public void Test()
         {
-            //var control = accessFormControlsTreeWalker.GetAccessControlByPath(application, "/Start/TabCtl52/Caption=Configuration login/");
-            var control = accessFormControlsTreeWalker.GetAccessControlByPath(application, "/Start/TabCtl55/Production/Command147/");
-
-
-
-            //var c = control.Control;
-
             var afs = application.CurrentProject.Resources;
-
             var reports = application.CurrentProject.AllReports.Cast<AccessObject>().ToList();
 
         }
+
+
 
 
         //public object RunMacro(string macroName, string args = null)

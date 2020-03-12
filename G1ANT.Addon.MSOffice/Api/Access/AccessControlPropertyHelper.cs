@@ -1,5 +1,4 @@
 ﻿using G1ANT.Addon.MSOffice.Models.Access;
-using Microsoft.Office.Interop.Access;
 using System;
 
 namespace G1ANT.Addon.MSOffice.Api.Access
@@ -12,11 +11,11 @@ namespace G1ANT.Addon.MSOffice.Api.Access
             return (T)Convert.ChangeType(value, typeof(T));
         }
 
-        public static T TryGetPropertyValue<T>(this _Control control, string propertyName)
+        public static T TryGetPropertyValue<T>(this AccessControlModel control, string propertyName)
         {
             try
             {
-                return GetPropertyValue<T>(control.Properties, propertyName);
+                return GetPropertyValue<T>(control.Control.Properties, propertyName);
             }
             catch
             {
@@ -24,11 +23,17 @@ namespace G1ANT.Addon.MSOffice.Api.Access
             }
         }
 
-        public static bool TryGetPropertyValue<T>(this _Control control, string propertyName, out T value)
+        public static void SetPropertyValue<T>(this AccessControlModel control, string propertyName, T value)
+        {
+            control.Control.Properties[propertyName].Value = value;
+        }
+
+
+        public static bool TryGetPropertyValue<T>(this AccessControlModel control, string propertyName, out T value)
         {
             try
             {
-                value = GetPropertyValue<T>(control.Properties, propertyName);
+                value = GetPropertyValue<T>(control.Control.Properties, propertyName);
                 return true;
             }
             catch

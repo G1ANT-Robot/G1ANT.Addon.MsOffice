@@ -15,5 +15,6 @@ namespace G1ANT.Addon.MSOffice.Access
     public interface IAccessFormControlsTreeWalker
     {
         AccessControlModel GetAccessControlByPath(Application application, string path);
+        AccessControlModel GetAccessControlByPath(Application application, ControlPathModel controlPath);
     }
 }

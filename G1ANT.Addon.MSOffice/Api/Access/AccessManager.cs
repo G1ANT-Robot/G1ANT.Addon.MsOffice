@@ -7,7 +7,9 @@
 *    See License.txt file in the project root for full license information.
 *
 */
+
 using G1ANT.Addon.MSOffice.Access;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,6 +17,8 @@ namespace G1ANT.Addon.MSOffice
 {
     public static class AccessManager
     {
+        //public static event EventHandler<AccessWrapper> NewInstance;
+
         private static List<AccessWrapper> launchedAccesses = new List<AccessWrapper>();
 
         public static AccessWrapper CurrentAccess { get; private set; }

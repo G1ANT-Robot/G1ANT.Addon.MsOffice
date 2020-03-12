@@ -117,23 +117,24 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Excelicon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\image7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <metadata name="toolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="toolStripButton1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGBSURBVFhH7da5LkRRHMfxSyGWioTSA1BaIjrPgCglGnTz
+        AhR4A1uIhEpBR0nlFawJNVERBYX1+53kJjdi7p1wZhLJ+SWfzMzNzVn+ZyGJiYn5b2nBBHZxhmucYAm9
+        aEDNMoRzvOPzB8+YRyuCx87vYUdPOMAURrGAK3zgDZtoQrBYdstt57cYQSOy6cAKrM4rJhEsrrkNO3M7
+        rxRLfwQHeonvg/x13HA2eoiiRvvgXvD9QR+EyCls0DUvSic8Gb4/44MQSRscK//KTzsu4PslH4SI59wG
+        F8u/8tONO1Q74KpixzboUXO352UWHscXdPkgRHrgxrLhVVS6aIbxAN/bQrBb0Ybm4CXjcTxGP9xwrrll
+        d+Z2bqW0jzYEi7PegJeMHVjiG7jhXHNnrXQAft9BM4LF69UbLt3lWQ7Isu8hHYifawg6CONlNIBpeNT8
+        e+ByuFSWfRvZQawj6HIUxRm7WdNBuG+WUdc4CMtv548YR91j2Z25ndf0H5WYmJg/JEm+AJphaU/lurBz
+        AAAAAElFTkSuQmCC
+</value>
   </data>
-  <data name="insert_into" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\insert_into.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="OutlookIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\image8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="search" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\search.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WordIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\image6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
+  <metadata name="contextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>115, 17</value>
+  </metadata>
 </root>

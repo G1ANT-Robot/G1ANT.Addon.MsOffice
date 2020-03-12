@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
@@ -56,13 +57,13 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         {
             Control = control ?? throw new ArgumentNullException(nameof(control));
             Name = control.Name;
-            Type = ((AcControlType)control.TryGetPropertyValue<int>("ControlType")).ToString();
+            Type = ((AcControlType)this.TryGetPropertyValue<int>("ControlType")).ToString();
 
             if (getProperties && control.Properties.Count > 0)
             {
                 var properties = control.Properties.OfType<dynamic>().ToList();
-                Caption = control.TryGetPropertyValue<string>("Caption");
-                Value = control.TryGetPropertyValue<string>("Value");
+                Caption = this.TryGetPropertyValue<string>("Caption");
+                Value = this.TryGetPropertyValue<string>("Value");
                 Properties = new AccessPropertiesModel(control.Properties);
             }
 
@@ -70,13 +71,14 @@ namespace G1ANT.Addon.MSOffice.Models.Access
                 LoadChildren(getProperties);
         }
 
+        public int GetChildrenCount() => Control.Controls.Count;
 
         public void LoadChildren(bool getProperties = true)
         {
             try
             {
                 if (Control.Controls.Count > 0)
-                    Control.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getProperties, true)).ToList();
+                    Children = Control.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getProperties, true)).ToList();
             }
             catch { }
         }
@@ -87,5 +89,21 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         }
 
 
+        public void Blink(string propertyName = "ForeColor")
+        {
+            const string fallbackPropertyName = "FontUnderline";
+            var originColor = this.TryGetPropertyValue<int>(propertyName);
+            var originFontUnderline = this.TryGetPropertyValue<bool>(fallbackPropertyName);
+
+            for (var i = 0; i < 3; ++i)
+            {
+                this.SetPropertyValue(propertyName, (originColor & 0xffffff) ^ 0xffffff);
+                this.SetPropertyValue(fallbackPropertyName, !originFontUnderline);
+                Thread.Sleep(500);
+                this.SetPropertyValue(propertyName, originColor);
+                this.SetPropertyValue(fallbackPropertyName, originFontUnderline);
+                Thread.Sleep(500);
+            }
+        }
     }
 }

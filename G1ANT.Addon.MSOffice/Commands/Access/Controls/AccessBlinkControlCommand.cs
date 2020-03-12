@@ -7,12 +7,13 @@
 *    See License.txt file in the project root for full license information.
 *
 */
+
 using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
 {
-    [Command(Name = "access.controls.executeonclick", Tooltip = "Executes action assigned to a click at control selected by path")]
-    public class AccessControlExecuteOnClickCommand : Command
+    [Command(Name = "access.controls.blink", Tooltip = "Blink Access control")]
+    public class AccessBlinkControlCommand : Command
     {
         public class Arguments : CommandArguments
         {
@@ -20,12 +21,12 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
             public TextStructure Path { get; set; }
         }
 
-        public AccessControlExecuteOnClickCommand(AbstractScripter scripter) : base(scripter)
+        public AccessBlinkControlCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.ExecuteOnClick(arguments.Path.Value);
+            AccessManager.CurrentAccess.GetAccessControlByPath(arguments.Path.Value).Blink();
         }
     }
 }
