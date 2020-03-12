@@ -27,7 +27,7 @@ namespace G1ANT.Addon.MSOffice.Panels
             controller.Initialize(mainForm);
         }
 
-        public override void RefreshContent() => controller.InitRootElements(controlsTree);
+        public override void RefreshContent() => controller.InitRootElements(comboBox1, controlsTree);
 
         private void controlsTree_BeforeExpand(object sender, TreeViewCancelEventArgs e) => controller.LoadChildNodes(e.Node);
 
@@ -35,7 +35,7 @@ namespace G1ANT.Addon.MSOffice.Panels
 
         private void insertWPathButton_Click(object sender, EventArgs e) => controller.InsertPathIntoScript(controlsTree.SelectedNode);
 
-        private void refreshButton_Click(object sender, EventArgs e) => controller.InitRootElements(controlsTree);
+        private void refreshButton_Click(object sender, EventArgs e) => controller.InitRootElements(comboBox1, controlsTree);
 
         private void highlightToolStripMenuItem_Click(object sender, EventArgs e) => controller.ShowMarkerForm(controlsTree.SelectedNode);
 

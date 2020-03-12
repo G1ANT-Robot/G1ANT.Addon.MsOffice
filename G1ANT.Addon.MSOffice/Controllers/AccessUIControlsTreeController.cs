@@ -61,7 +61,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
 
         public bool initialized = false;
-        public void InitRootElements(TreeView controlsTree)
+        public void InitRootElements(ComboBox applications, TreeView controlsTree)
         {
             if (initialized)
                 return;
@@ -78,39 +78,45 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 if (mainHandle.ToInt32() > 0)
                 {
                     var IID_IDispatch = new Guid("{00020400-0000-0000-C000-000000000046}");
-                    //Microsoft.Office.Interop.Access.Application app = null;
-                    //Microsoft.Office.Core.IAccessible app = null;
-                    ;
+
                     int res = OleAccWrapper.AccessibleObjectFromWindow(mainHandle, OBJID_NATIVEOM, ref IID_IDispatch, out Microsoft.Office.Interop.Access.Application app);
                     if (res >= 0)
                     {
                         //Debug.Assert(app.hWndAccessApp() == mainHandle);
                         //Console.WriteLine(app.Name);
+
+                        applications.Items.Add($"{app.Name} {app.CurrentProject.Name}");
+                        // todo: check how to release app COM object when done using it
                     }
+                    else
+                        throw new Exception(); //todo: collect exception and throw AggregateException
                 }
             }
 
-            try
-            {
-                //var runningObjects = GetRunningObjects();
-                //foreach (var runningObject in runningObjects)
-                //{
-                //    if (runningObject.Application is Microsoft.Office.Interop.Access.Application)
-                //    {
-                //        var name = runningObject.Name;
-                //    }
-                //}
+            if (applications.Items.Cast<object>().Any())
+                applications.SelectedIndex = 0;
+
+            //try
+            //{
+            //    //var runningObjects = GetRunningObjects();
+            //    //foreach (var runningObject in runningObjects)
+            //    //{
+            //    //    if (runningObject.Application is Microsoft.Office.Interop.Access.Application)
+            //    //    {
+            //    //        var name = runningObject.Name;
+            //    //    }
+            //    //}
 
 
 
-                var access = (Microsoft.Office.Interop.Access.Application)Marshal.GetActiveObject("Access.Application");
-            }
-            catch (Exception ex)
-            {
-                if (ex.Message.Contains("MK_E_UNAVAILABLE"))
-                    return;
-                throw;
-            }
+            //    var access = (Microsoft.Office.Interop.Access.Application)Marshal.GetActiveObject("Access.Application");
+            //}
+            //catch (Exception ex)
+            //{
+            //    if (ex.Message.Contains("MK_E_UNAVAILABLE"))
+            //        return;
+            //    throw;
+            //}
 
 
             controlsTree.BeginUpdate();
