@@ -343,10 +343,13 @@ namespace G1ANT.Addon.MSOffice.Controllers
         }
 
 
-        private AccessControlModel GetAccessControlModelFromNode(TreeNode node)
+        private string GetNameFromNodeModel(TreeNode node)
         {
-            if (node?.Tag is AccessControlModel accessControlModel)
-                return accessControlModel;
+            if (node.Tag is AccessControlModel accessControlModel)
+                return accessControlModel.Name;
+
+            if (node.Tag is AccessFormModel accessFormModel)
+                return accessFormModel.Name;
 
             return null;
         }
@@ -358,8 +361,10 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 var path = "";
                 while (node != null)
                 {
-                    var model = GetAccessControlModelFromNode(node);
-                    path = $"{model.Name}/{path}";
+                    var name = GetNameFromNodeModel(node);
+                    if (name == null)
+                        break;
+                    path = $"{name}/{path}";
                     node = node.Parent;
                 }
                 path = "/" + path;
