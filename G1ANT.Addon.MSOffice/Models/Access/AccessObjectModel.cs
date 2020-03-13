@@ -13,7 +13,7 @@ using System;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class AccessObjectModel
+    public class AccessObjectModel : IComparable
     {
         public AccessObject Form { get; }
         public string Name { get; }
@@ -37,6 +37,19 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             DateCreated = form.DateCreated;
             DateModified = form.DateModified;
             IsWeb = form.IsWeb;
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj == null)
+                return 1;
+
+            if (!(obj is AccessObjectModel))
+                return 1;
+
+            var model = (AccessObjectModel)obj;
+
+            return model.FullName == this.FullName && model.Name == this.Name ? 0 : 1;// && model.Form.GetDependencyInfo().Dependants.
         }
     }
 }

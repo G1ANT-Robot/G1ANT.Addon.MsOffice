@@ -1,6 +1,8 @@
 ﻿using G1ANT.Addon.MSOffice.Api.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Language;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -14,6 +16,9 @@ namespace G1ANT.Addon.MSOffice.Controllers
         private readonly IRunningObjectTableService runningObjectTableService;
         private readonly TreeView controlsTree;
 
+        public List<object> expandedTreeNodeModels = new List<object>();
+        private object selectedTreeNodeModel;
+
         public AccessUIControlsTreeController(IRunningObjectTableService runningObjectTableService, TreeView controlsTree)
         {
             this.runningObjectTableService = runningObjectTableService;
@@ -23,21 +28,17 @@ namespace G1ANT.Addon.MSOffice.Controllers
         public void Initialize(IMainForm mainForm) => this.mainForm = mainForm;
 
 
-        public void InitRootElements(ComboBox applications)
+        public void InitRootElements(ComboBox applications, bool force = false)
         {
-            //if (initialized)
-            //    return;
-            //initialized = true;
-
+            if (initialized && !force)
+                return;
+            initialized = true;
 
             var selectedItemText = applications.SelectedItem?.ToString();
-
             var applicationInstances = runningObjectTableService.GetApplicationInstances("msaccess");
-
 
             applications.Items.Clear();
             applications.Items.AddRange(applicationInstances.ToArray());
-
 
             if (applicationInstances.Any())
             {
@@ -49,6 +50,9 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         internal void SelectedApplicationChanged(RotApplicationModel rotApplicationModel)
         {
+            selectedTreeNodeModel = controlsTree.SelectedNode?.Tag;
+            CollectExpandedTreeNodeModels(controlsTree.Nodes);
+
             controlsTree.BeginUpdate();
             controlsTree.Nodes.Clear();
 
@@ -62,27 +66,9 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 }
             );
 
+            ApplyExpandedTreeNodes(controlsTree.Nodes);
             controlsTree.EndUpdate();
         }
-
-        //private string FormatLongLine(string line)
-        //{
-        //    const int maxLineLength = 100;
-        //    if (line.Length <= maxLineLength)
-        //        return line;
-
-        //    var sb = new StringBuilder(line.Length);
-        //    var isFirstLine = true;
-        //    do
-        //    {
-        //        var linePart = line.Substring(0, Math.Min(line.Length, maxLineLength));
-        //        line = line.Substring(linePart.Length);
-        //        sb.AppendLine((isFirstLine ? "" : "\t") + linePart);
-        //        isFirstLine = false;
-        //    } while (line != "");
-
-        //    return sb.ToString();
-        //}
 
         private static readonly string[] ControlTooltipProperties = new string[]
         {
@@ -140,8 +126,6 @@ namespace G1ANT.Addon.MSOffice.Controllers
             "LogicalPageWidth",
             "Visible",
         };
-
-        //private static readonly string[] UnloadedFormTooltipProperties = new string[] { "Name", "Attributes", "DateCreated", "DateModified", "FullName", "Type" };
 
         private string GetTooltip(AccessControlModel controlModel)
         {
@@ -212,11 +196,56 @@ namespace G1ANT.Addon.MSOffice.Controllers
         }
 
 
+        private void CollectExpandedTreeNodeModels(TreeNodeCollection nodes)
+        {
+            var expandedNodes = nodes.Cast<TreeNode>()
+                .Where(tn => tn.IsExpanded)
+                .ToList();
+            expandedNodes.ForEach(en =>
+            {
+                expandedTreeNodeModels.Add(en.Tag);
+                CollectExpandedTreeNodeModels(en.Nodes);
+            });
+        }
+
+
+        private bool AreModelsSame(object source, object dest)
+        {
+            if (source == null || dest == null)
+                return false;
+
+            if (source is IComparable sc)
+                return sc.CompareTo(dest) == 0;
+
+            return false;
+        }
+
+
+        private void ApplyExpandedTreeNodes(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                var nodeModel = node.Tag;
+
+                if (selectedTreeNodeModel != null && AreModelsSame(nodeModel,  selectedTreeNodeModel))
+                    controlsTree.SelectedNode = node;
+
+                var expandedTreeNodeModel = expandedTreeNodeModels.FirstOrDefault(etn => AreModelsSame(etn, nodeModel));
+                if (expandedTreeNodeModel != null)
+                {
+                    expandedTreeNodeModels.Remove(expandedTreeNodeModel);
+
+                    LoadChildNodes(node);
+                    node.Expand();
+
+                    ApplyExpandedTreeNodes(node.Nodes);
+                    expandedTreeNodeModels.Remove(expandedTreeNodeModel);
+                }
+            }
+        }
+
         public void LoadChildNodes(TreeNode treeNode)
         {
-            //if (treeNode.Parent == null)
-            //    return; // don't clear jvms and their windows as they are already rendered
-
             controlsTree.BeginUpdate();
 
             if (treeNode.Tag is AccessControlModel accessControlModel)
@@ -226,6 +255,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
             else if (treeNode.Tag is RotApplicationModel rotApplicationModel)
                 LoadFormNodes(treeNode, rotApplicationModel);
 
+            ApplyExpandedTreeNodes(treeNode.Nodes);
             controlsTree.EndUpdate();
         }
 
@@ -250,16 +280,16 @@ namespace G1ANT.Addon.MSOffice.Controllers
                             childNode.Nodes.Add("");
                         treeNode.Nodes.Add(childNode);
                     }
-                    else
-                    {
-                        var formModel = new AccessObjectModel(form);
-                        var childNode = new TreeNode(GetNameForNode(formModel))
-                        {
-                            Tag = formModel,
-                            ToolTipText = GetTooltip(formModel)
-                        };
-                        treeNode.Nodes.Add(childNode);
-                    }
+                    //else
+                    //{
+                    //    var formModel = new AccessObjectModel(form);
+                    //    var childNode = new TreeNode(GetNameForNode(formModel))
+                    //    {
+                    //        Tag = formModel,
+                    //        ToolTipText = GetTooltip(formModel)
+                    //    };
+                    //    treeNode.Nodes.Add(childNode);
+                    //}
                 }
             }
         }
@@ -288,7 +318,6 @@ namespace G1ANT.Addon.MSOffice.Controllers
             }
         }
 
-
         private void LoadControlNodes(TreeNode treeNode, AccessControlModel accessControlModel)
         {
             if (treeNode.Nodes.Count == 1 && treeNode.Nodes[0].Text == "")
@@ -312,6 +341,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
             }
         }
+
 
         private AccessControlModel GetAccessControlModelFromNode(TreeNode node)
         {

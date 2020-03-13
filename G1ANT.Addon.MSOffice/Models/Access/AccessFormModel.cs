@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class AccessFormModel
+    public class AccessFormModel : IComparable
     {
         public string Name { get; }
 
@@ -73,6 +73,22 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         {
             if (Form.Controls.Count > 0)
                 Controls = Form.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getControlsProperties, false)).ToList();
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj == null)
+                return 1;
+
+            if (!(obj is AccessFormModel))
+                return 1;
+
+            var model = (AccessFormModel)obj;
+
+            if (Form.Application.hWndAccessApp() != model.Form.Application.hWndAccessApp())
+                return 1;
+
+            return model.Name == this.Name ? 0 : 1; // names of forms seem to be unique
         }
     }
 }

@@ -17,7 +17,7 @@ using System.Threading;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class AccessControlModel
+    public class AccessControlModel : IComparable
     {
         public string Name { get; }
         public string Type { get; }
@@ -114,6 +114,22 @@ namespace G1ANT.Addon.MSOffice.Models.Access
                 this.SetPropertyValue(fallbackPropertyName, originFontUnderline);
                 Thread.Sleep(500);
             }
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj == null)
+                return 1;
+
+            if (!(obj is AccessControlModel))
+                return 1;
+
+            var model = (AccessControlModel)obj;
+
+            if (Control.Application.hWndAccessApp() != model.Control.Application.hWndAccessApp())
+                return 1;
+
+            return model.Name == this.Name ? 0 : 1; // names of controls seem to be unique
         }
     }
 }

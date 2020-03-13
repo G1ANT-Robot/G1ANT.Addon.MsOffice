@@ -37,7 +37,7 @@ namespace G1ANT.Addon.MSOffice.Panels
 
         private void insertWPathButton_Click(object sender, EventArgs e) => controller.InsertPathIntoScript(controlsTree.SelectedNode);
 
-        private void refreshButton_Click(object sender, EventArgs e) => controller.InitRootElements(comboBox1);
+        private void refreshButton_Click(object sender, EventArgs e) => controller.InitRootElements(comboBox1, true);
 
         private void highlightToolStripMenuItem_Click(object sender, EventArgs e) => controller.ShowMarkerForm(controlsTree.SelectedNode);
 
