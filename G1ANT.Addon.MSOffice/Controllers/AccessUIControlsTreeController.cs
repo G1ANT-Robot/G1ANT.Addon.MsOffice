@@ -1,12 +1,7 @@
 ﻿using G1ANT.Addon.MSOffice.Api.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Language;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Windows.Forms;
 
@@ -15,225 +10,335 @@ namespace G1ANT.Addon.MSOffice.Controllers
     public class AccessUIControlsTreeController
     {
         private IMainForm mainForm;
+        public bool initialized = false;
+        private readonly IRunningObjectTableService runningObjectTableService;
+        private readonly TreeView controlsTree;
 
-        public AccessUIControlsTreeController()
-        { }
-
-
-
-        //struct RunningObject
-        //{
-        //    public string Name;
-        //    public object Application;
-        //}
-
-        //[DllImport("ole32.dll")]
-        //static extern int CreateBindCtx(uint reserved, out IBindCtx ppbc);
-
-        //// Returns the contents of the Running Object Table (ROT), where
-        //// open Microsoft applications and their documents are registered.
-        //List<RunningObject> GetRunningObjects()
-        //{
-        //    var result = new List<RunningObject>();
-
-        //    CreateBindCtx(0, out IBindCtx bindContext);
-            
-        //    bindContext.GetRunningObjectTable(out IRunningObjectTable runningObjectTable);
-        //    runningObjectTable.EnumRunning(out IEnumMoniker monikerEnumerator);
-
-        //    monikerEnumerator.Reset();
-
-        //    var monikers = new IMoniker[1];
-        //    IntPtr numFetched = IntPtr.Zero;
-        //    while (monikerEnumerator.Next(1, monikers, numFetched) == 0)
-        //    {
-        //        RunningObject running;
-        //        monikers[0].GetDisplayName(bindContext, null, out running.Name);
-        //        runningObjectTable.GetObject(monikers[0], out running.Application);
-        //        result.Add(running);
-        //    }
-        //    return result;
-        //}
-
-
+        public AccessUIControlsTreeController(IRunningObjectTableService runningObjectTableService, TreeView controlsTree)
+        {
+            this.runningObjectTableService = runningObjectTableService;
+            this.controlsTree = controlsTree;
+        }
 
         public void Initialize(IMainForm mainForm) => this.mainForm = mainForm;
 
 
-        public bool initialized = false;
-        public void InitRootElements(ComboBox applications, TreeView controlsTree)
+        public void InitRootElements(ComboBox applications)
         {
-            if (initialized)
-                return;
-            initialized = true;
+            //if (initialized)
+            //    return;
+            //initialized = true;
 
 
-            const uint OBJID_NATIVEOM = 0xFFFFFFF0;
+            var selectedItemText = applications.SelectedItem?.ToString();
 
-            var accessProcesses = new List<Process>(Process.GetProcessesByName("MSACCESS").Concat(Process.GetProcessesByName("MSACCESS.EXE")));
+            var applicationInstances = runningObjectTableService.GetApplicationInstances("msaccess");
 
-            foreach (var accessProcess in accessProcesses)
+
+            applications.Items.Clear();
+            applications.Items.AddRange(applicationInstances.ToArray());
+
+
+            if (applicationInstances.Any())
             {
-                var mainHandle = accessProcess.MainWindowHandle;
-                if (mainHandle.ToInt32() > 0)
-                {
-                    var IID_IDispatch = new Guid("{00020400-0000-0000-C000-000000000046}");
+                var itemToSelect = applications.Items.Cast<RotApplicationModel>().FirstOrDefault(a => a.ToString() == selectedItemText) ?? applications.Items[0];
 
-                    int res = OleAccWrapper.AccessibleObjectFromWindow(mainHandle, OBJID_NATIVEOM, ref IID_IDispatch, out Microsoft.Office.Interop.Access.Application app);
-                    if (res >= 0)
-                    {
-                        //Debug.Assert(app.hWndAccessApp() == mainHandle);
-                        //Console.WriteLine(app.Name);
-
-                        applications.Items.Add($"{app.Name} {app.CurrentProject.Name}");
-                        // todo: check how to release app COM object when done using it
-                    }
-                    else
-                        throw new Exception(); //todo: collect exception and throw AggregateException
-                }
+                applications.SelectedItem = itemToSelect;
             }
+        }
 
-            if (applications.Items.Cast<object>().Any())
-                applications.SelectedIndex = 0;
-
-            //try
-            //{
-            //    //var runningObjects = GetRunningObjects();
-            //    //foreach (var runningObject in runningObjects)
-            //    //{
-            //    //    if (runningObject.Application is Microsoft.Office.Interop.Access.Application)
-            //    //    {
-            //    //        var name = runningObject.Name;
-            //    //    }
-            //    //}
-
-
-
-            //    var access = (Microsoft.Office.Interop.Access.Application)Marshal.GetActiveObject("Access.Application");
-            //}
-            //catch (Exception ex)
-            //{
-            //    if (ex.Message.Contains("MK_E_UNAVAILABLE"))
-            //        return;
-            //    throw;
-            //}
-
-
+        internal void SelectedApplicationChanged(RotApplicationModel rotApplicationModel)
+        {
             controlsTree.BeginUpdate();
             controlsTree.Nodes.Clear();
 
-            //var jvms = nodeService.GetJvmNodes();
-            //foreach (var jvm in jvms)
-            //{
-            //    var name = $"{jvm.Name} {jvm.JvmId}";
-            //    var rootNode = controlsTree.Nodes.Add(name);
-            //    rootNode.Tag = jvm;
-
-            //    var windows = nodeService.GetChildNodes(jvm);
-            //    rootNode.Nodes.AddRange(windows.Select(w => CreateTreeNode(w)).ToArray());
-
-            //    rootNode.Expand();
-            //}
+            controlsTree.Nodes.AddRange(
+                new TreeNode[]
+                {
+                    new TreeNode("Forms") { Tag = rotApplicationModel, Nodes = { new TreeNode("") } },
+                    new TreeNode("Macros") { Tag = rotApplicationModel, Nodes = { new TreeNode("") } },
+                    new TreeNode("Reports") { Tag = rotApplicationModel, Nodes = { new TreeNode("") } },
+                    new TreeNode("Queries") { Tag = rotApplicationModel, Nodes = { new TreeNode("") } },
+                }
+            );
 
             controlsTree.EndUpdate();
         }
 
-        private TreeNode CreateTreeNode(AccessControlModel controlModel)
+        //private string FormatLongLine(string line)
+        //{
+        //    const int maxLineLength = 100;
+        //    if (line.Length <= maxLineLength)
+        //        return line;
+
+        //    var sb = new StringBuilder(line.Length);
+        //    var isFirstLine = true;
+        //    do
+        //    {
+        //        var linePart = line.Substring(0, Math.Min(line.Length, maxLineLength));
+        //        line = line.Substring(linePart.Length);
+        //        sb.AppendLine((isFirstLine ? "" : "\t") + linePart);
+        //        isFirstLine = false;
+        //    } while (line != "");
+
+        //    return sb.ToString();
+        //}
+
+        private static readonly string[] ControlTooltipProperties = new string[]
         {
-            var treeNode = new TreeNode(GetNameForNode(controlModel))
-            {
-                Tag = controlModel,
-                ToolTipText = GetTooltip(controlModel)
-            };
+            "Name",
+            "ControlType",
+            "FontName",
+            "FontSize",
+            "Caption",
+            "Visible",
+            "Width",
+            "Height",
+            "Top",
+            "Left",
+            "BackColor",
+            "Enabled",
+            "OnClick",
+            "Default",
+            "Cancel",
+            "TabIndex",
+            "TabStop",
+            "RowSource",
+            "RowSourceType",
+            "BoundColumn",
+            "ColumnCount",
+            "ColumnWidths",
+            "ColumnHeads",
+            "ListRows",
+            "ListWidth",
+            "ListCount",
+            "ListIndex"
+        };
 
-            if (controlModel.GetChildrenCount() > 0)
-                treeNode.Nodes.Add("");
-
-            return treeNode;
-        }
-
-        private string FormatLongLine(string line)
+        private static readonly string[] FormTooltipProperties = new string[]
         {
-            const int maxLineLength = 100;
-            if (line.Length <= maxLineLength)
-                return line;
+            "Name",
+            "Hwnd",
+            "Modal",
+            "Width",
+            "WindowWidth",
+            "WindowHeight",
+            "InsideHeight",
+            "InsideWidth",
+            "WindowTop",
+            "WindowLeft",
+            "ScrollBars",
+            "ControlBox",
+            "CloseButton",
+            "MinButton",
+            "MaxButton",
+            "MinMaxButtons",
+            "Moveable",
+            "GridX",
+            "GridY",
+            "ShowGrid",
+            "LogicalPageWidth",
+            "Visible",
+        };
 
-            var sb = new StringBuilder(line.Length);
-            var isFirstLine = true;
-            do
-            {
-                var linePart = line.Substring(0, Math.Min(line.Length, maxLineLength));
-                line = line.Substring(linePart.Length);
-                sb.AppendLine((isFirstLine ? "" : "\t") + linePart);
-                isFirstLine = false;
-            } while (line != "");
-
-            return sb.ToString();
-        }
+        //private static readonly string[] UnloadedFormTooltipProperties = new string[] { "Name", "Attributes", "DateCreated", "DateModified", "FullName", "Type" };
 
         private string GetTooltip(AccessControlModel controlModel)
         {
-            return "";
-            //var nodeProperties = controlModel.GetType().GetProperties()
-            //    .Where(p => p.Name != nameof(controlModel.Node))
-            //    .Select(p => new { Name = p.Name, Value = p.GetValue(controlModel) })
-            //    .Select(v => new { Name = v.Name, Value = v.Value is IEnumerable<string> ? string.Join(", ", v.Value as IEnumerable<string>) : v.Value });
+            var result = new StringBuilder($"Type: {controlModel.Type}\r\n");
 
-            //return string.Join("\r\n", nodeProperties.Where(np => !string.IsNullOrEmpty(np.Value?.ToString())).Select(np => $"{np.Name}: {FormatLongLine(np.Value.ToString())}"));
+            //foreach (var propertyName in ControlTooltipProperties)
+            //{
+            //    if (controlModel.TryGetPropertyValue(propertyName, out string propertyValue))
+            //        result.AppendLine($"{propertyName}: {propertyValue}");
+            //}
+
+            return result.ToString();
+        }
+
+        private string GetTooltip(AccessFormModel formModel)
+        {
+            var result = new StringBuilder();
+
+            foreach (var propertyName in FormTooltipProperties)
+            {
+                if (formModel.TryGetPropertyValue(propertyName, out string propertyValue))
+                    result.AppendLine($"{propertyName}: {propertyValue}");
+            }
+
+            return result.ToString();
+        }
+
+        private string GetTooltip(AccessObjectModel formModel)
+        {
+            var result = new StringBuilder();
+
+            result.AppendLine($"Name: {formModel.Name}");
+            result.AppendLine($"FullName: {formModel.FullName}");
+            result.AppendLine($"Type: {formModel.Type}");
+            result.AppendLine($"IsLoaded: {formModel.IsLoaded}");
+            result.AppendLine($"IsWeb: {formModel.IsWeb}");
+            result.AppendLine($"Attributes: {formModel.Attributes}");
+            result.AppendLine($"DateCreated: {formModel.DateCreated}");
+            result.AppendLine($"DateModified: {formModel.DateModified}");
+
+            for (var i = 0; i < formModel.Form.Properties.Count; ++i)
+            {
+                var property = formModel.Form.Properties[i];
+                result.AppendLine($"{property.Name}: {property.Value}");
+            }
+
+            return result.ToString();
         }
 
         public void CopyNodeDetails(TreeNode treeNode)
         {
-            var node = (AccessControlModel)treeNode.Tag;
-            var tooltip = GetTooltip(node);
-            Clipboard.SetText(tooltip);
+            Clipboard.SetText(treeNode.ToolTipText);
         }
 
-        private static string GetNameForNode(AccessControlModel controlModel)
+        private static string GetNameForNode(AccessControlModel model)
         {
-            var name = controlModel.Name;
-
-            //if (controlModel.Id > 0)
-            //    name += $" {controlModel.Id}";
-
-            //if (!string.IsNullOrEmpty(controlModel.Name))
-            //{
-            //    name += ": ";
-            //    name += $"\"{controlModel.Name}\"";
-            //}
-
-            return name;
+            return $"\"{model.Name}\" {model.Type} {model.Value}";
         }
+
+        private static string GetNameForNode(AccessFormModel model)
+        {
+            return $"\"{model.Name}\" {(model.Name != model.Caption ? model.Caption : "")} {(model.Name != model.FormName ? model.FormName : "")}";
+        }
+
+        private string GetNameForNode(AccessObjectModel formModel)
+        {
+            return $"\"{formModel.Name}\" {(formModel.Name != formModel.FullName ? formModel.FullName : "")}, loaded: {formModel.IsLoaded}";
+        }
+
 
         public void LoadChildNodes(TreeNode treeNode)
         {
-            if (treeNode.Parent == null)
-                return; // don't clear jvms and their windows as they are already rendered
+            //if (treeNode.Parent == null)
+            //    return; // don't clear jvms and their windows as they are already rendered
 
-            var node = (AccessControlModel)treeNode.Tag;
-            treeNode.Nodes.Clear();
+            controlsTree.BeginUpdate();
 
-            node.LoadChildren(false);
+            if (treeNode.Tag is AccessControlModel accessControlModel)
+                LoadControlNodes(treeNode, accessControlModel);
+            else if (treeNode.Tag is AccessFormModel accessFormModel)
+                LoadControlNodes(treeNode, accessFormModel);
+            else if (treeNode.Tag is RotApplicationModel rotApplicationModel)
+                LoadFormNodes(treeNode, rotApplicationModel);
 
-            var children = node.Children;
-            foreach (var child in children)
+            controlsTree.EndUpdate();
+        }
+
+        private void LoadFormNodes(TreeNode treeNode, RotApplicationModel rotApplicationModel)
+        {
+            if (treeNode.Nodes.Count == 1 && treeNode.Nodes[0].Text == "")
             {
-                treeNode.Nodes.Add(CreateTreeNode(child));
+                treeNode.Nodes.Clear();
+
+                foreach (Microsoft.Office.Interop.Access.AccessObject form in rotApplicationModel.Application.CurrentProject.AllForms)
+                {
+                    if (form.IsLoaded)
+                    {
+                        var formModel = new AccessFormModel(rotApplicationModel.Application.Forms[form.Name], false, false, false);
+
+                        var childNode = new TreeNode(GetNameForNode(formModel))
+                        {
+                            Tag = formModel,
+                            ToolTipText = GetTooltip(formModel)
+                        };
+                        if (formModel.Form.Controls.Count > 0)
+                            childNode.Nodes.Add("");
+                        treeNode.Nodes.Add(childNode);
+                    }
+                    else
+                    {
+                        var formModel = new AccessObjectModel(form);
+                        var childNode = new TreeNode(GetNameForNode(formModel))
+                        {
+                            Tag = formModel,
+                            ToolTipText = GetTooltip(formModel)
+                        };
+                        treeNode.Nodes.Add(childNode);
+                    }
+                }
             }
+        }
+
+        private void LoadControlNodes(TreeNode treeNode, AccessFormModel accessFormModel)
+        {
+            if (treeNode.Nodes.Count == 1 && treeNode.Nodes[0].Text == "")
+            {
+                treeNode.Nodes.Clear();
+
+                accessFormModel.LoadControls(false);
+
+                foreach (var childModel in accessFormModel.Controls)
+                {
+                    var childNode = new TreeNode(GetNameForNode(childModel))
+                    {
+                        Tag = childModel,
+                        ToolTipText = GetTooltip(childModel)
+                    };
+
+                    if (childModel.GetChildrenCount() > 0)
+                        childNode.Nodes.Add("");
+                    treeNode.Nodes.Add(childNode);
+                }
+
+            }
+        }
+
+
+        private void LoadControlNodes(TreeNode treeNode, AccessControlModel accessControlModel)
+        {
+            if (treeNode.Nodes.Count == 1 && treeNode.Nodes[0].Text == "")
+            {
+                treeNode.Nodes.Clear();
+
+                accessControlModel.LoadChildren(false);
+
+                foreach (var childModel in accessControlModel.Children)
+                {
+                    var childNode = new TreeNode(GetNameForNode(childModel))
+                    {
+                        Tag = childModel,
+                        ToolTipText = GetTooltip(childModel)
+                    };
+
+                    if (childModel.GetChildrenCount() > 0)
+                        childNode.Nodes.Add("");
+                    treeNode.Nodes.Add(childNode);
+                }
+
+            }
+        }
+
+        private AccessControlModel GetAccessControlModelFromNode(TreeNode node)
+        {
+            if (node?.Tag is AccessControlModel accessControlModel)
+                return accessControlModel;
+
+            return null;
         }
 
         public void InsertPathIntoScript(TreeNode node)
         {
-            //if (node != null)
-            //{
-            //    var controlModel = (AccessControlModel)node.Tag;
-            //    var path = pathService.GetXPathTo(controlModel);
+            if (node != null && node.Tag is AccessControlModel accessControlModel)
+            {
+                var path = "";
+                while (node != null)
+                {
+                    var model = GetAccessControlModelFromNode(node);
+                    path = $"{model.Name}/{path}";
+                    node = node.Parent;
+                }
+                path = "/" + path;
 
-            //    if (mainForm == null)
-            //        MessageBox.Show(path);
-            //    else
-            //        mainForm.InsertTextIntoCurrentEditor($"{SpecialChars.Text}{path}{SpecialChars.Text}");
-            //}
+                if (mainForm == null)
+                    MessageBox.Show(path);
+                else
+                    mainForm.InsertTextIntoCurrentEditor($"{SpecialChars.Text}{path}{SpecialChars.Text}");
+            }
         }
 
         public void ShowMarkerForm(TreeNode treeNode)

@@ -101,6 +101,9 @@
     <Compile Include="Api\Access\AccessControlPropertyHelper.cs" />
     <Compile Include="Api\Access\AccessFormControlsTreeWalker.cs" />
     <Compile Include="Api\Access\IAccessFormControlsTreeWalker.cs" />
+    <Compile Include="Api\Access\IRunningObjectTableService.cs" />
+    <Compile Include="Models\Access\RotApplicationModel.cs" />
+    <Compile Include="Api\Access\RunningObjectTableService.cs" />
     <Compile Include="Api\Access\OleAccWrapper.cs" />
     <Compile Include="Commands\Access\Controls\AccessControlExecuteOnClickCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessGetActiveControlCommand.cs" />

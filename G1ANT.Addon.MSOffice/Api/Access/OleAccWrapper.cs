@@ -10,7 +10,7 @@ namespace G1ANT.Addon.MSOffice.Api.Access
             IntPtr hwnd,
             uint dwObjectID,
             ref Guid riid,
-            out Microsoft.Office.Interop.Access.Application o
+            out Microsoft.Office.Interop.Access.Application applicationObject
         );
 
     }

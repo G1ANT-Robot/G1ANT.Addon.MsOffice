@@ -1,4 +1,6 @@
-﻿using G1ANT.Addon.MSOffice.Controllers;
+﻿using G1ANT.Addon.MSOffice.Api.Access;
+using G1ANT.Addon.MSOffice.Controllers;
+using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Language;
 using System;
 using System.Windows.Forms;
@@ -11,15 +13,15 @@ namespace G1ANT.Addon.MSOffice.Panels
     {
         private AccessUIControlsTreeController controller;
 
-        public AccessControlsTreePanel() : this(new AccessUIControlsTreeController())
+        public AccessControlsTreePanel()
+            : this(null)
         { }
 
         public AccessControlsTreePanel(AccessUIControlsTreeController controller) // IoC
         {
-            this.controller = controller;
             InitializeComponent();
+            this.controller = controller ?? new AccessUIControlsTreeController(new RunningObjectTableService(), controlsTree);
         }
-
 
         public override void Initialize(IMainForm mainForm)
         {
@@ -27,7 +29,7 @@ namespace G1ANT.Addon.MSOffice.Panels
             controller.Initialize(mainForm);
         }
 
-        public override void RefreshContent() => controller.InitRootElements(comboBox1, controlsTree);
+        public override void RefreshContent() => controller.InitRootElements(comboBox1);
 
         private void controlsTree_BeforeExpand(object sender, TreeViewCancelEventArgs e) => controller.LoadChildNodes(e.Node);
 
@@ -35,7 +37,7 @@ namespace G1ANT.Addon.MSOffice.Panels
 
         private void insertWPathButton_Click(object sender, EventArgs e) => controller.InsertPathIntoScript(controlsTree.SelectedNode);
 
-        private void refreshButton_Click(object sender, EventArgs e) => controller.InitRootElements(comboBox1, controlsTree);
+        private void refreshButton_Click(object sender, EventArgs e) => controller.InitRootElements(comboBox1);
 
         private void highlightToolStripMenuItem_Click(object sender, EventArgs e) => controller.ShowMarkerForm(controlsTree.SelectedNode);
 
@@ -51,5 +53,7 @@ namespace G1ANT.Addon.MSOffice.Panels
         private void toolStripButton1_Click(object sender, EventArgs e) => controller.ShowMarkerForm(controlsTree.SelectedNode);
 
         private void copyNodeDetailsToolStripMenuItem_Click(object sender, EventArgs e) => controller.CopyNodeDetails(controlsTree.SelectedNode);
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) => controller.SelectedApplicationChanged(comboBox1.SelectedItem as RotApplicationModel);
     }
 }

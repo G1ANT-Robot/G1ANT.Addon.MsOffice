@@ -9,6 +9,7 @@
 */
 using Microsoft.Office.Interop.Access;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,7 +40,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public int InsideHeight { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public ICollection<AccessControlModel> Controls { get; }
+        public ICollection<AccessControlModel> Controls { get; private set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public AccessPropertiesModel Properties { get; }
@@ -47,11 +48,12 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 
         public AccessFormModel(Form form, bool getFormProperties, bool getControls, bool getControlsProperties)
         {
+            Form = form ?? throw new ArgumentNullException(nameof(form));
+
             Name = form.Name;
             Value = form.accValue;
 
             Caption = form.Caption;
-            Form = form;// new AccessFormModel(form.Form, getFormProperties, getControls, getControlsProperties) : null;
             FormName = form.FormName;
             Hwnd = form.Hwnd;
             InsideWidth = form.InsideWidth;
@@ -62,7 +64,15 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             Y = form.WindowTop;
 
             Properties = !getFormProperties || form.Properties.Count == 0 ? null : new AccessPropertiesModel(form.Properties);
-            Controls = !getControls || form.Controls.Count == 0 ? null : form.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getControlsProperties)).ToList();
+            if (getControls)
+                LoadControls(getControlsProperties);
+        }
+
+
+        public void LoadControls(bool getControlsProperties)
+        {
+            if (Form.Controls.Count > 0)
+                Controls = Form.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getControlsProperties, false)).ToList();
         }
     }
 }

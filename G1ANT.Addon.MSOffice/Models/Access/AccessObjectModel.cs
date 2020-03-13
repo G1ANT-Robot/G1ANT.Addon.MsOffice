@@ -7,6 +7,7 @@
 *    See License.txt file in the project root for full license information.
 *
 */
+
 using Microsoft.Office.Interop.Access;
 using System;
 
@@ -14,6 +15,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 {
     public class AccessObjectModel
     {
+        public AccessObject Form { get; }
         public string Name { get; }
         public string FullName { get; }
         public bool IsLoaded { get; }
@@ -25,10 +27,12 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 
         public AccessObjectModel(AccessObject form)
         {
+            Form = form ?? throw new ArgumentNullException(nameof(form));
+
             Name = form.Name;
             FullName = form.FullName;
             IsLoaded = form.IsLoaded;
-            Type = form.Type.ToString();
+            Type = ((AcObjectType)form.Type).ToString();
             Attributes = form.Attributes;
             DateCreated = form.DateCreated;
             DateModified = form.DateModified;

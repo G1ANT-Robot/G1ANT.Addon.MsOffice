@@ -22,10 +22,10 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public string Name { get; }
         public string Type { get; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public dynamic Caption { get; }
+        public dynamic Caption { get; private set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public dynamic Value { get; }
+        public dynamic Value { get; private set; }
 
         [JsonIgnore]
         public _Control Control { get; }
@@ -58,20 +58,30 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             Control = control ?? throw new ArgumentNullException(nameof(control));
             Name = control.Name;
             Type = ((AcControlType)this.TryGetPropertyValue<int>("ControlType")).ToString();
+            Caption = this.TryGetPropertyValue<string>("Caption");
+            Value = this.TryGetPropertyValue<string>("Value");
 
             if (getProperties && control.Properties.Count > 0)
-            {
-                var properties = control.Properties.OfType<dynamic>().ToList();
-                Caption = this.TryGetPropertyValue<string>("Caption");
-                Value = this.TryGetPropertyValue<string>("Value");
-                Properties = new AccessPropertiesModel(control.Properties);
-            }
+                LoadProperties();
 
             if (getChildrenRecursively)
                 LoadChildren(getProperties);
         }
 
-        public int GetChildrenCount() => Control.Controls.Count;
+        public void LoadProperties()
+        {
+            Properties = new AccessPropertiesModel(Control.Properties);
+        }
+
+        public int GetChildrenCount()
+        {
+            try
+            {
+                return Control is _Control ? Control.Controls.Count : 0;
+            }
+            catch { }
+            return 0;
+        }
 
         public void LoadChildren(bool getProperties = true)
         {
