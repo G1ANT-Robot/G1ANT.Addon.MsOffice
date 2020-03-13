@@ -247,9 +247,6 @@
     <EmbeddedResource Include="License.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Image1.bmp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\insert_into.png" />
   </ItemGroup>
   <ItemGroup>
