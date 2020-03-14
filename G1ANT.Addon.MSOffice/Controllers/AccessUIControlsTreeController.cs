@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+//using Access = Microsoft.Office.Interop.Access;
 
 namespace G1ANT.Addon.MSOffice.Controllers
 {
@@ -48,6 +49,13 @@ namespace G1ANT.Addon.MSOffice.Controllers
             }
         }
 
+        const string FormsLabel = "Forms";
+        const string MacrosLabel = "Macros";
+        const string ReportsLabel = "Reports";
+        const string QueriesLabel = "Queries";
+        const string PropertiesLabel = "Properties";
+        const string InternalName = "internal";
+
         internal void SelectedApplicationChanged(RotApplicationModel rotApplicationModel)
         {
             selectedTreeNodeModel = controlsTree.SelectedNode?.Tag;
@@ -59,10 +67,10 @@ namespace G1ANT.Addon.MSOffice.Controllers
             controlsTree.Nodes.AddRange(
                 new TreeNode[]
                 {
-                    new TreeNode("Forms") { Tag = rotApplicationModel, Nodes = { new TreeNode("") } },
-                    new TreeNode("Macros") { Tag = rotApplicationModel, Nodes = { new TreeNode("") } },
-                    new TreeNode("Reports") { Tag = rotApplicationModel, Nodes = { new TreeNode("") } },
-                    new TreeNode("Queries") { Tag = rotApplicationModel, Nodes = { new TreeNode("") } },
+                    new TreeNode(FormsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
+                    new TreeNode(MacrosLabel) { Tag = rotApplicationModel, Nodes = { "" } },
+                    new TreeNode(ReportsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
+                    new TreeNode(QueriesLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                 }
             );
 
@@ -70,66 +78,72 @@ namespace G1ANT.Addon.MSOffice.Controllers
             controlsTree.EndUpdate();
         }
 
-        private static readonly string[] ControlTooltipProperties = new string[]
-        {
-            "Name",
-            "ControlType",
-            "FontName",
-            "FontSize",
-            "Caption",
-            "Visible",
-            "Width",
-            "Height",
-            "Top",
-            "Left",
-            "BackColor",
-            "Enabled",
-            "OnClick",
-            "Default",
-            "Cancel",
-            "TabIndex",
-            "TabStop",
-            "RowSource",
-            "RowSourceType",
-            "BoundColumn",
-            "ColumnCount",
-            "ColumnWidths",
-            "ColumnHeads",
-            "ListRows",
-            "ListWidth",
-            "ListCount",
-            "ListIndex"
-        };
+        //private static readonly string[] ControlTooltipProperties = new string[]
+        //{
+        //    "Name",
+        //    "ControlType",
+        //    "FontName",
+        //    "FontSize",
+        //    "Caption",
+        //    "Visible",
+        //    "Width",
+        //    "Height",
+        //    "Top",
+        //    "Left",
+        //    "BackColor",
+        //    "Enabled",
+        //    "OnClick",
+        //    "Default",
+        //    "Cancel",
+        //    "TabIndex",
+        //    "TabStop",
+        //    "RowSource",
+        //    "RowSourceType",
+        //    "BoundColumn",
+        //    "ColumnCount",
+        //    "ColumnWidths",
+        //    "ColumnHeads",
+        //    "ListRows",
+        //    "ListWidth",
+        //    "ListCount",
+        //    "ListIndex"
+        //};
 
-        private static readonly string[] FormTooltipProperties = new string[]
-        {
-            "Name",
-            "Hwnd",
-            "Modal",
-            "Width",
-            "WindowWidth",
-            "WindowHeight",
-            "InsideHeight",
-            "InsideWidth",
-            "WindowTop",
-            "WindowLeft",
-            "ScrollBars",
-            "ControlBox",
-            "CloseButton",
-            "MinButton",
-            "MaxButton",
-            "MinMaxButtons",
-            "Moveable",
-            "GridX",
-            "GridY",
-            "ShowGrid",
-            "LogicalPageWidth",
-            "Visible",
-        };
+        //private static readonly string[] FormTooltipProperties = new string[]
+        //{
+        //    "Name",
+        //    "Hwnd",
+        //    "Modal",
+        //    "Width",
+        //    "WindowWidth",
+        //    "WindowHeight",
+        //    "InsideHeight",
+        //    "InsideWidth",
+        //    "WindowTop",
+        //    "WindowLeft",
+        //    "ScrollBars",
+        //    "ControlBox",
+        //    "CloseButton",
+        //    "MinButton",
+        //    "MaxButton",
+        //    "MinMaxButtons",
+        //    "Moveable",
+        //    "GridX",
+        //    "GridY",
+        //    "ShowGrid",
+        //    "LogicalPageWidth",
+        //    "Visible",
+        //};
 
         private string GetTooltip(AccessControlModel controlModel)
         {
-            var result = new StringBuilder($"Type: {controlModel.Type}\r\n");
+            var result = new StringBuilder();
+
+            result.AppendLine($"Type: {controlModel.Type}\r\n");
+            result.AppendLine($"Name: {controlModel.Name}");
+            result.AppendLine($"Caption: {controlModel.Caption}");
+            if (controlModel.Value != null)
+                result.AppendLine($"Value: {controlModel.Value}");
 
             //foreach (var propertyName in ControlTooltipProperties)
             //{
@@ -144,11 +158,19 @@ namespace G1ANT.Addon.MSOffice.Controllers
         {
             var result = new StringBuilder();
 
-            foreach (var propertyName in FormTooltipProperties)
-            {
-                if (formModel.TryGetPropertyValue(propertyName, out string propertyValue))
-                    result.AppendLine($"{propertyName}: {propertyValue}");
-            }
+            result.AppendLine($"Name: {formModel.Name}");
+            result.AppendLine($"Caption: {formModel.Caption}");
+            if (formModel.FormName != formModel.Name)
+                result.AppendLine($"FormName: {formModel.FormName}");
+            result.AppendLine($"Height: {formModel.Height}");
+            result.AppendLine($"Width: {formModel.Width}");
+            result.AppendLine($"X: {formModel.X}");
+            result.AppendLine($"Y: {formModel.Y}");
+            //foreach (var propertyName in FormTooltipProperties)
+            //{
+            //    if (formModel.TryGetPropertyValue(propertyName, out string propertyValue))
+            //        result.AppendLine($"{propertyName}: {propertyValue}");
+            //}
 
             return result.ToString();
         }
@@ -166,11 +188,11 @@ namespace G1ANT.Addon.MSOffice.Controllers
             result.AppendLine($"DateCreated: {formModel.DateCreated}");
             result.AppendLine($"DateModified: {formModel.DateModified}");
 
-            for (var i = 0; i < formModel.Form.Properties.Count; ++i)
-            {
-                var property = formModel.Form.Properties[i];
-                result.AppendLine($"{property.Name}: {property.Value}");
-            }
+            //for (var i = 0; i < formModel.Form.Properties.Count; ++i)
+            //{
+            //    var property = formModel.Form.Properties[i];
+            //    result.AppendLine($"{property.Name}: {property.Value}");
+            //}
 
             return result.ToString();
         }
@@ -182,17 +204,17 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         private static string GetNameForNode(AccessControlModel model)
         {
-            return $"\"{model.Name}\" {model.Type} {model.Value}";
+            return $"{model.Name} {model.Type} {model.Value}";
         }
 
         private static string GetNameForNode(AccessFormModel model)
         {
-            return $"\"{model.Name}\" {(model.Name != model.Caption ? model.Caption : "")} {(model.Name != model.FormName ? model.FormName : "")}";
+            return $"{model.Name} {(model.Name != model.Caption ? model.Caption : "")} {(model.Name != model.FormName ? model.FormName : "")}";
         }
 
-        private string GetNameForNode(AccessObjectModel formModel)
+        private string GetNameForNode(AccessObjectModel model)
         {
-            return $"\"{formModel.Name}\" {(formModel.Name != formModel.FullName ? formModel.FullName : "")}, loaded: {formModel.IsLoaded}";
+            return $"{model.Name} {(model.Name != model.FullName ? model.FullName : "")} {(model.IsLoaded ? "" : "(not loaded)")}";
         }
 
 
@@ -227,7 +249,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
             {
                 var nodeModel = node.Tag;
 
-                if (selectedTreeNodeModel != null && AreModelsSame(nodeModel,  selectedTreeNodeModel))
+                if (selectedTreeNodeModel != null && AreModelsSame(nodeModel, selectedTreeNodeModel))
                     controlsTree.SelectedNode = node;
 
                 var expandedTreeNodeModel = expandedTreeNodeModels.FirstOrDefault(etn => AreModelsSame(etn, nodeModel));
@@ -253,11 +275,53 @@ namespace G1ANT.Addon.MSOffice.Controllers
             else if (treeNode.Tag is AccessFormModel accessFormModel)
                 LoadControlNodes(treeNode, accessFormModel);
             else if (treeNode.Tag is RotApplicationModel rotApplicationModel)
-                LoadFormNodes(treeNode, rotApplicationModel);
+            {
+                switch (treeNode.Text)
+                {
+                    case FormsLabel:
+                        LoadFormNodes(treeNode, rotApplicationModel);
+                        break;
+                    case MacrosLabel:
+                        LoadMacroNodes(treeNode, rotApplicationModel);
+                        break;
+                }
+            }
 
             ApplyExpandedTreeNodes(treeNode.Nodes);
             controlsTree.EndUpdate();
         }
+
+        private void LoadMacroNodes(TreeNode treeNode, RotApplicationModel rotApplicationModel)
+        {
+            if (treeNode.Nodes.Count == 1 && treeNode.Nodes[0].Text == "")
+            {
+                treeNode.Nodes.Clear();
+
+                foreach (Microsoft.Office.Interop.Access.AccessObject macro in rotApplicationModel.Application.CurrentProject.AllMacros)
+                {
+                    var macroModel = new AccessObjectModel(macro);
+                    var childNode = new TreeNode(GetNameForNode(macroModel))
+                    {
+                        Tag = macroModel,
+                        ToolTipText = GetTooltip(macroModel)
+                    };
+                    treeNode.Nodes.Add(childNode);
+                }
+            }
+        }
+
+        private TreeNode CreatePropertyNode(object model)
+        {
+            var node = new TreeNode(PropertiesLabel)
+            {
+                Tag = model,
+                Name = InternalName,
+                Nodes = { "" }
+            };
+
+            return node;
+        }
+
 
         private void LoadFormNodes(TreeNode treeNode, RotApplicationModel rotApplicationModel)
         {
@@ -280,16 +344,16 @@ namespace G1ANT.Addon.MSOffice.Controllers
                             childNode.Nodes.Add("");
                         treeNode.Nodes.Add(childNode);
                     }
-                    //else
-                    //{
-                    //    var formModel = new AccessObjectModel(form);
-                    //    var childNode = new TreeNode(GetNameForNode(formModel))
-                    //    {
-                    //        Tag = formModel,
-                    //        ToolTipText = GetTooltip(formModel)
-                    //    };
-                    //    treeNode.Nodes.Add(childNode);
-                    //}
+                    else
+                    {
+                        var formModel = new AccessObjectModel(form);
+                        var childNode = new TreeNode(GetNameForNode(formModel))
+                        {
+                            Tag = formModel,
+                            ToolTipText = GetTooltip(formModel)
+                        };
+                        treeNode.Nodes.Add(childNode);
+                    }
                 }
             }
         }
@@ -300,6 +364,14 @@ namespace G1ANT.Addon.MSOffice.Controllers
             {
                 treeNode.Nodes.Clear();
 
+                if (treeNode.Name == InternalName && treeNode.Text == PropertiesLabel)
+                {
+                    treeNode.Nodes.AddRange(CreatePropertyNodes(accessFormModel.Form.Properties));
+                    return;
+                }
+
+                treeNode.Nodes.Add(CreatePropertyNode(accessFormModel));
+
                 accessFormModel.LoadControls(false);
 
                 foreach (var childModel in accessFormModel.Controls)
@@ -307,15 +379,21 @@ namespace G1ANT.Addon.MSOffice.Controllers
                     var childNode = new TreeNode(GetNameForNode(childModel))
                     {
                         Tag = childModel,
-                        ToolTipText = GetTooltip(childModel)
+                        ToolTipText = GetTooltip(childModel),
+                        Nodes = { "" }
                     };
 
-                    if (childModel.GetChildrenCount() > 0)
-                        childNode.Nodes.Add("");
                     treeNode.Nodes.Add(childNode);
                 }
 
             }
+        }
+
+        private TreeNode[] CreatePropertyNodes(Microsoft.Office.Interop.Access.Properties properties)
+        {
+            return new AccessPropertiesModel(properties)
+                .Select(p => new TreeNode($"{p.Key}: {p.Value}"))
+                .ToArray();
         }
 
         private void LoadControlNodes(TreeNode treeNode, AccessControlModel accessControlModel)
@@ -324,21 +402,30 @@ namespace G1ANT.Addon.MSOffice.Controllers
             {
                 treeNode.Nodes.Clear();
 
-                accessControlModel.LoadChildren(false);
-
-                foreach (var childModel in accessControlModel.Children)
+                if (treeNode.Name == InternalName && treeNode.Text == PropertiesLabel)
                 {
-                    var childNode = new TreeNode(GetNameForNode(childModel))
-                    {
-                        Tag = childModel,
-                        ToolTipText = GetTooltip(childModel)
-                    };
-
-                    if (childModel.GetChildrenCount() > 0)
-                        childNode.Nodes.Add("");
-                    treeNode.Nodes.Add(childNode);
+                    treeNode.Nodes.AddRange(CreatePropertyNodes(accessControlModel.Control.Properties));
+                    return;
                 }
 
+                treeNode.Nodes.Add(CreatePropertyNode(accessControlModel));
+
+                if (accessControlModel.GetChildrenCount() > 0)
+                {
+                    accessControlModel.LoadChildren(false);
+
+                    foreach (var childModel in accessControlModel.Children)
+                    {
+                        var childNode = new TreeNode(GetNameForNode(childModel))
+                        {
+                            Tag = childModel,
+                            ToolTipText = GetTooltip(childModel),
+                            Nodes = { "" }
+                        };
+
+                        treeNode.Nodes.Add(childNode);
+                    }
+                }
             }
         }
 
@@ -378,10 +465,13 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         public void ShowMarkerForm(TreeNode treeNode)
         {
-            if (treeNode != null)
+            if (treeNode?.Tag is AccessControlModel model)
             {
-                var node = (AccessControlModel)treeNode.Tag;
-                node.Blink();
+                model.Blink();
+            }
+            else if (treeNode?.Tag == null && treeNode?.Parent?.Tag is AccessControlModel parentModel)
+            {
+                parentModel.Blink();
             }
         }
 
