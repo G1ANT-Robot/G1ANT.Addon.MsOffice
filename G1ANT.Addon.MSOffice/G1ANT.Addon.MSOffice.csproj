@@ -171,7 +171,6 @@
     <Compile Include="Models\Access\AccessMacroModel.cs" />
     <Compile Include="Models\Access\AccessControlModel.cs" />
     <Compile Include="Models\Access\AccessFormModel.cs" />
-    <Compile Include="Models\Access\AccessObjectDetailedModel.cs" />
     <Compile Include="Models\Access\AccessObjectModel.cs" />
     <Compile Include="Models\Access\AccessObjectPropertyModel.cs" />
     <Compile Include="Models\Access\AccessPropertiesModel.cs" />
