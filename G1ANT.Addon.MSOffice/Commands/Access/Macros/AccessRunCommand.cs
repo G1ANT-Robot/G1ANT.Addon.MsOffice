@@ -13,7 +13,7 @@ using G1ANT.Language;
 namespace G1ANT.Addon.MSOffice.Commands.Access.Macros
 {
     [Command(Name = "access.procedures.run", Tooltip = "This command runs an existing Access procedure (sub) or function")]
-    public class AccessRunCommand : Command
+    public class AccessRunProcedureCommand : Command
     {
         public class Arguments : CommandArguments
         {
@@ -21,12 +21,12 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Macros
             public TextStructure ProcedureName { get; set; }
         }
 
-        public AccessRunCommand(AbstractScripter scripter) : base(scripter)
+        public AccessRunProcedureCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.Run(arguments.ProcedureName.Value);
+            AccessManager.CurrentAccess.RunProcedure(arguments.ProcedureName.Value);
         }
     }
 }

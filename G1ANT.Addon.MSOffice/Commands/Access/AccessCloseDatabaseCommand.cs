@@ -12,19 +12,19 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access
 {
-    [Command(Name = "access.close", Tooltip = "This command closes Access instance")]
-    public class AccessCloseCommand : Command
+    [Command(Name = "access.closedatabase", Tooltip = "This command closes Access database leaving the Access instance open")]
+    public class AccessCloseDatabaseCommand : Command
     {
         public class Arguments : CommandArguments
         {
         }
 
-        public AccessCloseCommand(AbstractScripter scripter) : base(scripter)
+        public AccessCloseDatabaseCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.Close();
+            AccessManager.CurrentAccess.CloseDatabase();
         }
     }
 }

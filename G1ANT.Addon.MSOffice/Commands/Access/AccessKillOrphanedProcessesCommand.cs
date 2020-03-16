@@ -7,24 +7,23 @@
 *    See License.txt file in the project root for full license information.
 *
 */
-
 using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access
 {
-    [Command(Name = "access.close", Tooltip = "This command closes Access instance")]
-    public class AccessCloseCommand : Command
+    [Command(Name = "access.killorphanedprocesses", Tooltip = "This command quits all Access proceses that are not registered in Running Object Table")]
+    public class AccessKillOrphanedProcessesCommand : Command
     {
         public class Arguments : CommandArguments
         {
         }
 
-        public AccessCloseCommand(AbstractScripter scripter) : base(scripter)
+        public AccessKillOrphanedProcessesCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.Close();
+            AccessManager.CurrentAccess.KillOrphanedAccessProcesses();
         }
     }
 }

@@ -62,5 +62,39 @@ namespace G1ANT.Addon.MSOffice.Api.Access
 
             throw new Exception($"Process {process.ProcessName} id {process.Id} does not have main window");
         }
+
+
+        /// <summary>
+        /// Get list of process ids that do are not registered in ROT
+        /// </summary>
+        /// <param name="applicationProcessName"></param>
+        /// <returns></returns>
+        public IList<int> GetOrphanedApplicationProcessIds(string applicationProcessName)
+        {
+            applicationProcessName = Path.GetFileNameWithoutExtension(applicationProcessName);
+            var applicationProcesses = Process.GetProcessesByName(applicationProcessName).Concat(Process.GetProcessesByName(applicationProcessName + ".EXE"));
+
+            return applicationProcesses.Select(process => process.Id).ToList();
+
+        }
+
+        private bool IsOrphaned(Process process)
+        {
+            try
+            {
+                var mainHandle = process.MainWindowHandle;
+                if (mainHandle.ToInt32() > 0)
+                {
+                    var IID_IDispatch = RunningObjectTableService.IID_IDispatch;
+                    int res = OleAccWrapper.AccessibleObjectFromWindow(mainHandle, OBJID_NATIVEOM, ref IID_IDispatch, out Application app);
+                    return res < 0;
+                }
+            }
+            catch { }
+
+            return true;
+        }
+
+
     }
 }

@@ -68,6 +68,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         internal void SelectedApplicationChanged(RotApplicationModel rotApplicationModel)
         {
+            //rotApplicationModel.Application.da
+
             if (rotApplicationModel.Application == null)
             {
                 controlsTree.Nodes.Clear();
@@ -132,7 +134,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
         }
 
 
-internal void OpenReport(AccessObjectModel report)
+        internal void OpenReport(AccessObjectModel report)
         {
             try
             {

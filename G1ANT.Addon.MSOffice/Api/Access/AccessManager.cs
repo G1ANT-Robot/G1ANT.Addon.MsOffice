@@ -9,6 +9,7 @@
 */
 
 using G1ANT.Addon.MSOffice.Access;
+using G1ANT.Addon.MSOffice.Api.Access;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace G1ANT.Addon.MSOffice
             //    throw new Exception("Can't determine path to msaccess.exe");
             //}
 
-            var wrapper = new AccessWrapper(new AccessFormControlsTreeWalker());
+            var wrapper = new AccessWrapper(new AccessFormControlsTreeWalker(), new RunningObjectTableService());
             launchedAccesses.Add(wrapper);
             CurrentAccess = wrapper;
             return wrapper;

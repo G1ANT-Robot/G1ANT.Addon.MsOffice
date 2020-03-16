@@ -6,5 +6,12 @@ namespace G1ANT.Addon.MSOffice.Api.Access
     public interface IRunningObjectTableService
     {
         IList<RotApplicationModel> GetApplicationInstances(string applicationProcessName);
+        
+        /// <summary>
+        /// Get list of process ids that do are not registered in ROT
+        /// </summary>
+        /// <param name="applicationProcessName"></param>
+        /// <returns></returns>
+        IList<int> GetOrphanedApplicationProcessIds(string applicationProcessName);
     }
 }
