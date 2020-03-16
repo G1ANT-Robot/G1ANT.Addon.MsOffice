@@ -1,5 +1,6 @@
 ﻿using G1ANT.Addon.MSOffice.Api.Access;
 using G1ANT.Addon.MSOffice.Controllers;
+using G1ANT.Addon.MSOffice.Controllers.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Language;
 using System;
@@ -20,7 +21,12 @@ namespace G1ANT.Addon.MSOffice.Panels
         public AccessControlsTreePanel(AccessUIControlsTreeController controller) // IoC
         {
             InitializeComponent();
-            this.controller = controller ?? new AccessUIControlsTreeController(new RunningObjectTableService(), controlsTree);
+            this.controller = controller ?? new AccessUIControlsTreeController(
+                controlsTree,
+                comboBox1,
+                new RunningObjectTableService(),
+                new TooltipService()
+            );
         }
 
         public override void Initialize(IMainForm mainForm)
@@ -29,7 +35,7 @@ namespace G1ANT.Addon.MSOffice.Panels
             controller.Initialize(mainForm);
         }
 
-        public override void RefreshContent() => controller.InitRootElements(comboBox1);
+        public override void RefreshContent() => controller.InitRootElements();
 
         private void controlsTree_BeforeExpand(object sender, TreeViewCancelEventArgs e) => controller.LoadChildNodes(e.Node);
 
@@ -37,7 +43,7 @@ namespace G1ANT.Addon.MSOffice.Panels
 
         private void insertWPathButton_Click(object sender, EventArgs e) => controller.InsertPathIntoScript(controlsTree.SelectedNode);
 
-        private void refreshButton_Click(object sender, EventArgs e) => controller.InitRootElements(comboBox1, true);
+        private void refreshButton_Click(object sender, EventArgs e) => controller.InitRootElements(true);
 
         private void highlightToolStripMenuItem_Click(object sender, EventArgs e) => controller.ShowMarkerForm(controlsTree.SelectedNode);
 
@@ -55,5 +61,34 @@ namespace G1ANT.Addon.MSOffice.Panels
         private void copyNodeDetailsToolStripMenuItem_Click(object sender, EventArgs e) => controller.CopyNodeDetails(controlsTree.SelectedNode);
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) => controller.SelectedApplicationChanged(comboBox1.SelectedItem as RotApplicationModel);
+
+        private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var clickedNode = controlsTree.SelectedNode;
+            if (clickedNode == null)
+            {
+                e.Cancel = true;
+                return;
+            }
+            var clickedModel = clickedNode.Tag;
+
+            loadFormToolStripMenuItem.Visible = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Forms";
+            highlightToolStripMenuItem.Visible = clickedModel is AccessControlModel;
+            copyNodeDetailsToolStripMenuItem.Visible = clickedModel is AccessControlModel;
+        }
+
+        private void acNormalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
+            controller.LoadForm(model, false);
+            // todo: replace current tree node with loaded form data
+        }
+
+        private void acDesignToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
+            controller.LoadForm(model, true);
+            // todo: replace current tree node with loaded form data
+        }
     }
 }

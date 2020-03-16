@@ -15,7 +15,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 {
     public class AccessObjectModel : IComparable
     {
-        public AccessObject Form { get; }
+        public AccessObject Object { get; }
         public string Name { get; }
         public string FullName { get; }
         public bool IsLoaded { get; }
@@ -25,18 +25,18 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public DateTime DateModified { get; }
         public bool IsWeb { get; }
 
-        public AccessObjectModel(AccessObject form)
+        public AccessObjectModel(AccessObject @object)
         {
-            Form = form ?? throw new ArgumentNullException(nameof(form));
+            Object = @object ?? throw new ArgumentNullException(nameof(@object));
 
-            Name = form.Name;
-            FullName = form.FullName;
-            IsLoaded = form.IsLoaded;
-            Type = ((AcObjectType)form.Type).ToString();
-            Attributes = form.Attributes;
-            DateCreated = form.DateCreated;
-            DateModified = form.DateModified;
-            IsWeb = form.IsWeb;
+            Name = @object.Name;
+            FullName = @object.FullName;
+            IsLoaded = @object.IsLoaded;
+            Type = ((AcObjectType)@object.Type).ToString();
+            Attributes = @object.Attributes;
+            DateCreated = @object.DateCreated;
+            DateModified = @object.DateModified;
+            IsWeb = @object.IsWeb;
         }
 
         public int CompareTo(object obj)

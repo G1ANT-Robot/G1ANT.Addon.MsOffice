@@ -41,6 +41,9 @@
             this.highlightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyNodeDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.loadFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.acNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.acDesignToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -119,21 +122,23 @@
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.highlightToolStripMenuItem,
-            this.copyNodeDetailsToolStripMenuItem});
+            this.copyNodeDetailsToolStripMenuItem,
+            this.loadFormToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(170, 48);
+            this.contextMenuStrip.Size = new System.Drawing.Size(181, 92);
+            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // highlightToolStripMenuItem
             // 
             this.highlightToolStripMenuItem.Name = "highlightToolStripMenuItem";
-            this.highlightToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.highlightToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.highlightToolStripMenuItem.Text = "&Highlight";
             this.highlightToolStripMenuItem.Click += new System.EventHandler(this.highlightToolStripMenuItem_Click);
             // 
             // copyNodeDetailsToolStripMenuItem
             // 
             this.copyNodeDetailsToolStripMenuItem.Name = "copyNodeDetailsToolStripMenuItem";
-            this.copyNodeDetailsToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.copyNodeDetailsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.copyNodeDetailsToolStripMenuItem.Text = "&Copy node details";
             this.copyNodeDetailsToolStripMenuItem.Click += new System.EventHandler(this.copyNodeDetailsToolStripMenuItem_Click);
             // 
@@ -149,6 +154,30 @@
             this.comboBox1.Size = new System.Drawing.Size(222, 21);
             this.comboBox1.TabIndex = 1;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // loadFormToolStripMenuItem
+            // 
+            this.loadFormToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.acNormalToolStripMenuItem,
+            this.acDesignToolStripMenuItem});
+            this.loadFormToolStripMenuItem.Name = "loadFormToolStripMenuItem";
+            this.loadFormToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadFormToolStripMenuItem.Text = "Load form";
+            this.loadFormToolStripMenuItem.Visible = false;
+            // 
+            // acNormalToolStripMenuItem
+            // 
+            this.acNormalToolStripMenuItem.Name = "acNormalToolStripMenuItem";
+            this.acNormalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.acNormalToolStripMenuItem.Text = "acNormal";
+            this.acNormalToolStripMenuItem.Click += new System.EventHandler(this.acNormalToolStripMenuItem_Click);
+            // 
+            // acDesignToolStripMenuItem
+            // 
+            this.acDesignToolStripMenuItem.Name = "acDesignToolStripMenuItem";
+            this.acDesignToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.acDesignToolStripMenuItem.Text = "acDesign";
+            this.acDesignToolStripMenuItem.Click += new System.EventHandler(this.acDesignToolStripMenuItem_Click);
             // 
             // AccessControlsTreePanel
             // 
@@ -180,5 +209,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem copyNodeDetailsToolStripMenuItem;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ToolStripMenuItem loadFormToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem acNormalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem acDesignToolStripMenuItem;
     }
 }

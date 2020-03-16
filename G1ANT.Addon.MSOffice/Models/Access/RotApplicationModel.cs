@@ -16,7 +16,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 
         public override string ToString()
         {
-            return $"{Name} {Application.CurrentProject.Name} (id {ApplicationMainHwnd})";
+            return $"{Name} {Application?.CurrentProject.FullName} (id {ApplicationMainHwnd})";
         }
        
     }

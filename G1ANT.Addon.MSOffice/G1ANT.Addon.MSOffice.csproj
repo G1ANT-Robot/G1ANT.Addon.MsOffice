@@ -102,6 +102,9 @@
     <Compile Include="Api\Access\AccessFormControlsTreeWalker.cs" />
     <Compile Include="Api\Access\IAccessFormControlsTreeWalker.cs" />
     <Compile Include="Api\Access\IRunningObjectTableService.cs" />
+    <Compile Include="Controllers\Access\ITooltipService.cs" />
+    <Compile Include="Controllers\Access\TooltipService.cs" />
+    <Compile Include="Models\Access\AccessObjectCollectionModel.cs" />
     <Compile Include="Models\Access\RotApplicationModel.cs" />
     <Compile Include="Api\Access\RunningObjectTableService.cs" />
     <Compile Include="Api\Access\OleAccWrapper.cs" />
