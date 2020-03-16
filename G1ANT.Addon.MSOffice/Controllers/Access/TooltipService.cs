@@ -42,7 +42,7 @@ namespace G1ANT.Addon.MSOffice.Controllers.Access
 
             result.AppendLine($"Name: {formModel.Name}");
             result.AppendLine($"FullName: {formModel.FullName}");
-            result.AppendLine($"Type: {formModel.Type}");
+            result.AppendLine($"Type: {formModel.TypeName}");
             result.AppendLine($"IsLoaded: {formModel.IsLoaded}");
             result.AppendLine($"IsWeb: {formModel.IsWeb}");
             result.AppendLine($"Attributes: {formModel.Attributes}");

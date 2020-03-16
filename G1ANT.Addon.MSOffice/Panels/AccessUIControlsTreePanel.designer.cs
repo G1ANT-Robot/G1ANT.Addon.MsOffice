@@ -43,9 +43,7 @@
             this.loadFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acDesignToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.executeQueryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.executeMacroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.copynameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip.SuspendLayout();
@@ -129,11 +127,9 @@
             this.copynameToolStripMenuItem,
             this.copyNodeDetailsToolStripMenuItem,
             this.loadFormToolStripMenuItem,
-            this.executeQueryToolStripMenuItem,
-            this.executeMacroToolStripMenuItem,
-            this.openReportToolStripMenuItem});
+            this.openToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(181, 180);
+            this.contextMenuStrip.Size = new System.Drawing.Size(181, 136);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // highlightToolStripMenuItem
@@ -174,25 +170,12 @@
             this.acDesignToolStripMenuItem.Text = "acDesign";
             this.acDesignToolStripMenuItem.Click += new System.EventHandler(this.acDesignToolStripMenuItem_Click);
             // 
-            // executeQueryToolStripMenuItem
+            // openToolStripMenuItem
             // 
-            this.executeQueryToolStripMenuItem.Name = "executeQueryToolStripMenuItem";
-            this.executeQueryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.executeQueryToolStripMenuItem.Text = "Execute &query";
-            this.executeQueryToolStripMenuItem.Click += new System.EventHandler(this.executeQueryToolStripMenuItem_Click);
-            // 
-            // executeMacroToolStripMenuItem
-            // 
-            this.executeMacroToolStripMenuItem.Name = "executeMacroToolStripMenuItem";
-            this.executeMacroToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.executeMacroToolStripMenuItem.Text = "Execute &macro";
-            // 
-            // openReportToolStripMenuItem
-            // 
-            this.openReportToolStripMenuItem.Name = "openReportToolStripMenuItem";
-            this.openReportToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.openReportToolStripMenuItem.Text = "Open &report";
-            this.openReportToolStripMenuItem.Click += new System.EventHandler(this.openReportToolStripMenuItem_Click);
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Text = "&Open/Execute";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // comboBox1
             // 
@@ -247,9 +230,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadFormToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem acNormalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem acDesignToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem executeQueryToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem executeMacroToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openReportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copynameToolStripMenuItem;
     }
 }

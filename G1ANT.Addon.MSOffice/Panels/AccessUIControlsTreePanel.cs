@@ -75,9 +75,9 @@ namespace G1ANT.Addon.MSOffice.Panels
             
             //todo: move to controller and use constants
             loadFormToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Forms";
-            executeQueryToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Queries";
-            executeMacroToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Macros";
-            openReportToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Reports";
+
+            openToolStripMenuItem.Available = clickedModel is AccessObjectModel && !loadFormToolStripMenuItem.Available;
+
             copynameToolStripMenuItem.Available = clickedNode.Parent != null && !(clickedModel is RotApplicationModel);
 
             highlightToolStripMenuItem.Available = clickedModel is AccessControlModel;
@@ -90,32 +90,26 @@ namespace G1ANT.Addon.MSOffice.Panels
         private void acNormalToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
-            controller.LoadForm(model, false);
+            controller.TryOpenForm(model, false);
             // todo: replace current tree node with loaded form data
         }
 
         private void acDesignToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
-            controller.LoadForm(model, true);
+            controller.TryOpenForm(model, true);
             // todo: replace current tree node with loaded form data
-        }
-
-        private void executeQueryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
-            controller.ExecuteQuery(model);
-        }
-
-        private void openReportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
-            controller.OpenReport(model);
         }
 
         private void copynameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(controlsTree.SelectedNode?.Text);
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
+            controller.OpenAccessObject(model);
         }
     }
 }

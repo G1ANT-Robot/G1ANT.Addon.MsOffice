@@ -19,7 +19,8 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public string Name { get; }
         public string FullName { get; }
         public bool IsLoaded { get; }
-        public string Type { get; }
+        public string TypeName { get; }
+        public AcObjectType Type { get; }
         public int Attributes { get; }
         public DateTime DateCreated { get; }
         public DateTime DateModified { get; }
@@ -32,7 +33,8 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             Name = @object.Name;
             FullName = @object.FullName;
             IsLoaded = @object.IsLoaded;
-            Type = ((AcObjectType)@object.Type).ToString();
+            TypeName = ((AcObjectType)@object.Type).ToString();
+            Type = @object.Type;
             Attributes = @object.Attributes;
             DateCreated = @object.DateCreated;
             DateModified = @object.DateModified;

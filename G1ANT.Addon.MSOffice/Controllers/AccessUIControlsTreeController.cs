@@ -10,7 +10,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-//using Access = Microsoft.Office.Interop.Access;
+using MSAccess = Microsoft.Office.Interop.Access;
 
 namespace G1ANT.Addon.MSOffice.Controllers
 {
@@ -113,7 +113,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
 
 
-        internal void LoadForm(AccessObjectModel formToLoad, bool openInDesigner)
+        internal void TryOpenForm(AccessObjectModel formToLoad, bool openInDesigner)
         {
             var applicationModel = GetCurrentApplication();
             new Thread(() =>
@@ -135,7 +135,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 var formName = formToLoad.FullName ?? formToLoad.Name;
                 applicationModel.Application.DoCmd.OpenForm(
                     formName,
-                    openInDesigner ? Microsoft.Office.Interop.Access.AcFormView.acDesign : Microsoft.Office.Interop.Access.AcFormView.acNormal
+                    openInDesigner ? MSAccess.AcFormView.acDesign : MSAccess.AcFormView.acNormal
                 );
 
                 var form = applicationModel.Application.Forms[formName];
@@ -149,12 +149,43 @@ namespace G1ANT.Addon.MSOffice.Controllers
         }
 
 
-        internal void OpenReport(AccessObjectModel report)
+        internal void OpenAccessObject(AccessObjectModel report)
         {
             try
             {
                 var app = GetCurrentApplication().Application;
-                app.DoCmd.OpenReport(report.FullName ?? report.Name);
+                var name = report.FullName ?? report.Name;
+
+                switch (report.Type)
+                {
+                    case MSAccess.AcObjectType.acReport:
+                        app.DoCmd.OpenReport(name);
+                        break;
+                    case MSAccess.AcObjectType.acTable:
+                        app.DoCmd.OpenTable(name, MSAccess.AcView.acViewNormal, MSAccess.AcOpenDataMode.acReadOnly);
+                        break;
+                    case MSAccess.AcObjectType.acServerView:
+                        app.DoCmd.OpenView(name, MSAccess.AcView.acViewNormal, MSAccess.AcOpenDataMode.acReadOnly);
+                        break;
+                    case MSAccess.AcObjectType.acStoredProcedure:
+                        app.DoCmd.OpenStoredProcedure(name, MSAccess.AcView.acViewNormal, MSAccess.AcOpenDataMode.acReadOnly);
+                        break;
+                    case MSAccess.AcObjectType.acQuery:
+                        app.DoCmd.OpenQuery(name, MSAccess.AcView.acViewNormal, MSAccess.AcOpenDataMode.acReadOnly);
+                        break;
+                    case MSAccess.AcObjectType.acFunction:
+                        app.DoCmd.OpenFunction(name, MSAccess.AcView.acViewNormal, MSAccess.AcOpenDataMode.acReadOnly);
+                        break;
+                    case MSAccess.AcObjectType.acDiagram:
+                        app.DoCmd.OpenDiagram(name);
+                        break;
+                    case MSAccess.AcObjectType.acMacro:
+                        app.DoCmd.RunMacro(name, 1, true);
+                        break;
+                    default:
+                        throw new NotImplementedException($"Opener for {report.TypeName} not implemented.");
+                }
+
                 RobotWin32.BringWindowToFront((IntPtr)app.hWndAccessApp());
             }
             catch (Exception ex)
@@ -163,23 +194,6 @@ namespace G1ANT.Addon.MSOffice.Controllers
             }
         }
 
-        internal void ExecuteQuery(AccessObjectModel model)
-        {
-            try
-            {
-                var app = GetCurrentApplication().Application;
-                app.DoCmd.OpenQuery(
-                    model.FullName ?? model.Name,
-                    Microsoft.Office.Interop.Access.AcView.acViewNormal,
-                    Microsoft.Office.Interop.Access.AcOpenDataMode.acReadOnly
-                );
-                RobotWin32.BringWindowToFront((IntPtr)app.hWndAccessApp());
-            }
-            catch (Exception ex)
-            {
-                RobotMessageBox.Show(ex.Message);
-            }
-        }
 
         public void CopyNodeDetails(TreeNode treeNode)
         {
