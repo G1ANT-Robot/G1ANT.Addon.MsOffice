@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class AccessFormModel : IComparable
+    public class AccessFormModel : IComparable, INameModel
     {
         public string Name { get; }
 

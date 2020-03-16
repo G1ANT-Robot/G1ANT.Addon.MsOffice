@@ -2,6 +2,7 @@
 using G1ANT.Addon.MSOffice.Controllers.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Addon.MSOffice.Models.Access.Dao;
+using G1ANT.Addon.MSOffice.Models.Access.Data;
 using G1ANT.Language;
 using System;
 using System.Collections.Generic;
@@ -62,7 +63,12 @@ namespace G1ANT.Addon.MSOffice.Controllers
         const string FormsLabel = "Forms";
         const string MacrosLabel = "Macros";
         const string ReportsLabel = "Reports";
+        const string DatabaseDiagramsLabel = "Database Diagrams";
+        const string FunctionsLabel = "Functions";
         const string QueriesLabel = "Queries";
+        const string StoredProceduresLabel = "Stored Prodecures";
+        const string TablesLabel = "Tables";
+        const string ViewsLabel = "Views";
         const string PropertiesLabel = "Properties";
         const string InternalName = "internal";
 
@@ -88,7 +94,16 @@ namespace G1ANT.Addon.MSOffice.Controllers
                     new TreeNode(FormsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                     new TreeNode(MacrosLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                     new TreeNode(ReportsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
-                    new TreeNode(QueriesLabel) { Tag = rotApplicationModel, Nodes = { "" } },
+                    new TreeNode("Database") {
+                        Nodes = {
+                            new TreeNode(DatabaseDiagramsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
+                            new TreeNode(FunctionsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
+                            new TreeNode(QueriesLabel) { Tag = rotApplicationModel, Nodes = { "" } },
+                            new TreeNode(StoredProceduresLabel) { Tag = rotApplicationModel, Nodes = { "" } },
+                            new TreeNode(TablesLabel) { Tag = rotApplicationModel, Nodes = { "" } },
+                            new TreeNode(ViewsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
+                        },
+                    }
                 }
             );
 
@@ -264,6 +279,22 @@ namespace G1ANT.Addon.MSOffice.Controllers
                         break;
                     case ReportsLabel:
                         LoadAccessObjectNodes(treeNode, new AccessObjectReportCollectionModel(rotApplicationModel));
+                        break;
+
+                    case DatabaseDiagramsLabel:
+                        LoadAccessObjectNodes(treeNode, new AccessObjectDatabaseDiagramCollectionModel(rotApplicationModel));
+                        break;
+                    case FunctionsLabel:
+                        LoadAccessObjectNodes(treeNode, new AccessObjectFunctionCollectionModel(rotApplicationModel));
+                        break;
+                    case StoredProceduresLabel:
+                        LoadAccessObjectNodes(treeNode, new AccessObjectStoredProcedureCollectionModel(rotApplicationModel));
+                        break;
+                    case TablesLabel:
+                        LoadAccessObjectNodes(treeNode, new AccessObjectTableCollectionModel(rotApplicationModel));
+                        break;
+                    case ViewsLabel:
+                        LoadAccessObjectNodes(treeNode, new AccessObjectViewCollectionModel(rotApplicationModel));
                         break;
                 }
             }
@@ -442,20 +473,20 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         private string GetNameFromNodeModel(TreeNode node)
         {
-            if (node.Tag is AccessControlModel accessControlModel)
-                return accessControlModel.Name;
-
-            if (node.Tag is AccessFormModel accessFormModel)
-                return accessFormModel.Name;
+            if (node.Tag is INameModel nameModel)
+                return nameModel.Name;
 
             return null;
         }
 
         public void InsertPathIntoScript(TreeNode node)
         {
-            if (node != null && node.Tag is AccessControlModel accessControlModel)
+            var path = "";
+            if (node == null)
+                return;
+
+            if (node.Tag is AccessControlModel accessControlModel)
             {
-                var path = "";
                 while (node != null)
                 {
                     var name = GetNameFromNodeModel(node);
@@ -465,12 +496,16 @@ namespace G1ANT.Addon.MSOffice.Controllers
                     node = node.Parent;
                 }
                 path = "/" + path;
-
-                if (mainForm == null)
-                    MessageBox.Show(path);
-                else
-                    mainForm.InsertTextIntoCurrentEditor($"{SpecialChars.Text}{path}{SpecialChars.Text}");
             }
+            else if (node.Tag is INameModel nameModel)
+            {
+                path = nameModel.Name;
+            }
+
+            if (mainForm == null)
+                MessageBox.Show(path);
+            else
+                mainForm.InsertTextIntoCurrentEditor($"{SpecialChars.Text}{path}{SpecialChars.Text}");
         }
 
         public void ShowMarkerForm(TreeNode treeNode)

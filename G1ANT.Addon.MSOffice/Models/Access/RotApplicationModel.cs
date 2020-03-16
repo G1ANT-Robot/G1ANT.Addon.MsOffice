@@ -3,7 +3,7 @@ using System;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class RotApplicationModel : IComparable
+    public class RotApplicationModel : IComparable//, INameModel
     {
         public string Name { get; set; }
         public Application Application { get; set; }

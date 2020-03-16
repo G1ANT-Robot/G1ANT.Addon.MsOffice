@@ -47,6 +47,7 @@
             this.executeMacroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.copynameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -125,13 +126,14 @@
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.highlightToolStripMenuItem,
+            this.copynameToolStripMenuItem,
             this.copyNodeDetailsToolStripMenuItem,
             this.loadFormToolStripMenuItem,
             this.executeQueryToolStripMenuItem,
             this.executeMacroToolStripMenuItem,
             this.openReportToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(181, 158);
+            this.contextMenuStrip.Size = new System.Drawing.Size(181, 180);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // highlightToolStripMenuItem
@@ -205,6 +207,13 @@
             this.comboBox1.TabIndex = 1;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
+            // copynameToolStripMenuItem
+            // 
+            this.copynameToolStripMenuItem.Name = "copynameToolStripMenuItem";
+            this.copynameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copynameToolStripMenuItem.Text = "Copy &name";
+            this.copynameToolStripMenuItem.Click += new System.EventHandler(this.copynameToolStripMenuItem_Click);
+            // 
             // AccessControlsTreePanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -241,5 +250,6 @@
         private System.Windows.Forms.ToolStripMenuItem executeQueryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem executeMacroToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openReportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copynameToolStripMenuItem;
     }
 }

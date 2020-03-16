@@ -114,7 +114,12 @@
     <Compile Include="Controllers\Access\ITooltipService.cs" />
     <Compile Include="Controllers\Access\TooltipService.cs" />
     <Compile Include="Models\Access\AccessObjectReportCollectionModel.cs" />
-    <Compile Include="Models\Access\AccessObjectQueryCollectionModel.cs" />
+    <Compile Include="Models\Access\Data\AccessObjectViewCollectionModel.cs" />
+    <Compile Include="Models\Access\Data\AccessObjectTableCollectionModel.cs" />
+    <Compile Include="Models\Access\Data\AccessObjectStoredProcedureCollectionModel.cs" />
+    <Compile Include="Models\Access\Data\AccessObjectFunctionCollectionModel.cs" />
+    <Compile Include="Models\Access\Data\AccessObjectDatabaseDiagramCollectionModel.cs" />
+    <Compile Include="Models\Access\Data\AccessObjectQueryCollectionModel.cs" />
     <Compile Include="Models\Access\AccessObjectMacroCollectionModel.cs" />
     <Compile Include="Models\Access\Dao\AccessQueryFieldCollectionModel.cs" />
     <Compile Include="Models\Access\AccessObjectFormCollectionModel.cs" />
@@ -125,6 +130,7 @@
     <Compile Include="Models\Access\Dao\AccessQueryParameterModel.cs" />
     <Compile Include="Models\Access\Dao\AccessQueryPropertyCollectionModel.cs" />
     <Compile Include="Models\Access\Dao\AccessQueryPropertyModel.cs" />
+    <Compile Include="Models\Access\INameModel.cs" />
     <Compile Include="Models\Access\RotApplicationModel.cs" />
     <Compile Include="Api\Access\RunningObjectTableService.cs" />
     <Compile Include="Api\Access\OleAccWrapper.cs" />

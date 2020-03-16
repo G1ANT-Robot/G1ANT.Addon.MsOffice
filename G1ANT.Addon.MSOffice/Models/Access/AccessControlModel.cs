@@ -17,7 +17,7 @@ using System.Threading;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class AccessControlModel : IComparable
+    public class AccessControlModel : IComparable, INameModel
     {
         public string Name { get; }
         public string Type { get; }

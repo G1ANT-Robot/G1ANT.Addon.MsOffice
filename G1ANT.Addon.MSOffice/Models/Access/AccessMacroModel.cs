@@ -13,7 +13,7 @@ using System;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class AccessMacroModel
+    public class AccessMacroModel : INameModel
     {
         public string Name { get; }
 

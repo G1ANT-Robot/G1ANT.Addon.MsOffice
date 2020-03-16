@@ -8,12 +8,10 @@
 *
 */
 using Microsoft.Office.Interop.Access;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class AccessObjectPropertyModel
+    public class AccessObjectPropertyModel : INameModel
     {
         public string Name { get; set; }
         public string Value { get; set; }

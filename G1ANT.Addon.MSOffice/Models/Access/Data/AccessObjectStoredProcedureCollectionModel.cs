@@ -8,16 +8,15 @@
 *
 */
 
-namespace G1ANT.Addon.MSOffice.Models.Access
+namespace G1ANT.Addon.MSOffice.Models.Access.Data
 {
-    public class AccessObjectQueryCollectionModel : AccessObjectCollectionModel
+    public class AccessObjectStoredProcedureCollectionModel : AccessObjectCollectionModel
     {
-        public AccessObjectQueryCollectionModel(RotApplicationModel rotApplicationModel)
+        public AccessObjectStoredProcedureCollectionModel(RotApplicationModel rotApplicationModel)
         {
             try
             {
-                var currentData = rotApplicationModel.Application.CurrentData;
-                Initialize(currentData.AllQueries);
+                Initialize(rotApplicationModel.Application.CurrentData.AllStoredProcedures);
             }
             catch
             { }

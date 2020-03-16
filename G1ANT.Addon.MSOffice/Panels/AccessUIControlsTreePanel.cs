@@ -78,6 +78,7 @@ namespace G1ANT.Addon.MSOffice.Panels
             executeQueryToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Queries";
             executeMacroToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Macros";
             openReportToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Reports";
+            copynameToolStripMenuItem.Available = clickedNode.Parent != null && !(clickedModel is RotApplicationModel);
 
             highlightToolStripMenuItem.Available = clickedModel is AccessControlModel;
             copyNodeDetailsToolStripMenuItem.Available = clickedModel is AccessControlModel;
@@ -110,6 +111,11 @@ namespace G1ANT.Addon.MSOffice.Panels
         {
             var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
             controller.OpenReport(model);
+        }
+
+        private void copynameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(controlsTree.SelectedNode?.Text);
         }
     }
 }

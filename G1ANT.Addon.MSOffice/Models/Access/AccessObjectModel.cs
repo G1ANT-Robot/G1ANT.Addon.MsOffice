@@ -13,7 +13,7 @@ using System;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class AccessObjectModel : IComparable
+    public class AccessObjectModel : IComparable, INameModel
     {
         public AccessObject Object { get; }
         public string Name { get; }
