@@ -74,7 +74,10 @@ namespace G1ANT.Addon.MSOffice.Api.Access
             applicationProcessName = Path.GetFileNameWithoutExtension(applicationProcessName);
             var applicationProcesses = Process.GetProcessesByName(applicationProcessName).Concat(Process.GetProcessesByName(applicationProcessName + ".EXE"));
 
-            return applicationProcesses.Select(process => process.Id).ToList();
+            return applicationProcesses
+                .Where(process => IsOrphaned(process))
+                .Select(process => process.Id)
+                .ToList();
 
         }
 

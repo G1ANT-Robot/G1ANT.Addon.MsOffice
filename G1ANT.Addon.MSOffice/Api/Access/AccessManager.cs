@@ -10,16 +10,14 @@
 
 using G1ANT.Addon.MSOffice.Access;
 using G1ANT.Addon.MSOffice.Api.Access;
-using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace G1ANT.Addon.MSOffice
 {
     public static class AccessManager
     {
-        //public static event EventHandler<AccessWrapper> NewInstance;
-
         private static List<AccessWrapper> launchedAccesses = new List<AccessWrapper>();
 
         public static AccessWrapper CurrentAccess { get; private set; }
@@ -31,10 +29,20 @@ namespace G1ANT.Addon.MSOffice
             //    throw new Exception("Can't determine path to msaccess.exe");
             //}
 
-            var wrapper = new AccessWrapper(new AccessFormControlsTreeWalker(), new RunningObjectTableService());
+            var wrapper = new AccessWrapper(new AccessFormControlsTreeWalker());
             launchedAccesses.Add(wrapper);
             CurrentAccess = wrapper;
             return wrapper;
+        }
+
+        public static void KillOrphanedAccessProcesses()
+        {
+            var processIds = new RunningObjectTableService().GetOrphanedApplicationProcessIds("msaccess");
+            foreach (var processId in processIds)
+            {
+                var process = Process.GetProcessById(processId);
+                process.Kill();
+            }
         }
 
         public static int GetFreeId()

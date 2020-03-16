@@ -23,7 +23,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Access
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.KillOrphanedAccessProcesses();
+            AccessManager.KillOrphanedAccessProcesses();
         }
     }
 }

@@ -15,7 +15,6 @@ using G1ANT.Language;
 using Microsoft.Office.Interop.Access;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace G1ANT.Addon.MSOffice
@@ -25,15 +24,13 @@ namespace G1ANT.Addon.MSOffice
         private string path;
         private Application application = null;
         private readonly IAccessFormControlsTreeWalker accessFormControlsTreeWalker;
-        private readonly IRunningObjectTableService runningObjectTableService;
 
         public int Id { get; }
 
-        internal AccessWrapper(IAccessFormControlsTreeWalker accessFormControlsTreeWalker, IRunningObjectTableService runningObjectTableService)
+        internal AccessWrapper(IAccessFormControlsTreeWalker accessFormControlsTreeWalker)
         {
             Id = AccessManager.GetFreeId();
             this.accessFormControlsTreeWalker = accessFormControlsTreeWalker;
-            this.runningObjectTableService = runningObjectTableService;
         }
 
 
@@ -148,17 +145,7 @@ namespace G1ANT.Addon.MSOffice
             AccessManager.Remove(this);
         }
 
-        public void KillOrphanedAccessProcesses()
-        {
-            var processIds = runningObjectTableService.GetOrphanedApplicationProcessIds("msaccess");
-            foreach (var processId in processIds)
-            {
-                var process = Process.GetProcessById(processId);
-                process.Kill();
-            }
-        }
 
-            
         public void Save(string objectType, string objectName)
         {
             var acObjectType = (AcObjectType)Enum.Parse(typeof(AcObjectType), objectType);
