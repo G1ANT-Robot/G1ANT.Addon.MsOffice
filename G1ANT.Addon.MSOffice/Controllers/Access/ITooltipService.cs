@@ -7,5 +7,6 @@ namespace G1ANT.Addon.MSOffice.Controllers.Access
         string GetTooltip(AccessControlModel controlModel);
         string GetTooltip(AccessFormModel formModel);
         string GetTooltip(AccessObjectModel formModel);
+        string GetTooltip(AccessQueryModel query);
     }
 }

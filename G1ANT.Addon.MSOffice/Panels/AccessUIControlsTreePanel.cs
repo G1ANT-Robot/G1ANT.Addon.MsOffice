@@ -4,6 +4,7 @@ using G1ANT.Addon.MSOffice.Controllers.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Language;
 using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace G1ANT.Addon.MSOffice.Panels
@@ -72,9 +73,15 @@ namespace G1ANT.Addon.MSOffice.Panels
             }
             var clickedModel = clickedNode.Tag;
 
-            loadFormToolStripMenuItem.Visible = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Forms";
-            highlightToolStripMenuItem.Visible = clickedModel is AccessControlModel;
-            copyNodeDetailsToolStripMenuItem.Visible = clickedModel is AccessControlModel;
+            loadFormToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Forms";
+            executeQueryToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Queries";
+            executeMacroToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Macros";
+
+            highlightToolStripMenuItem.Available = clickedModel is AccessControlModel;
+            copyNodeDetailsToolStripMenuItem.Available = clickedModel is AccessControlModel;
+
+
+            e.Cancel = !contextMenuStrip.Items.OfType<ToolStripMenuItem>().Any(item => item.Available);
         }
 
         private void acNormalToolStripMenuItem_Click(object sender, EventArgs e)
@@ -89,6 +96,12 @@ namespace G1ANT.Addon.MSOffice.Panels
             var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
             controller.LoadForm(model, true);
             // todo: replace current tree node with loaded form data
+        }
+
+        private void executeQueryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
+            controller.ExecuteQuery(model);
         }
     }
 }

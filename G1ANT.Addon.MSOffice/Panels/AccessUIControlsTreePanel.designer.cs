@@ -40,10 +40,12 @@
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.highlightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyNodeDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.loadFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acDesignToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.executeQueryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.executeMacroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -123,9 +125,11 @@
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.highlightToolStripMenuItem,
             this.copyNodeDetailsToolStripMenuItem,
-            this.loadFormToolStripMenuItem});
+            this.loadFormToolStripMenuItem,
+            this.executeQueryToolStripMenuItem,
+            this.executeMacroToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(181, 92);
+            this.contextMenuStrip.Size = new System.Drawing.Size(181, 136);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // highlightToolStripMenuItem
@@ -142,19 +146,6 @@
             this.copyNodeDetailsToolStripMenuItem.Text = "&Copy node details";
             this.copyNodeDetailsToolStripMenuItem.Click += new System.EventHandler(this.copyNodeDetailsToolStripMenuItem_Click);
             // 
-            // comboBox1
-            // 
-            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox1.CausesValidation = false;
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.Location = new System.Drawing.Point(0, 28);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(222, 21);
-            this.comboBox1.TabIndex = 1;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
             // loadFormToolStripMenuItem
             // 
             this.loadFormToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -162,7 +153,7 @@
             this.acDesignToolStripMenuItem});
             this.loadFormToolStripMenuItem.Name = "loadFormToolStripMenuItem";
             this.loadFormToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.loadFormToolStripMenuItem.Text = "Load form";
+            this.loadFormToolStripMenuItem.Text = "&Load form";
             this.loadFormToolStripMenuItem.Visible = false;
             // 
             // acNormalToolStripMenuItem
@@ -178,6 +169,32 @@
             this.acDesignToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.acDesignToolStripMenuItem.Text = "acDesign";
             this.acDesignToolStripMenuItem.Click += new System.EventHandler(this.acDesignToolStripMenuItem_Click);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox1.CausesValidation = false;
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.Location = new System.Drawing.Point(0, 28);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(222, 21);
+            this.comboBox1.TabIndex = 1;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // executeQueryToolStripMenuItem
+            // 
+            this.executeQueryToolStripMenuItem.Name = "executeQueryToolStripMenuItem";
+            this.executeQueryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.executeQueryToolStripMenuItem.Text = "Execute &query";
+            this.executeQueryToolStripMenuItem.Click += new System.EventHandler(this.executeQueryToolStripMenuItem_Click);
+            // 
+            // executeMacroToolStripMenuItem
+            // 
+            this.executeMacroToolStripMenuItem.Name = "executeMacroToolStripMenuItem";
+            this.executeMacroToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.executeMacroToolStripMenuItem.Text = "Execute &macro";
             // 
             // AccessControlsTreePanel
             // 
@@ -212,5 +229,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadFormToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem acNormalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem acDesignToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem executeQueryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem executeMacroToolStripMenuItem;
     }
 }

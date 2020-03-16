@@ -50,6 +50,12 @@
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Access, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Office.Interop.Access.15.0.4420.1017\lib\net20\Microsoft.Office.Interop.Access.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Access.Dao, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Access.Dao.15.0.4420.1017\lib\net20\Microsoft.Office.Interop.Access.Dao.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
@@ -104,7 +110,18 @@
     <Compile Include="Api\Access\IRunningObjectTableService.cs" />
     <Compile Include="Controllers\Access\ITooltipService.cs" />
     <Compile Include="Controllers\Access\TooltipService.cs" />
+    <Compile Include="Models\Access\AccessObjectReportCollectionModel.cs" />
+    <Compile Include="Models\Access\AccessObjectQueryCollectionModel.cs" />
+    <Compile Include="Models\Access\AccessObjectMacroCollectionModel.cs" />
+    <Compile Include="Models\Access\Dao\AccessQueryFieldCollectionModel.cs" />
+    <Compile Include="Models\Access\AccessObjectFormCollectionModel.cs" />
     <Compile Include="Models\Access\AccessObjectCollectionModel.cs" />
+    <Compile Include="Models\Access\AccessQueryCollectionModel.cs" />
+    <Compile Include="Models\Access\Dao\AccessQueryFieldModel.cs" />
+    <Compile Include="Models\Access\Dao\AccessQueryParameterCollectionModel.cs" />
+    <Compile Include="Models\Access\Dao\AccessQueryParameterModel.cs" />
+    <Compile Include="Models\Access\Dao\AccessQueryPropertyCollectionModel.cs" />
+    <Compile Include="Models\Access\Dao\AccessQueryPropertyModel.cs" />
     <Compile Include="Models\Access\RotApplicationModel.cs" />
     <Compile Include="Api\Access\RunningObjectTableService.cs" />
     <Compile Include="Api\Access\OleAccWrapper.cs" />

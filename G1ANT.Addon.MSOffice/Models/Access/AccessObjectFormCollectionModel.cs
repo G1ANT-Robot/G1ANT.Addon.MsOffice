@@ -8,17 +8,18 @@
 *
 */
 
-using Microsoft.Office.Interop.Access;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class AccessObjectCollectionModel : List<AccessObjectModel>
+    public class AccessObjectFormCollectionModel : AccessObjectCollectionModel
     {
-        protected void Initialize(AllObjects allObjects)
+        public AccessObjectFormCollectionModel(RotApplicationModel rotApplicationModel)
         {
-            AddRange(allObjects.OfType<AccessObject>().Select(o => new AccessObjectModel(o)));
+            try
+            {
+                Initialize(rotApplicationModel.Application.CurrentProject.AllForms);
+            }
+            catch
+            { }
         }
     }
 }

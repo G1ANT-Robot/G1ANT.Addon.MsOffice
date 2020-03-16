@@ -1,4 +1,5 @@
 ﻿using G1ANT.Addon.MSOffice.Models.Access;
+using System.Linq;
 using System.Text;
 
 namespace G1ANT.Addon.MSOffice.Controllers.Access
@@ -46,6 +47,31 @@ namespace G1ANT.Addon.MSOffice.Controllers.Access
             result.AppendLine($"Attributes: {formModel.Attributes}");
             result.AppendLine($"DateCreated: {formModel.DateCreated}");
             result.AppendLine($"DateModified: {formModel.DateModified}");
+
+            return result.ToString();
+        }
+
+
+        public string GetTooltip(AccessQueryModel query)
+        {
+            var result = new StringBuilder();
+
+            result.AppendLine($"Name: {query.Name}");
+            result.AppendLine($"Type: {query.Type}");
+            result.AppendLine($"DateCreated: {query.DateCreated}");
+            result.AppendLine($"DateModified: {query.LastUpdated}");
+            result.AppendLine($"Connect: {query.Connect}");
+            result.AppendLine($"Fields: {string.Join(", ", query.Fields.Select(f => f.Name))}");
+            result.AppendLine($"Parameters: {string.Join(", ", query.Parameters.Select(p => p.Name))}");
+            result.AppendLine($"Prepare: {query.Prepare}");
+            result.AppendLine($"Properties: {string.Join(", ", query.Properties.Select(p => p.Name))}");
+            result.AppendLine($"Properties: {query.Query}");
+            result.AppendLine($"RecordsAffected: {query.RecordsAffected}");
+            result.AppendLine($"ReturnsRecords: {query.ReturnsRecords}");
+            result.AppendLine($"SQL: {query.SQL}");
+            result.AppendLine($"StillExecuting: {query.StillExecuting}");
+            result.AppendLine($"Type: {query.Type}");
+            result.AppendLine($"Updatable: {query.Updatable}");
 
             return result.ToString();
         }

@@ -93,14 +93,21 @@ namespace G1ANT.Addon.MSOffice.Controllers
             controlsTree.EndUpdate();
         }
 
+
+
         internal void LoadForm(AccessObjectModel formToLoad, bool openInDesigner)
         {
-            var applicationModel = (RotApplicationModel)applications.SelectedItem;
+            var applicationModel = GetCurrentApplication();
             new Thread(() =>
             {
                 try { OpenForm(formToLoad, openInDesigner, applicationModel); }
                 catch (COMException ex) { RobotMessageBox.Show(ex.Message); }
             }).Start();
+        }
+
+        private RotApplicationModel GetCurrentApplication()
+        {
+            return (RotApplicationModel)applications.SelectedItem;
         }
 
         private static void OpenForm(AccessObjectModel formToLoad, bool openInDesigner, RotApplicationModel applicationModel)
@@ -116,6 +123,23 @@ namespace G1ANT.Addon.MSOffice.Controllers
             RobotWin32.BringWindowToFront((IntPtr)form.Hwnd);
         }
 
+        internal void ExecuteQuery(AccessObjectModel model)
+        {
+            try
+            {
+                var app = GetCurrentApplication().Application;
+                app.DoCmd.OpenQuery(
+                    model.Object.Name,
+                    Microsoft.Office.Interop.Access.AcView.acViewNormal,
+                    Microsoft.Office.Interop.Access.AcOpenDataMode.acReadOnly
+                );
+                RobotWin32.BringWindowToFront((IntPtr)app.hWndAccessApp());
+            }
+            catch (Exception ex)
+            {
+                RobotMessageBox.Show(ex.Message);
+            }
+        }
 
         public void CopyNodeDetails(TreeNode treeNode)
         {
@@ -134,7 +158,12 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         private string GetNameForNode(AccessObjectModel model)
         {
-            return $"{model.Name} {(model.Name != model.FullName ? model.FullName : "")} {(model.IsLoaded ? "" : "(not loaded)")}";
+            return $"{model.Name} {(model.Name != model.FullName ? model.FullName : "")}";// {(model.IsLoaded ? "" : "(not loaded)")}";
+        }
+
+        private string GetNameForNode(AccessQueryModel model)
+        {
+            return $"{model.Name} {model.Type}";
         }
 
 
@@ -202,7 +231,16 @@ namespace G1ANT.Addon.MSOffice.Controllers
                         LoadFormNodes(treeNode, rotApplicationModel);
                         break;
                     case MacrosLabel:
-                        LoadMacroNodes(treeNode, rotApplicationModel);
+                        //LoadMacroNodes(treeNode, rotApplicationModel);
+                        LoadAccessObjectNodes(treeNode, new AccessObjectMacroCollectionModel(rotApplicationModel));
+                        break;
+                    case QueriesLabel:
+                        LoadAccessObjectNodes(treeNode, new AccessObjectQueryCollectionModel(rotApplicationModel));
+                        //LoadQueryNodes(treeNode, rotApplicationModel);
+                        break;
+                    case ReportsLabel:
+                        LoadAccessObjectNodes(treeNode, new AccessObjectReportCollectionModel(rotApplicationModel));
+                        //LoadReportNodes(treeNode, rotApplicationModel);
                         break;
                 }
             }
@@ -211,25 +249,84 @@ namespace G1ANT.Addon.MSOffice.Controllers
             controlsTree.EndUpdate();
         }
 
-        private void LoadMacroNodes(TreeNode treeNode, RotApplicationModel rotApplicationModel)
+
+        private void LoadAccessObjectNodes(TreeNode treeNode, AccessObjectCollectionModel objects)
         {
-            if (treeNode.Nodes.Count == 1 && treeNode.Nodes[0].Text == "")
+            if (IsEmptyNode(treeNode))
             {
                 treeNode.Nodes.Clear();
 
-                var formAccessObjects = new AccessObjectCollectionModel(rotApplicationModel);
-
-                foreach (var accessObject in formAccessObjects)
+                foreach (var @object in objects)
                 {
-                    var childNode = new TreeNode(GetNameForNode(accessObject))
+                    var childNode = new TreeNode(GetNameForNode(@object))
                     {
-                        Tag = accessObject,
-                        ToolTipText = tooltipService.GetTooltip(accessObject)
+                        Tag = @object,
+                        ToolTipText = tooltipService.GetTooltip(@object)
                     };
                     treeNode.Nodes.Add(childNode);
                 }
             }
         }
+
+        //private void LoadReportNodes(TreeNode treeNode, RotApplicationModel rotApplicationModel)
+        //{
+        //    if (IsEmptyNode(treeNode))
+        //    {
+        //        treeNode.Nodes.Clear();
+
+        //        var queries = new AccessObjectReportCollectionModel(rotApplicationModel);
+        //        foreach (var query in queries)
+        //        {
+        //            var childNode = new TreeNode(GetNameForNode(query))
+        //            {
+        //                Tag = query,
+        //                ToolTipText = tooltipService.GetTooltip(query)
+        //            };
+        //            treeNode.Nodes.Add(childNode);
+        //        }
+        //    }
+        //}
+
+        //private void LoadQueryNodes(TreeNode treeNode, RotApplicationModel rotApplicationModel)
+        //{
+        //    if (IsEmptyNode(treeNode))
+        //    {
+        //        treeNode.Nodes.Clear();
+
+        //        //var queries = new AccessQueryCollectionModel(rotApplicationModel);
+        //        var queries = new AccessObjectQueryCollectionModel(rotApplicationModel);
+        //        foreach (var query in queries)
+        //        {
+        //            var childNode = new TreeNode(GetNameForNode(query))
+        //            {
+        //                Tag = query,
+        //                ToolTipText = tooltipService.GetTooltip(query)
+        //            };
+        //            treeNode.Nodes.Add(childNode);
+        //        }
+        //    }
+        //}
+
+
+        //private void LoadMacroNodes(TreeNode treeNode, RotApplicationModel rotApplicationModel)
+        //{
+        //    if (IsEmptyNode(treeNode))
+        //    {
+        //        treeNode.Nodes.Clear();
+
+        //        var formAccessObjects = new AccessObjectMacroCollectionModel(rotApplicationModel);
+
+        //        foreach (var accessObject in formAccessObjects)
+        //        {
+        //            var childNode = new TreeNode(GetNameForNode(accessObject))
+        //            {
+        //                Tag = accessObject,
+        //                ToolTipText = tooltipService.GetTooltip(accessObject)
+        //            };
+        //            treeNode.Nodes.Add(childNode);
+        //        }
+        //    }
+        //}
 
         private TreeNode CreatePropertyNode(object model)
         {
@@ -255,7 +352,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
             {
                 treeNode.Nodes.Clear();
 
-                var formAccessObjects = new AccessObjectCollectionModel(rotApplicationModel);
+                var formAccessObjects = new AccessObjectFormCollectionModel(rotApplicationModel);
                 foreach (var accessObject in formAccessObjects)
                 {
                     if (accessObject.IsLoaded)
