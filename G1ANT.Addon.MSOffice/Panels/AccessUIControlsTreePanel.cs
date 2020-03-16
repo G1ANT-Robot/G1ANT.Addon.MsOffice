@@ -72,10 +72,12 @@ namespace G1ANT.Addon.MSOffice.Panels
                 return;
             }
             var clickedModel = clickedNode.Tag;
-
+            
+            //todo: move to controller and use constants
             loadFormToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Forms";
             executeQueryToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Queries";
             executeMacroToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Macros";
+            openReportToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Reports";
 
             highlightToolStripMenuItem.Available = clickedModel is AccessControlModel;
             copyNodeDetailsToolStripMenuItem.Available = clickedModel is AccessControlModel;
@@ -102,6 +104,12 @@ namespace G1ANT.Addon.MSOffice.Panels
         {
             var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
             controller.ExecuteQuery(model);
+        }
+
+        private void openReportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
+            controller.OpenReport(model);
         }
     }
 }

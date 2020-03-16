@@ -8,14 +8,13 @@
 *
 */
 
-using G1ANT.Addon.MSOffice.Models.Access.Dao;
 using G1ANT.Language;
 using Microsoft.Office.Interop.Access.Dao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace G1ANT.Addon.MSOffice.Models.Access
+namespace G1ANT.Addon.MSOffice.Models.Access.Dao
 {
     public class AccessQueryModel
     {

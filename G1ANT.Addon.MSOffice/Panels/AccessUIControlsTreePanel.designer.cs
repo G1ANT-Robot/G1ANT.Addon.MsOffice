@@ -43,9 +43,10 @@
             this.loadFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acDesignToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.executeQueryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.executeMacroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.toolStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -127,9 +128,10 @@
             this.copyNodeDetailsToolStripMenuItem,
             this.loadFormToolStripMenuItem,
             this.executeQueryToolStripMenuItem,
-            this.executeMacroToolStripMenuItem});
+            this.executeMacroToolStripMenuItem,
+            this.openReportToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(181, 136);
+            this.contextMenuStrip.Size = new System.Drawing.Size(181, 158);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // highlightToolStripMenuItem
@@ -159,29 +161,16 @@
             // acNormalToolStripMenuItem
             // 
             this.acNormalToolStripMenuItem.Name = "acNormalToolStripMenuItem";
-            this.acNormalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.acNormalToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.acNormalToolStripMenuItem.Text = "acNormal";
             this.acNormalToolStripMenuItem.Click += new System.EventHandler(this.acNormalToolStripMenuItem_Click);
             // 
             // acDesignToolStripMenuItem
             // 
             this.acDesignToolStripMenuItem.Name = "acDesignToolStripMenuItem";
-            this.acDesignToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.acDesignToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.acDesignToolStripMenuItem.Text = "acDesign";
             this.acDesignToolStripMenuItem.Click += new System.EventHandler(this.acDesignToolStripMenuItem_Click);
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox1.CausesValidation = false;
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.Location = new System.Drawing.Point(0, 28);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(222, 21);
-            this.comboBox1.TabIndex = 1;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // executeQueryToolStripMenuItem
             // 
@@ -195,6 +184,26 @@
             this.executeMacroToolStripMenuItem.Name = "executeMacroToolStripMenuItem";
             this.executeMacroToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.executeMacroToolStripMenuItem.Text = "Execute &macro";
+            // 
+            // openReportToolStripMenuItem
+            // 
+            this.openReportToolStripMenuItem.Name = "openReportToolStripMenuItem";
+            this.openReportToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openReportToolStripMenuItem.Text = "Open &report";
+            this.openReportToolStripMenuItem.Click += new System.EventHandler(this.openReportToolStripMenuItem_Click);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox1.CausesValidation = false;
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.Location = new System.Drawing.Point(0, 28);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(222, 21);
+            this.comboBox1.TabIndex = 1;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // AccessControlsTreePanel
             // 
@@ -231,5 +240,6 @@
         private System.Windows.Forms.ToolStripMenuItem acDesignToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem executeQueryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem executeMacroToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openReportToolStripMenuItem;
     }
 }

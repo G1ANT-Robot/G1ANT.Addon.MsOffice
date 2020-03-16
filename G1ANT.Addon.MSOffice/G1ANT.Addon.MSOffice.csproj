@@ -116,7 +116,7 @@
     <Compile Include="Models\Access\Dao\AccessQueryFieldCollectionModel.cs" />
     <Compile Include="Models\Access\AccessObjectFormCollectionModel.cs" />
     <Compile Include="Models\Access\AccessObjectCollectionModel.cs" />
-    <Compile Include="Models\Access\AccessQueryCollectionModel.cs" />
+    <Compile Include="Models\Access\Dao\AccessQueryCollectionModel.cs" />
     <Compile Include="Models\Access\Dao\AccessQueryFieldModel.cs" />
     <Compile Include="Models\Access\Dao\AccessQueryParameterCollectionModel.cs" />
     <Compile Include="Models\Access\Dao\AccessQueryParameterModel.cs" />

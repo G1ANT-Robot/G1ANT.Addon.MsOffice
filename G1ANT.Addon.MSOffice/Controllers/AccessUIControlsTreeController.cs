@@ -1,6 +1,7 @@
 ﻿using G1ANT.Addon.MSOffice.Api.Access;
 using G1ANT.Addon.MSOffice.Controllers.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
+using G1ANT.Addon.MSOffice.Models.Access.Dao;
 using G1ANT.Language;
 using System;
 using System.Collections.Generic;
@@ -112,15 +113,37 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         private static void OpenForm(AccessObjectModel formToLoad, bool openInDesigner, RotApplicationModel applicationModel)
         {
-            var formName = formToLoad.FullName ?? formToLoad.Name;
-            applicationModel.Application.DoCmd.OpenForm(
-                formName,
-                openInDesigner ? Microsoft.Office.Interop.Access.AcFormView.acDesign : Microsoft.Office.Interop.Access.AcFormView.acNormal
-            );
+            try
+            {
+                var formName = formToLoad.FullName ?? formToLoad.Name;
+                applicationModel.Application.DoCmd.OpenForm(
+                    formName,
+                    openInDesigner ? Microsoft.Office.Interop.Access.AcFormView.acDesign : Microsoft.Office.Interop.Access.AcFormView.acNormal
+                );
 
-            var form = applicationModel.Application.Forms[formName];
-            form.SetFocus();
-            RobotWin32.BringWindowToFront((IntPtr)form.Hwnd);
+                var form = applicationModel.Application.Forms[formName];
+                form.SetFocus();
+                RobotWin32.BringWindowToFront((IntPtr)form.Hwnd);
+            }
+            catch (Exception ex)
+            {
+                RobotMessageBox.Show(ex.Message);
+            }
+        }
+
+
+internal void OpenReport(AccessObjectModel report)
+        {
+            try
+            {
+                var app = GetCurrentApplication().Application;
+                app.DoCmd.OpenReport(report.FullName ?? report.Name);
+                RobotWin32.BringWindowToFront((IntPtr)app.hWndAccessApp());
+            }
+            catch (Exception ex)
+            {
+                RobotMessageBox.Show(ex.Message);
+            }
         }
 
         internal void ExecuteQuery(AccessObjectModel model)
@@ -129,7 +152,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
             {
                 var app = GetCurrentApplication().Application;
                 app.DoCmd.OpenQuery(
-                    model.Object.Name,
+                    model.FullName ?? model.Name,
                     Microsoft.Office.Interop.Access.AcView.acViewNormal,
                     Microsoft.Office.Interop.Access.AcOpenDataMode.acReadOnly
                 );
@@ -231,7 +254,6 @@ namespace G1ANT.Addon.MSOffice.Controllers
                         LoadFormNodes(treeNode, rotApplicationModel);
                         break;
                     case MacrosLabel:
-                        //LoadMacroNodes(treeNode, rotApplicationModel);
                         LoadAccessObjectNodes(treeNode, new AccessObjectMacroCollectionModel(rotApplicationModel));
                         break;
                     case QueriesLabel:
@@ -240,7 +262,6 @@ namespace G1ANT.Addon.MSOffice.Controllers
                         break;
                     case ReportsLabel:
                         LoadAccessObjectNodes(treeNode, new AccessObjectReportCollectionModel(rotApplicationModel));
-                        //LoadReportNodes(treeNode, rotApplicationModel);
                         break;
                 }
             }
@@ -268,24 +289,6 @@ namespace G1ANT.Addon.MSOffice.Controllers
             }
         }
 
-        //private void LoadReportNodes(TreeNode treeNode, RotApplicationModel rotApplicationModel)
-        //{
-        //    if (IsEmptyNode(treeNode))
-        //    {
-        //        treeNode.Nodes.Clear();
-
-        //        var queries = new AccessObjectReportCollectionModel(rotApplicationModel);
-        //        foreach (var query in queries)
-        //        {
-        //            var childNode = new TreeNode(GetNameForNode(query))
-        //            {
-        //                Tag = query,
-        //                ToolTipText = tooltipService.GetTooltip(query)
-        //            };
-        //            treeNode.Nodes.Add(childNode);
-        //        }
-        //    }
-        //}
 
         //private void LoadQueryNodes(TreeNode treeNode, RotApplicationModel rotApplicationModel)
         //{
@@ -308,25 +311,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
         //}
 
 
-        //private void LoadMacroNodes(TreeNode treeNode, RotApplicationModel rotApplicationModel)
-        //{
-        //    if (IsEmptyNode(treeNode))
-        //    {
-        //        treeNode.Nodes.Clear();
 
-        //        var formAccessObjects = new AccessObjectMacroCollectionModel(rotApplicationModel);
-
-        //        foreach (var accessObject in formAccessObjects)
-        //        {
-        //            var childNode = new TreeNode(GetNameForNode(accessObject))
-        //            {
-        //                Tag = accessObject,
-        //                ToolTipText = tooltipService.GetTooltip(accessObject)
-        //            };
-        //            treeNode.Nodes.Add(childNode);
-        //        }
-        //    }
-        //}
 
         private TreeNode CreatePropertyNode(object model)
         {
