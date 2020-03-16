@@ -11,7 +11,7 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
 {
-    [Command(Name = "access.controls.executeonclick", Tooltip = "Executes action assigned to a click at control selected by path")]
+    [Command(Name = "access.controls.click", Tooltip = "Executes action assigned to a click at control selected by path")]
     public class AccessControlExecuteOnClickCommand : Command
     {
         public class Arguments : CommandArguments
