@@ -110,6 +110,7 @@
     <Compile Include="Api\Access\IRunningObjectTableService.cs" />
     <Compile Include="Commands\Access\AccessCloseDatabaseCommand.cs" />
     <Compile Include="Commands\Access\AccessKillOrphanedProcessesCommand.cs" />
+    <Compile Include="Commands\Access\Macros\AccessRunProcedureCommand.cs" />
     <Compile Include="Controllers\Access\ITooltipService.cs" />
     <Compile Include="Controllers\Access\TooltipService.cs" />
     <Compile Include="Models\Access\AccessObjectReportCollectionModel.cs" />
@@ -139,7 +140,6 @@
     <Compile Include="Commands\Access\Controls\Items\AccessSetSelectedItemCommand.cs" />
     <Compile Include="Commands\Access\Forms\AccessGetActiveFormCommand.cs" />
     <Compile Include="Commands\Access\Macros\AccessGetMacrosCommand.cs" />
-    <Compile Include="Commands\Access\Macros\AccessRunCommand.cs" />
     <Compile Include="Commands\Access\Macros\AccessRunMacroCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessSetFocusCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessFindControlCommand.cs" />
