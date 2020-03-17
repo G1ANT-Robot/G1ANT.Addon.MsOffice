@@ -13,7 +13,7 @@ using System;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access
 {
-    [Command(Name = "access.open", Tooltip = "This command opens a new Access instance with a database")]
+    [Command(Name = "access.open", Tooltip = "This command opens a database in new Access instance")]
     public class AccessOpenCommand : Command
     {
         public class Arguments : CommandArguments
