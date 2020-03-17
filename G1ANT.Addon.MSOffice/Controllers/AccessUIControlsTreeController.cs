@@ -65,6 +65,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
         const string FormsLabel = "Forms";
         const string MacrosLabel = "Macros";
         const string ReportsLabel = "Reports";
+        const string ResourcesLabel = "Resources";
+        const string ModulesLabel = "Modules";
         const string DatabaseDiagramsLabel = "Database Diagrams";
         const string FunctionsLabel = "Functions";
         const string QueriesLabel = "Queries";
@@ -77,8 +79,6 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         internal void SelectedApplicationChanged(RotApplicationModel rotApplicationModel)
         {
-            //rotApplicationModel.Application.da
-
             if (rotApplicationModel.Application == null)
             {
                 controlsTree.Nodes.Clear();
@@ -97,6 +97,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
                     new TreeNode(FormsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                     new TreeNode(MacrosLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                     new TreeNode(ReportsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
+                    new TreeNode(ResourcesLabel) { Tag = rotApplicationModel, Nodes = { "" } },
+                    new TreeNode(ModulesLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                     new TreeNode("Database") {
                         Nodes = {
                             new TreeNode(DatabaseDiagramsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
@@ -280,6 +282,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 LoadControlNodes(treeNode, accessControlModel);
             else if (treeNode.Tag is AccessFormModel accessFormModel)
                 LoadControlNodes(treeNode, accessFormModel);
+            else if (treeNode.Tag is ModuleModel moduleModel)
+                LoadModulePropertyNodes(treeNode, moduleModel);
             else if (treeNode.Tag is RotApplicationModel rotApplicationModel)
             {
                 switch (treeNode.Text)
@@ -296,6 +300,13 @@ namespace G1ANT.Addon.MSOffice.Controllers
                         break;
                     case ReportsLabel:
                         LoadAccessObjectNodes(treeNode, new AccessObjectReportCollectionModel(rotApplicationModel));
+                        break;
+
+                    case ResourcesLabel:
+                        LoadResourceNodes(treeNode);
+                        break;
+                    case ModulesLabel:
+                        LoadModuleNodes(treeNode);
                         break;
 
                     case DatabaseDiagramsLabel:
@@ -318,6 +329,57 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
             ApplyExpandedTreeNodes(treeNode.Nodes);
             controlsTree.EndUpdate();
+        }
+
+        private void LoadModulePropertyNodes(TreeNode parentNode, ModuleModel model)
+        {
+            if (IsEmptyNode(parentNode))
+            {
+                parentNode.Nodes.Clear();
+
+                parentNode.Nodes.AddRange(
+                    new TreeNode[]
+                    {
+                        new TreeNode($"Name: {model.Name}"),
+                        new TreeNode($"Type: {model.TypeName}"),
+                        new TreeNode($"CountOfDeclarationLines: {model.CountOfDeclarationLines}"),
+                        new TreeNode($"CountOfLines: {model.CountOfLines}"),
+                        new TreeNode($"Code: {model.Code}"), // ???
+                    }
+                );
+            }
+        }
+
+        private void LoadModuleNodes(TreeNode parentNode)
+        {
+            if (IsEmptyNode(parentNode))
+            {
+                parentNode.Nodes.Clear();
+                var modules = GetCurrentApplication().Application.Modules;// CurrentProject.AllModules;
+
+                parentNode.Nodes.AddRange(
+                    modules.Cast<MSAccess.Module>()
+                        .Select(m => new ModuleModel(m))
+                        .Select(mm => new TreeNode(mm.ToString()) { Tag = mm, Nodes = { CreatePropertyNode(mm) } })
+                        .ToArray()
+                );
+            }
+        }
+
+        private void LoadResourceNodes(TreeNode parentNode)
+        {
+            if (IsEmptyNode(parentNode))
+            {
+                parentNode.Nodes.Clear();
+                var resources = GetCurrentApplication().Application.CurrentProject.Resources;
+
+                parentNode.Nodes.AddRange(
+                    resources.Cast<MSAccess.SharedResource>()
+                        .Select(r => new ResourceModel(r))
+                        .Select(rm => new TreeNode(rm.ToString()) { Tag = rm })
+                        .ToArray()
+                );
+            }
         }
 
 
