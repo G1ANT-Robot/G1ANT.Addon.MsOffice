@@ -22,10 +22,17 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             CountOfDeclarationLines = module.CountOfDeclarationLines;
             CountOfLines = module.CountOfLines;
 
-            Code = module.Lines[0, CountOfLines];
+            Code = module.Lines[0, CountOfLines - 1];
         }
 
-        public override string ToString() => $"{Name} {TypeName}";
+        public void AddFromFile(string path) => Module.AddFromFile(path);
+        public void AddFromString(string code) => Module.AddFromString(code);
+        public void InsertLines(int from, string code) => Module.InsertLines(from, code);
+        public void InsertText(string text) => Module.InsertText(text);
+        public void InsertText(int line, string code) => Module.ReplaceLine(line, code);
 
+        public void DeleteLines(int from, int count) => Module.DeleteLines(from, count);
+
+        public override string ToString() => $"{Name} {TypeName}";
     }
 }
