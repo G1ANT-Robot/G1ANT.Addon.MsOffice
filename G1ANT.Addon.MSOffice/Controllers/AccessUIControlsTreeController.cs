@@ -417,15 +417,6 @@ namespace G1ANT.Addon.MSOffice.Controllers
         }
 
 
-        private TreeNode[] CreateObjectProperties(object accessObject)
-        {
-            var objectProperties = TypeDescriptor.GetProperties(accessObject);
-            return objectProperties
-                .Cast<PropertyDescriptor>()
-                .Select(p => new TreeNode($"{p.Name}: {p.GetValue(accessObject)}"))
-                .ToArray();
-        }
-
         private void LoadControlNodes(TreeNode treeNode, AccessFormModel accessFormModel)
         {
             if (IsEmptyNode(treeNode))
@@ -434,8 +425,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
                 if (treeNode.Name == InternalName && treeNode.Text == PropertiesLabel)
                 {
-                    treeNode.Nodes.Add(new TreeNode(DynamicPropertiesLabel, CreatePropertyNodes(accessFormModel.Form.Properties)));
-                    treeNode.Nodes.AddRange(CreateObjectProperties(accessFormModel.Form));
+                    treeNode.Nodes.Add(new TreeNode(DynamicPropertiesLabel, CreateDynamicPropertyNodes(accessFormModel.Form.Properties)));
+                    treeNode.Nodes.AddRange(CreatePropertyNodes(accessFormModel.Form));
                     return;
                 }
 
@@ -458,13 +449,6 @@ namespace G1ANT.Addon.MSOffice.Controllers
             }
         }
 
-        private TreeNode[] CreatePropertyNodes(Microsoft.Office.Interop.Access.Properties properties)
-        {
-            return new AccessPropertiesModel(properties)
-                .Select(p => new TreeNode($"{p.Key}: {p.Value}"))
-                .ToArray();
-        }
-
         private void LoadControlNodes(TreeNode treeNode, AccessControlModel accessControlModel)
         {
             if (IsEmptyNode(treeNode))
@@ -473,8 +457,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
                 if (treeNode.Name == InternalName && treeNode.Text == PropertiesLabel)
                 {
-                    treeNode.Nodes.Add(new TreeNode(DynamicPropertiesLabel, CreatePropertyNodes(accessControlModel.Control.Properties)));
-                    treeNode.Nodes.AddRange(CreateObjectProperties(accessControlModel.Control));
+                    treeNode.Nodes.Add(new TreeNode(DynamicPropertiesLabel, CreateDynamicPropertyNodes(accessControlModel.Control.Properties)));
+                    treeNode.Nodes.AddRange(CreatePropertyNodes(accessControlModel.Control));
                     return;
                 }
 
@@ -499,6 +483,21 @@ namespace G1ANT.Addon.MSOffice.Controllers
             }
         }
 
+        private TreeNode[] CreateDynamicPropertyNodes(MSAccess.Properties properties)
+        {
+            return new AccessDynamicPropertiesModel(properties)
+                .Select(p => new TreeNode($"{p.Key}: {p.Value}"))
+                .ToArray();
+        }
+
+        private TreeNode[] CreatePropertyNodes(object accessObject)
+        {
+            var objectProperties = TypeDescriptor.GetProperties(accessObject);
+            return objectProperties
+                .Cast<PropertyDescriptor>()
+                .Select(p => new TreeNode($"{p.Name}: {p.GetValue(accessObject)}"))
+                .ToArray();
+        }
 
         private string GetNameFromNodeModel(TreeNode node)
         {

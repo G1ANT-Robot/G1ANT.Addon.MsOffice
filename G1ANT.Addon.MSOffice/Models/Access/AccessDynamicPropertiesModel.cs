@@ -7,14 +7,15 @@
 *    See License.txt file in the project root for full license information.
 *
 */
+
 using System.Collections.Generic;
 using System.Linq;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class AccessPropertiesModel : Dictionary<string, string>
+    public class AccessDynamicPropertiesModel : Dictionary<string, string>
     {
-        public AccessPropertiesModel(IEnumerable<dynamic> properties)
+        public AccessDynamicPropertiesModel(IEnumerable<dynamic> properties)
         {
             properties.Select(p =>
             {
@@ -37,7 +38,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             .ForEach(p => Add(p.Name, p.Value));
         }
 
-        public AccessPropertiesModel(Microsoft.Office.Interop.Access.Properties properties) : this(properties.OfType<dynamic>())
+        public AccessDynamicPropertiesModel(Microsoft.Office.Interop.Access.Properties properties) : this(properties.OfType<dynamic>())
         { }
     }
 }

@@ -37,8 +37,28 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public ICollection<AccessControlModel> Children;
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public AccessPropertiesModel Properties;
+        public AccessDynamicPropertiesModel Properties;
 
+
+        public AccessControlModel(_Control control, bool getProperties = true, bool getChildrenRecursively = true)
+        {
+            Control = control ?? throw new ArgumentNullException(nameof(control));
+            Name = control.Name;
+            Type = ((AcControlType)this.TryGetDynamicPropertyValue<int>("ControlType")).ToString();
+            Caption = this.TryGetDynamicPropertyValue<string>("Caption");
+            Value = this.TryGetDynamicPropertyValue<string>("Value");
+
+            if (getProperties && control.Properties.Count > 0)
+                LoadProperties();
+
+            if (getChildrenRecursively)
+                LoadChildren(getProperties);
+        }
+
+        public void LoadProperties()
+        {
+            Properties = new AccessDynamicPropertiesModel(Control.Properties);
+        }
 
         internal void SetValue(string value)
         {
@@ -63,6 +83,16 @@ namespace G1ANT.Addon.MSOffice.Models.Access
                 throw new Exception("Error getting the value", ex);
             }
         }
+
+        internal List<NameValueModel> GetProperties(bool getValues = true)
+        {
+            return TypeDescriptor.GetProperties(Control)
+                .Cast<PropertyDescriptor>()
+                .Select(pd => new NameValueModel(pd.Name, getValues ? pd.GetValue(Control) : null))
+                .ToList();
+        }
+
+        internal AccessDynamicPropertiesModel GetDynamicProperties() => new AccessDynamicPropertiesModel(Control.Properties);
 
         internal object GetPropertyValue(string name)
         {
@@ -106,25 +136,6 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public void SetItemSelected(int index, bool selected) => Control.Selected[index] = selected ? 1 : 0;
 
 
-        public AccessControlModel(_Control control, bool getProperties = true, bool getChildrenRecursively = true)
-        {
-            Control = control ?? throw new ArgumentNullException(nameof(control));
-            Name = control.Name;
-            Type = ((AcControlType)this.TryGetDynamicPropertyValue<int>("ControlType")).ToString();
-            Caption = this.TryGetDynamicPropertyValue<string>("Caption");
-            Value = this.TryGetDynamicPropertyValue<string>("Value");
-
-            if (getProperties && control.Properties.Count > 0)
-                LoadProperties();
-
-            if (getChildrenRecursively)
-                LoadChildren(getProperties);
-        }
-
-        public void LoadProperties()
-        {
-            Properties = new AccessPropertiesModel(Control.Properties);
-        }
 
         public int GetChildrenCount()
         {

@@ -45,7 +45,47 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public ICollection<AccessControlModel> Controls { get; private set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public AccessPropertiesModel Properties { get; }
+        public AccessDynamicPropertiesModel Properties { get; }
+
+        public AccessFormModel(Form form, bool getFormProperties, bool getControls, bool getControlsProperties)
+        {
+            Form = form ?? throw new ArgumentNullException(nameof(form));
+
+            Name = form.Name;
+            Value = form.accValue;
+
+            Caption = form.Caption;
+            FormName = form.FormName;
+            Hwnd = form.Hwnd;
+            InsideWidth = form.InsideWidth;
+            InsideHeight = form.InsideHeight;
+            Width = form.WindowWidth;
+            Height = form.WindowHeight;
+            X = form.WindowLeft;
+            Y = form.WindowTop;
+
+            Properties = !getFormProperties || form.Properties.Count == 0 ? null : new AccessDynamicPropertiesModel(form.Properties);
+            if (getControls)
+                LoadControls(getControlsProperties);
+        }
+
+
+        public void LoadControls(bool getControlsProperties)
+        {
+            if (Form.Controls.Count > 0)
+                Controls = Form.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getControlsProperties, false)).ToList();
+        }
+
+        internal List<NameValueModel> GetProperties(bool getValues = true)
+        {
+            return TypeDescriptor.GetProperties(Form)
+                .Cast<PropertyDescriptor>()
+                .Select(pd => new NameValueModel(pd.Name, getValues ? pd.GetValue(Form) : null))
+                .ToList();
+        }
+
+        internal AccessDynamicPropertiesModel GetDynamicProperties() => new AccessDynamicPropertiesModel(Form.Properties);
+
 
         internal object GetPropertyValue(string name)
         {
@@ -71,35 +111,6 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             {
                 throw new Exception($"Error setting the value of property {name}", ex);
             }
-        }
-
-        public AccessFormModel(Form form, bool getFormProperties, bool getControls, bool getControlsProperties)
-        {
-            Form = form ?? throw new ArgumentNullException(nameof(form));
-
-            Name = form.Name;
-            Value = form.accValue;
-
-            Caption = form.Caption;
-            FormName = form.FormName;
-            Hwnd = form.Hwnd;
-            InsideWidth = form.InsideWidth;
-            InsideHeight = form.InsideHeight;
-            Width = form.WindowWidth;
-            Height = form.WindowHeight;
-            X = form.WindowLeft;
-            Y = form.WindowTop;
-
-            Properties = !getFormProperties || form.Properties.Count == 0 ? null : new AccessPropertiesModel(form.Properties);
-            if (getControls)
-                LoadControls(getControlsProperties);
-        }
-
-
-        public void LoadControls(bool getControlsProperties)
-        {
-            if (Form.Controls.Count > 0)
-                Controls = Form.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getControlsProperties, false)).ToList();
         }
 
         public int CompareTo(object obj)
