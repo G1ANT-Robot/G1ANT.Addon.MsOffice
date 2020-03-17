@@ -18,7 +18,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
     {
         public SelectedItemDataCollectionModel(AccessControlModel control)
         {
-            var isHeaderVisible = control.TryGetPropertyValue<bool>("ColumnHeads");
+            var isHeaderVisible = control.TryGetDynamicPropertyValue<bool>("ColumnHeads");
 
             AddRange(
                 Enumerable

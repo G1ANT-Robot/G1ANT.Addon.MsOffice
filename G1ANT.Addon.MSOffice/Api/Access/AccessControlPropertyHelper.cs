@@ -5,17 +5,17 @@ namespace G1ANT.Addon.MSOffice.Api.Access
 {
     static class AccessControlPropertyHelper
     {
-        public static T GetPropertyValue<T>(Microsoft.Office.Interop.Access.Properties properties, string propertyName)
+        public static T GetDynamicPropertyValue<T>(Microsoft.Office.Interop.Access.Properties properties, string propertyName)
         {
             var value = properties[propertyName].Value;
             return (T)Convert.ChangeType(value, typeof(T));
         }
 
-        public static T TryGetPropertyValue<T>(this AccessControlModel control, string propertyName)
+        public static T TryGetDynamicPropertyValue<T>(this AccessControlModel control, string propertyName)
         {
             try
             {
-                return GetPropertyValue<T>(control.Control.Properties, propertyName);
+                return GetDynamicPropertyValue<T>(control.Control.Properties, propertyName);
             }
             catch
             {
@@ -23,17 +23,17 @@ namespace G1ANT.Addon.MSOffice.Api.Access
             }
         }
 
-        public static void SetPropertyValue<T>(this AccessControlModel control, string propertyName, T value)
+        public static void SetDynamicPropertyValue<T>(this AccessControlModel control, string propertyName, T value)
         {
             control.Control.Properties[propertyName].Value = value;
         }
 
 
-        public static bool TryGetPropertyValue<T>(this AccessControlModel control, string propertyName, out T value)
+        public static bool TryGetDynamicPropertyValue<T>(this AccessControlModel control, string propertyName, out T value)
         {
             try
             {
-                value = GetPropertyValue<T>(control.Control.Properties, propertyName);
+                value = GetDynamicPropertyValue<T>(control.Control.Properties, propertyName);
                 return true;
             }
             catch
@@ -43,11 +43,11 @@ namespace G1ANT.Addon.MSOffice.Api.Access
             }
         }
 
-        public static T TryGetPropertyValue<T>(this AccessFormModel form, string propertyName)
+        public static T TryGetDynamicPropertyValue<T>(this AccessFormModel form, string propertyName)
         {
             try
             {
-                return GetPropertyValue<T>(form.Form.Properties, propertyName);
+                return GetDynamicPropertyValue<T>(form.Form.Properties, propertyName);
             }
             catch
             {
@@ -55,11 +55,11 @@ namespace G1ANT.Addon.MSOffice.Api.Access
             }
         }
 
-        public static bool TryGetPropertyValue<T>(this AccessFormModel form, string propertyName, out T value)
+        public static bool TryGetDynamicPropertyValue<T>(this AccessFormModel form, string propertyName, out T value)
         {
             try
             {
-                value = GetPropertyValue<T>(form.Form.Properties, propertyName);
+                value = GetDynamicPropertyValue<T>(form.Form.Properties, propertyName);
                 return true;
             }
             catch
@@ -69,5 +69,9 @@ namespace G1ANT.Addon.MSOffice.Api.Access
             }
         }
 
+        public static void SetDynamicPropertyValue<T>(this AccessFormModel control, string propertyName, T value)
+        {
+            control.Form.Properties[propertyName].Value = value;
+        }
     }
 }

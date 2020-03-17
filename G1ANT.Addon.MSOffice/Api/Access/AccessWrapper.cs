@@ -156,7 +156,7 @@ namespace G1ANT.Addon.MSOffice
             var controlPath = new ControlPathModel(path);
             var control = accessFormControlsTreeWalker.GetAccessControlByPath(application, controlPath);
 
-            var onClickCode = control.TryGetPropertyValue<string>("OnClick");
+            var onClickCode = control.TryGetDynamicPropertyValue<string>("OnClick");
             if (onClickCode == "[Event Procedure]")
             {
                 var formName = controlPath.FormName;

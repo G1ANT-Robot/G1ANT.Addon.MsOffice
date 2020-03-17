@@ -13,6 +13,7 @@ using Microsoft.Office.Interop.Access;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -51,7 +52,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             }
         }
 
-        internal string GetValue()
+        internal object GetValue()
         {
             try
             {
@@ -60,6 +61,32 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             catch (COMException ex)
             {
                 throw new Exception("Error getting the value", ex);
+            }
+        }
+
+        internal object GetPropertyValue(string name)
+        {
+            try
+            {
+                var property = TypeDescriptor.GetProperties(Control)[name];
+                return property.GetValue(Control);
+            }
+            catch (COMException ex)
+            {
+                throw new Exception($"Error getting the property {name} value", ex);
+            }
+        }
+
+        internal void SetPropertyValue(string name, object value)
+        {
+            try
+            {
+                var property = TypeDescriptor.GetProperties(Control)[name];
+                property.SetValue(Control, value);
+            }
+            catch (COMException ex)
+            {
+                throw new Exception($"Error setting the value of property {name}", ex);
             }
         }
 
@@ -83,9 +110,9 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         {
             Control = control ?? throw new ArgumentNullException(nameof(control));
             Name = control.Name;
-            Type = ((AcControlType)this.TryGetPropertyValue<int>("ControlType")).ToString();
-            Caption = this.TryGetPropertyValue<string>("Caption");
-            Value = this.TryGetPropertyValue<string>("Value");
+            Type = ((AcControlType)this.TryGetDynamicPropertyValue<int>("ControlType")).ToString();
+            Caption = this.TryGetDynamicPropertyValue<string>("Caption");
+            Value = this.TryGetDynamicPropertyValue<string>("Value");
 
             if (getProperties && control.Properties.Count > 0)
                 LoadProperties();
@@ -128,16 +155,16 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public void Blink(string propertyName = "ForeColor")
         {
             const string fallbackPropertyName = "FontUnderline";
-            var originColor = this.TryGetPropertyValue<int>(propertyName);
-            var originFontUnderline = this.TryGetPropertyValue<bool>(fallbackPropertyName);
+            var originColor = this.TryGetDynamicPropertyValue<int>(propertyName);
+            var originFontUnderline = this.TryGetDynamicPropertyValue<bool>(fallbackPropertyName);
 
             for (var i = 0; i < 3; ++i)
             {
-                this.SetPropertyValue(propertyName, (originColor & 0xffffff) ^ 0xffffff);
-                this.SetPropertyValue(fallbackPropertyName, !originFontUnderline);
+                this.SetDynamicPropertyValue(propertyName, (originColor & 0xffffff) ^ 0xffffff);
+                this.SetDynamicPropertyValue(fallbackPropertyName, !originFontUnderline);
                 Thread.Sleep(500);
-                this.SetPropertyValue(propertyName, originColor);
-                this.SetPropertyValue(fallbackPropertyName, originFontUnderline);
+                this.SetDynamicPropertyValue(propertyName, originColor);
+                this.SetDynamicPropertyValue(fallbackPropertyName, originFontUnderline);
                 Thread.Sleep(500);
             }
         }

@@ -11,7 +11,9 @@ using Microsoft.Office.Interop.Access;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
@@ -45,6 +47,31 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public AccessPropertiesModel Properties { get; }
 
+        internal object GetPropertyValue(string name)
+        {
+            try
+            {
+                var property = TypeDescriptor.GetProperties(Form)[name];
+                return property.GetValue(Form);
+            }
+            catch (COMException ex)
+            {
+                throw new Exception($"Error getting the property {name} value", ex);
+            }
+        }
+
+        internal void SetPropertyValue(string name, object value)
+        {
+            try
+            {
+                var property = TypeDescriptor.GetProperties(Form)[name];
+                property.SetValue(Form, value);
+            }
+            catch (COMException ex)
+            {
+                throw new Exception($"Error setting the value of property {name}", ex);
+            }
+        }
 
         public AccessFormModel(Form form, bool getFormProperties, bool getControls, bool getControlsProperties)
         {
