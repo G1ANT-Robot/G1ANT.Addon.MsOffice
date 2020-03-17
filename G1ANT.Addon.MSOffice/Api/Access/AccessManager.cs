@@ -16,13 +16,13 @@ using System.Linq;
 
 namespace G1ANT.Addon.MSOffice
 {
-    public static class AccessManager
+    internal static class AccessManager
     {
         private static List<AccessWrapper> launchedAccesses = new List<AccessWrapper>();
 
-        public static AccessWrapper CurrentAccess { get; private set; }
+        internal static AccessWrapper CurrentAccess { get; private set; }
 
-        public static AccessWrapper AddAccess()
+        internal static AccessWrapper AddAccess()
         {
             //if (GetOfficeAppPath("Access.Application", "msaccess.exe") == null)
             //{
@@ -35,7 +35,7 @@ namespace G1ANT.Addon.MSOffice
             return wrapper;
         }
 
-        public static void KillOrphanedAccessProcesses()
+        internal static void KillOrphanedAccessProcesses()
         {
             var processIds = new RunningObjectTableService().GetOrphanedApplicationProcessIds("msaccess");
             foreach (var processId in processIds)
@@ -45,12 +45,12 @@ namespace G1ANT.Addon.MSOffice
             }
         }
 
-        public static int GetFreeId()
+        internal static int GetFreeId()
         {
             return launchedAccesses.Select(x => x.Id).DefaultIfEmpty(-1).Max() + 1;
         }
 
-        public static bool Switch(int id)
+        internal static bool Switch(int id)
         {
             var wrapper = launchedAccesses.Where(x => x.Id == id).FirstOrDefault();
             CurrentAccess = wrapper ?? CurrentAccess;
@@ -58,7 +58,7 @@ namespace G1ANT.Addon.MSOffice
             return wrapper != null;
         }
 
-        public static void Remove(AccessWrapper accessWrapper)
+        internal static void Remove(AccessWrapper accessWrapper)
         {
             launchedAccesses.Remove(accessWrapper);
             CurrentAccess = launchedAccesses.FirstOrDefault();
