@@ -19,14 +19,14 @@ using System.Linq;
 
 namespace G1ANT.Addon.MSOffice
 {
-    public partial class AccessWrapper
+    internal partial class AccessWrapper
     {
         private string path;
         private Application application = null;
         private readonly IAccessFormControlsTreeWalker accessFormControlsTreeWalker;
         private readonly IRunningObjectTableService runningObjectTableService;
 
-        public int Id { get; }
+        internal int Id { get; }
 
         internal AccessWrapper(
             IAccessFormControlsTreeWalker accessFormControlsTreeWalker,
@@ -38,6 +38,118 @@ namespace G1ANT.Addon.MSOffice
             this.runningObjectTableService = runningObjectTableService;
         }
 
+        private AcView ToAcView(string viewType)
+        {
+            const string prefix = "acView";
+
+            if (!viewType.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase))
+                viewType = prefix + viewType;
+            return (AcView)Enum.Parse(typeof(AcView), viewType, true);
+        }
+
+        private AcFormView ToAcFormView(string viewFormType)
+        {
+            const string prefix = "acFormView";
+
+            if (!viewFormType.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase))
+                viewFormType = prefix + viewFormType;
+            return (AcFormView)Enum.Parse(typeof(AcFormView), viewFormType, true);
+        }
+
+        private AcWindowMode ToAcWindowMode(string windowMode)
+        {
+            const string prefix = "ac";
+            if (!windowMode.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase))
+                windowMode = prefix + windowMode;
+            return (AcWindowMode)Enum.Parse(typeof(AcWindowMode), windowMode, true);
+        }
+        
+
+        private AcOpenDataMode ToAcOpenDataMode(bool createNew, bool openReadonly)
+        {
+            return createNew ? AcOpenDataMode.acAdd : openReadonly ? AcOpenDataMode.acReadOnly : AcOpenDataMode.acEdit;
+        }
+
+        private AcFormOpenDataMode ToAcFormOpenDataMode(bool createNew, bool openReadonly, bool openPropertySettings)
+        {
+            if (createNew)
+                return AcFormOpenDataMode.acFormAdd;
+            if (openReadonly)
+                return AcFormOpenDataMode.acFormReadOnly;
+            if (openPropertySettings)
+                return AcFormOpenDataMode.acFormPropertySettings;
+
+            return AcFormOpenDataMode.acFormEdit;
+        }
+        
+
+        internal void OpenForm(
+            string name,
+            string viewFormType = "Normal",
+            bool createNew = false,
+            bool openReadonly = true,
+            bool openPropertySettings = false,
+            string windowMode = "acWindowNormal",
+            string filterName = null,
+            string whereCondition = null,
+            string openArgs = null
+        )
+        {
+            application.DoCmd.OpenForm(
+                name,
+                ToAcFormView(viewFormType),
+                filterName,
+                whereCondition,
+                ToAcFormOpenDataMode(createNew, openReadonly, openPropertySettings),
+                ToAcWindowMode(windowMode),
+                openArgs
+            );
+        }
+
+
+        internal void OpenTable(string name, string viewType = "Normal", bool createNew = false, bool openReadonly = true)
+        {
+            application.DoCmd.OpenTable(name, ToAcView(viewType), ToAcOpenDataMode(createNew, openReadonly));
+        }
+
+        internal void OpenStoredProcedure(string name, string viewType = "Normal", bool createNew = false, bool openReadonly = true)
+        {
+            application.DoCmd.OpenStoredProcedure(name, ToAcView(viewType), ToAcOpenDataMode(createNew, openReadonly));
+        }
+
+        internal void OpenReport(string name, string viewType = "Normal", bool createNew = false, bool openReadonly = true)
+        {
+            application.DoCmd.OpenReport(name, ToAcView(viewType), ToAcOpenDataMode(createNew, openReadonly));
+        }
+
+        internal void OpenQuery(string name, string viewType = "Normal", bool createNew = false, bool openReadonly = true)
+        {
+            application.DoCmd.OpenQuery(name, ToAcView(viewType), ToAcOpenDataMode(createNew, openReadonly));
+        }
+
+        internal void OpenFunction(string name, string viewType = "Normal", bool createNew = false, bool openReadonly = true)
+        {
+            application.DoCmd.OpenFunction(name, ToAcView(viewType), ToAcOpenDataMode(createNew, openReadonly));
+        }
+
+        internal void OpenView(string name, string viewType = "Normal", bool createNew = false, bool openReadonly = true)
+        {
+            application.DoCmd.OpenView(name, ToAcView(viewType), ToAcOpenDataMode(createNew, openReadonly));
+        }
+
+        internal void OpenDiagram(string name) => application.DoCmd.OpenDiagram(name);
+
+
+        internal void Close(AcObjectType objectType, string objectName, bool? save)
+        {
+            application.DoCmd.Close(
+                objectType,
+                objectName,
+                save.HasValue
+                    ? save.Value ? AcCloseSave.acSaveYes : AcCloseSave.acSaveNo
+                    : AcCloseSave.acSavePrompt
+            );
+        }
 
         internal void ExecuteOnClick(string path)
         {
@@ -60,7 +172,7 @@ namespace G1ANT.Addon.MSOffice
             }
             else
             {
-                control.Control.Application.DoCmd.RunMacro(onClickCode);
+                application.DoCmd.RunMacro(onClickCode);
             }
         }
 
@@ -69,7 +181,7 @@ namespace G1ANT.Addon.MSOffice
         /// 
         /// </summary>
         /// <param name="processId">0 to join to newest instance</param>
-        public void JoinToExistingInstance(int processId = 0)
+        internal void JoinToExistingInstance(int processId = 0)
         {
             application = processId > 0
                 ? runningObjectTableService.GetApplicationInstance(processId)
@@ -77,7 +189,7 @@ namespace G1ANT.Addon.MSOffice
         }
 
 
-        public void Open(string path, string password = "", bool openExclusive = false, bool shouldShowApplication = true)
+        internal void Open(string path, string password = "", bool openExclusive = false, bool shouldShowApplication = true)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
@@ -93,7 +205,7 @@ namespace G1ANT.Addon.MSOffice
             application.OpenCurrentDatabase(path, openExclusive);
         }
 
-        public void OpenProject(string path, bool openExclusive = false, bool shouldShowApplication = true)
+        internal void OpenProject(string path, bool openExclusive = false, bool shouldShowApplication = true)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
@@ -109,32 +221,32 @@ namespace G1ANT.Addon.MSOffice
             application.OpenAccessProject(path, openExclusive);
         }
 
-        public void Show()
+        internal void Show()
         {
             application.Visible = true;
         }
 
-        public AccessControlModel GetAccessControlByPath(string path)
+        internal AccessControlModel GetAccessControlByPath(string path)
         {
             return accessFormControlsTreeWalker.GetAccessControlByPath(application, path);
         }
 
-        public AccessControlModel GetActiveControl(bool getProperties = true, bool getChildrenRecursively = true)
+        internal AccessControlModel GetActiveControl(bool getProperties = true, bool getChildrenRecursively = true)
         {
             return new AccessControlModel(application.Screen.ActiveControl, getProperties, getChildrenRecursively);
         }
 
-        public AccessFormModel GetActiveForm()
+        internal AccessFormModel GetActiveForm()
         {
             return new AccessFormModel(application.Screen.ActiveForm, true, true, false);
         }
 
-        public void Hide()
+        internal void Hide()
         {
             application.Visible = false;
         }
 
-        public ICollection<AccessObjectModel> GetAllProjectForms()
+        internal ICollection<AccessObjectModel> GetAllProjectForms()
         {
             var result = application.CurrentProject.AllForms
                 .Cast<AccessObject>()
@@ -143,7 +255,7 @@ namespace G1ANT.Addon.MSOffice
             return result.ToList();
         }
 
-        public ICollection<AccessFormModel> GetAllForms()
+        internal ICollection<AccessFormModel> GetAllForms()
         {
             var result = application.Forms
                 .Cast<Form>()
@@ -152,7 +264,7 @@ namespace G1ANT.Addon.MSOffice
             return result.ToList();
         }
 
-        public AccessFormModel GetForm(string formName)
+        internal AccessFormModel GetForm(string formName)
         {
             var form = application.Forms[formName];
             var result = new AccessFormModel(form, true, true, true);
@@ -161,41 +273,36 @@ namespace G1ANT.Addon.MSOffice
         }
 
 
-        public void CloseDatabase()
+        internal void CloseDatabase()
         {
             application.DoCmd.CloseDatabase();
         }
 
-        public void Close()
-        {
-            application.DoCmd.Close();
-        }
-
-        public void Quit(bool saveChanges)
+        internal void Quit(bool saveChanges)
         {
             application.DoCmd.Quit(saveChanges ? AcQuitOption.acQuitSaveAll : AcQuitOption.acQuitSaveNone);
             AccessManager.Remove(this);
         }
 
 
-        public void Save(string objectType, string objectName)
+        internal void Save(string objectType, string objectName)
         {
             var acObjectType = (AcObjectType)Enum.Parse(typeof(AcObjectType), objectType);
             application.DoCmd.Save(acObjectType, objectName);
         }
 
-        public void RunMacro(string macroName)
+        internal void RunMacro(string macroName)
         {
             application.DoCmd.RunMacro(macroName, 1, true);
             //var me = application.MacroError;
         }
 
-        //public void RunCommand(string command)
+        //internal void RunCommand(string command)
         //{
         //    application.RunCommand(AcCommand. command)
         //}
 
-        public dynamic RunProcedure(string procedure)
+        internal dynamic RunProcedure(string procedure)
         {
             var result = application.Run(procedure);
 
@@ -203,7 +310,7 @@ namespace G1ANT.Addon.MSOffice
         }
 
 
-        public IReadOnlyCollection<AccessMacroModel> GetMacros()
+        internal IReadOnlyCollection<AccessMacroModel> GetMacros()
         {
             var macros = application.CurrentProject.AllMacros;
             var result = new List<AccessMacroModel>();
@@ -218,18 +325,18 @@ namespace G1ANT.Addon.MSOffice
         }
 
 
-        //public static int ConvertTwipsToPixels(int twips, MeasureDirection direction)
+        //internal static int ConvertTwipsToPixels(int twips, MeasureDirection direction)
         //{
         //    return twips * GetPPI(direction) / 1440;
         //}
 
-        //public enum MeasureDirection
+        //internal enum MeasureDirection
         //{
         //    Horizontal = 88,
         //    Vertical = 90
         //}
 
-        //public static int GetPPI(MeasureDirection direction)
+        //internal static int GetPPI(MeasureDirection direction)
         //{
         //    IntPtr dc = GetDC(IntPtr.Zero);
 
@@ -248,7 +355,7 @@ namespace G1ANT.Addon.MSOffice
         //[DllImport("gdi32.dll")]
         //static extern int GetDeviceCaps(IntPtr hdc, int devCap);
 
-        //public void Click(AccessControlModel control)
+        //internal void Click(AccessControlModel control)
         //{
         //    var xTwips = 0;
         //    var yTwips = 0;
@@ -292,7 +399,7 @@ namespace G1ANT.Addon.MSOffice
         //}
 
 
-        public void Test()
+        internal void Test()
         {
             var afs = application.CurrentProject.Resources;
             var reports = application.CurrentProject.AllReports.Cast<AccessObject>().ToList();
@@ -302,7 +409,7 @@ namespace G1ANT.Addon.MSOffice
 
 
 
-        //public object RunMacro(string macroName, string args = null)
+        //internal object RunMacro(string macroName, string args = null)
         //{
         //    List<object> arguments = new List<object> { macroName };
         //    object result = null;
@@ -313,7 +420,7 @@ namespace G1ANT.Addon.MSOffice
         //    result = application.GetType().InvokeMember("Run", BindingFlags.InvokeMethod, null, this.application, arguments.ToArray());
         //    return result;
         //}
-        //public void InsertText(string text, bool replaceAllText)
+        //internal void InsertText(string text, bool replaceAllText)
         //{
         //    if (!replaceAllText)
         //    {
@@ -325,22 +432,22 @@ namespace G1ANT.Addon.MSOffice
         //        document.Content.Text = text;
         //    }
         //}
-        //public string GetText()
+        //internal string GetText()
         //{
         //    return document.Content.Text;
         //}
-        //public void InsertParagraph()
+        //internal void InsertParagraph()
         //{
         //    document.Content.InsertParagraph();
         //}
 
-        //public void ReplaceWord(string from, string to, bool Match, bool WholeWord)
+        //internal void ReplaceWord(string from, string to, bool Match, bool WholeWord)
         //{
         //    document.Content.Find.Execute(from, Match, WholeWord, false, false, false, true, false, 1, to, 2, false, false, false, false);
 
         //}
 
-        //public void Save(string path)
+        //internal void Save(string path)
         //{
         //    if (string.IsNullOrEmpty(path))
         //    {
@@ -356,7 +463,7 @@ namespace G1ANT.Addon.MSOffice
         //    }
         //}
 
-        //public void Export(string path, string type)
+        //internal void Export(string path, string type)
         //{
         //    if (string.IsNullOrEmpty(type))
         //    {
@@ -393,7 +500,7 @@ namespace G1ANT.Addon.MSOffice
         //    Close();
         //}
 
-        //public void Close()
+        //internal void Close()
         //{
         //    try
         //    {
