@@ -20,7 +20,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Data
             [Argument(Tooltip = "Name of the query to close", Required = true)]
             public TextStructure Name { get; set; }
 
-            [Argument(Tooltip = "Set to true to save changes, false to discard them, don't set any value to prompt user", Required = true)]
+            [Argument(Tooltip = "Set to true to save changes, false to discard them, don't set any value to prompt user")]
             public BooleanStructure SaveChanges { get; set; }
         }
 
