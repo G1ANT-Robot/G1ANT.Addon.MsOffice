@@ -18,8 +18,8 @@ namespace G1ANT.Addon.MSOffice.Commands.Access
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Required = true, Tooltip = "Id of Access process to join to")]
-            public IntegerStructure ProcessId { get; set; }
+            [Argument(Tooltip = "Id of an Access process to join to. Set to 0 or skip to join latest (newest) process")]
+            public IntegerStructure ProcessId { get; set; } = new IntegerStructure(0);
 
             [Argument(Tooltip = "Name of a variable where a currently opened Access process number is stored. It can be used in the `access.switch` command")]
             public VariableStructure Result { get; set; } = new VariableStructure("result");

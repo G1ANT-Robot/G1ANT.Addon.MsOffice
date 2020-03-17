@@ -16,5 +16,6 @@ namespace G1ANT.Addon.MSOffice.Api.Access
         IList<int> GetOrphanedApplicationProcessIds(string applicationProcessName);
 
         Application GetApplicationInstance(int processId);
+        Application GetNewestApplicationInstance();
     }
 }

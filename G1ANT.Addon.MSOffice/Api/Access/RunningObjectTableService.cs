@@ -104,10 +104,16 @@ namespace G1ANT.Addon.MSOffice.Api.Access
             return true;
         }
 
-
         public Application GetApplicationInstance(int processId)
         {
             var accessProcess = Process.GetProcessById(processId);
+            var result = GetApplicationFromProcess(accessProcess);
+            return result.Application;
+        }
+
+        public Application GetNewestApplicationInstance()
+        {
+            var accessProcess = GetApplicationProcesses("msaccess").OrderByDescending(p => p.StartTime).First();
             var result = GetApplicationFromProcess(accessProcess);
             return result.Application;
         }

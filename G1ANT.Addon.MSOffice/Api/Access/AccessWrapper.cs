@@ -64,9 +64,16 @@ namespace G1ANT.Addon.MSOffice
             }
         }
 
-        public void JoinToExistingInstance(int processId)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="processId">0 to join to newest instance</param>
+        public void JoinToExistingInstance(int processId = 0)
         {
-            application = runningObjectTableService.GetApplicationInstance(processId);
+            application = processId > 0
+                ? runningObjectTableService.GetApplicationInstance(processId)
+                : runningObjectTableService.GetNewestApplicationInstance();
         }
 
 
