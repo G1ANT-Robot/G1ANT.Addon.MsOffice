@@ -113,6 +113,7 @@
     <Compile Include="Commands\Access\AccessJoinCommand.cs" />
     <Compile Include="Commands\Access\AccessRunSqlCommand.cs" />
     <Compile Include="Commands\Access\AccessOpenProjectCommand.cs" />
+    <Compile Include="Commands\Access\Controls\AccessGetControlValueCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessSetControlValueCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessCloseViewCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessCloseTableCommand.cs" />
