@@ -1,4 +1,5 @@
 ﻿using G1ANT.Addon.MSOffice.Models.Access;
+using Microsoft.Office.Interop.Access;
 using System.Collections.Generic;
 
 namespace G1ANT.Addon.MSOffice.Api.Access
@@ -13,5 +14,7 @@ namespace G1ANT.Addon.MSOffice.Api.Access
         /// <param name="applicationProcessName"></param>
         /// <returns></returns>
         IList<int> GetOrphanedApplicationProcessIds(string applicationProcessName);
+
+        Application GetApplicationInstance(int processId);
     }
 }

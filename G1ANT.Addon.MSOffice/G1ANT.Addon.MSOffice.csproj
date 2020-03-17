@@ -110,6 +110,8 @@
     <Compile Include="Api\Access\IRunningObjectTableService.cs" />
     <Compile Include="Commands\Access\AccessCloseDatabaseCommand.cs" />
     <Compile Include="Commands\Access\AccessKillOrphanedProcessesCommand.cs" />
+    <Compile Include="Commands\Access\AccessJoinCommand.cs" />
+    <Compile Include="Commands\Access\AccessOpenProjectCommand.cs" />
     <Compile Include="Commands\Access\Macros\AccessRunProcedureCommand.cs" />
     <Compile Include="Controllers\Access\ITooltipService.cs" />
     <Compile Include="Controllers\Access\TooltipService.cs" />

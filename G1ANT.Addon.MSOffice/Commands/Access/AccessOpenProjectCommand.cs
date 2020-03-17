@@ -13,16 +13,13 @@ using System;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access
 {
-    [Command(Name = "access.open", Tooltip = "This command opens a new Access instance with a database")]
-    public class AccessOpenCommand : Command
+    [Command(Name = "access.openproject", Tooltip = "This command opens a new Access instance with an Access project")]
+    public class AccessOpenProjectCommand : Command
     {
         public class Arguments : CommandArguments
         {
             [Argument(Tooltip = "Path of a file that has to be opened in Access", Required = true)]
             public TextStructure Path { get; set; }
-
-            [Argument(Tooltip = "Password required to open Access database")]
-            public TextStructure Password { get; set; } = new TextStructure("");
 
             [Argument(Tooltip = "Set to true to open excusively. False by default")]
             public BooleanStructure OpenExclusive { get; set; } = new BooleanStructure(false);
@@ -34,7 +31,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Access
             public VariableStructure Result { get; set; } = new VariableStructure("result");
         }
 
-        public AccessOpenCommand(AbstractScripter scripter) : base(scripter)
+        public AccessOpenProjectCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
@@ -42,7 +39,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Access
             try
             {
                 var access = AccessManager.AddAccess();
-                access.Open(arguments.Path.Value, arguments.Password.Value, arguments.OpenExclusive.Value, arguments.Show.Value);
+                access.OpenProject(arguments.Path.Value, arguments.OpenExclusive.Value, arguments.Show.Value);
 
                 Scripter.Variables.SetVariableValue(arguments.Result.Value, new IntegerStructure(access.Id));
             }

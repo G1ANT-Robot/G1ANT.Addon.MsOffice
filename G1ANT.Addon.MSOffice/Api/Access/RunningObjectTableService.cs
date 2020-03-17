@@ -13,11 +13,19 @@ namespace G1ANT.Addon.MSOffice.Api.Access
         private const uint OBJID_NATIVEOM = 0xFFFFFFF0;
         private static readonly Guid IID_IDispatch = new Guid("{00020400-0000-0000-C000-000000000046}");
 
-        public IList<RotApplicationModel> GetApplicationInstances(string applicationProcessName)
+        private ICollection<Process> GetApplicationProcesses(string applicationProcessName)
         {
             applicationProcessName = Path.GetFileNameWithoutExtension(applicationProcessName);
+            var applicationProcesses =
+                Process.GetProcessesByName(applicationProcessName)
+                .Concat(Process.GetProcessesByName(applicationProcessName + ".EXE"))
+                .ToList();
+            return applicationProcesses;
+        }
 
-            var applicationProcesses = Process.GetProcessesByName(applicationProcessName).Concat(Process.GetProcessesByName(applicationProcessName + ".EXE"));
+        public IList<RotApplicationModel> GetApplicationInstances(string applicationProcessName)
+        {
+            var applicationProcesses = GetApplicationProcesses(applicationProcessName);
 
             var result = new List<RotApplicationModel>();
             var exceptions = new List<Exception>();
@@ -71,14 +79,12 @@ namespace G1ANT.Addon.MSOffice.Api.Access
         /// <returns></returns>
         public IList<int> GetOrphanedApplicationProcessIds(string applicationProcessName)
         {
-            applicationProcessName = Path.GetFileNameWithoutExtension(applicationProcessName);
-            var applicationProcesses = Process.GetProcessesByName(applicationProcessName).Concat(Process.GetProcessesByName(applicationProcessName + ".EXE"));
+            var applicationProcesses = GetApplicationProcesses(applicationProcessName);
 
             return applicationProcesses
                 .Where(process => IsOrphaned(process))
                 .Select(process => process.Id)
                 .ToList();
-
         }
 
         private bool IsOrphaned(Process process)
@@ -99,5 +105,11 @@ namespace G1ANT.Addon.MSOffice.Api.Access
         }
 
 
+        public Application GetApplicationInstance(int processId)
+        {
+            var accessProcess = Process.GetProcessById(processId);
+            var result = GetApplicationFromProcess(accessProcess);
+            return result.Application;
+        }
     }
 }

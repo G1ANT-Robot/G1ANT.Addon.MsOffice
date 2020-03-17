@@ -24,13 +24,18 @@ namespace G1ANT.Addon.MSOffice
         private string path;
         private Application application = null;
         private readonly IAccessFormControlsTreeWalker accessFormControlsTreeWalker;
+        private readonly IRunningObjectTableService runningObjectTableService;
 
         public int Id { get; }
 
-        internal AccessWrapper(IAccessFormControlsTreeWalker accessFormControlsTreeWalker)
+        internal AccessWrapper(
+            IAccessFormControlsTreeWalker accessFormControlsTreeWalker,
+            IRunningObjectTableService runningObjectTableService
+        )
         {
             Id = AccessManager.GetFreeId();
             this.accessFormControlsTreeWalker = accessFormControlsTreeWalker;
+            this.runningObjectTableService = runningObjectTableService;
         }
 
 
@@ -59,6 +64,10 @@ namespace G1ANT.Addon.MSOffice
             }
         }
 
+        public void JoinToExistingInstance(int processId)
+        {
+            application = runningObjectTableService.GetApplicationInstance(processId);
+        }
 
 
         public void Open(string path, string password = "", bool openExclusive = false, bool shouldShowApplication = true)
@@ -75,6 +84,22 @@ namespace G1ANT.Addon.MSOffice
                 Hide();
 
             application.OpenCurrentDatabase(path, openExclusive);
+        }
+
+        public void OpenProject(string path, bool openExclusive = false, bool shouldShowApplication = true)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+            this.path = path;
+
+            application = application ?? new Application();
+
+            if (shouldShowApplication)
+                Show();
+            else
+                Hide();
+
+            application.OpenAccessProject(path, openExclusive);
         }
 
         public void Show()
