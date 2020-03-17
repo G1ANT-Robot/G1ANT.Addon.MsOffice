@@ -7,12 +7,14 @@
 *    See License.txt file in the project root for full license information.
 *
 */
+
 using G1ANT.Addon.MSOffice.Api.Access;
 using Microsoft.Office.Interop.Access;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
@@ -36,6 +38,18 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public AccessPropertiesModel Properties;
 
+
+        internal void SetValue(string value)
+        {
+            try
+            {
+                ((dynamic)Control).Value = value;
+            }
+            catch (COMException ex)
+            {
+                throw new Exception("Error setting the value", ex);
+            }
+        }
 
         public void SetFocus() => Control.SetFocus();
 

@@ -111,7 +111,9 @@
     <Compile Include="Commands\Access\AccessCloseDatabaseCommand.cs" />
     <Compile Include="Commands\Access\AccessKillOrphanedProcessesCommand.cs" />
     <Compile Include="Commands\Access\AccessJoinCommand.cs" />
+    <Compile Include="Commands\Access\AccessRunSqlCommand.cs" />
     <Compile Include="Commands\Access\AccessOpenProjectCommand.cs" />
+    <Compile Include="Commands\Access\Controls\AccessSetControlValueCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessCloseViewCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessCloseTableCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessCloseStoredProcedureCommand.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="Commands\Access\Data\AccessOpenStoredProcedureCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessOpenViewCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessOpenDatabaseDiagramCommand.cs" />
+    <Compile Include="Commands\Access\Forms\AccessCloseFormCommand.cs" />
     <Compile Include="Commands\Access\Forms\AccessOpenFormCommand.cs" />
     <Compile Include="Commands\Access\Macros\AccessRunProcedureCommand.cs" />
     <Compile Include="Controllers\Access\ITooltipService.cs" />
