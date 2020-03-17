@@ -11,7 +11,7 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access
 {
-    [Command(Name = "access.killorphanedprocesses", Tooltip = "This command quits all Access proceses that are not registered in Running Object Table")]
+    [Command(Name = "access.killorphanedprocesses", Tooltip = "This command kills all Access proceses that are not registered in Running Object Table")]
     public class AccessKillOrphanedProcessesCommand : Command
     {
         public class Arguments : CommandArguments

@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Forms
 {
-    [Command(Name = "access.forms.getlist", Tooltip = "Get list of all forms in current project")]
+    [Command(Name = "access.getallforms", Tooltip = "Get list of all forms in current project")]
     public class AccessGetFormsCommand : Command
     {
         public class Arguments : CommandArguments

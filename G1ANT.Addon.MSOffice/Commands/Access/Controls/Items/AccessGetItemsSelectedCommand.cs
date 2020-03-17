@@ -12,12 +12,12 @@ using Newtonsoft.Json.Linq;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Controls.Items
 {
-    [Command(Name = "access.controls.items.selected.getlist", Tooltip = "Get selected items indexes and values")]
+    [Command(Name = "access.getselectedcontrolitems", Tooltip = "Get selected items indexes and values")]
     public class AccessGetItemsSelectedCommand : Command
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Required = true, Tooltip = "Path to the control. See `access.control.find` tooltip for path examples")]
+            [Argument(Required = true, Tooltip = "Path to the control. See `access.getcontrol` tooltip for path examples")]
             public TextStructure Path { get; set; }
 
             [Argument(Tooltip = "Name of a variable where the command's result will be stored")]

@@ -14,7 +14,7 @@ using System;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Forms
 {
-    [Command(Name = "access.forms.get", Tooltip = "Get detailed information about form defined in current project")]
+    [Command(Name = "access.getform", Tooltip = "Get detailed information about form defined in current project")]
     public class AccessGetFormCommand : Command
     {
         public class Arguments : CommandArguments

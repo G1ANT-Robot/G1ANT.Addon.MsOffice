@@ -12,7 +12,7 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Macros
 {
-    [Command(Name = "access.macros.run", Tooltip = "This command runs an existing Access macro")]
+    [Command(Name = "access.runmacro", Tooltip = "This command runs an existing Access macro")]
     public class AccessRunMacroCommand : Command
     {
         public class Arguments : CommandArguments

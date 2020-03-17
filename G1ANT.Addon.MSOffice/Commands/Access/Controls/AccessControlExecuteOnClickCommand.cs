@@ -11,12 +11,12 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
 {
-    [Command(Name = "access.controls.click", Tooltip = "Executes action assigned to a click at control selected by path")]
+    [Command(Name = "access.clickcontrol", Tooltip = "Executes action assigned to a click at control selected by path")]
     public class AccessControlExecuteOnClickCommand : Command
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Required = true, Tooltip = "Path to the control. See `access.control.find` tooltip for path examples")]
+            [Argument(Required = true, Tooltip = "Path to the control. See `access.getcontrol` tooltip for path examples")]
             public TextStructure Path { get; set; }
         }
 

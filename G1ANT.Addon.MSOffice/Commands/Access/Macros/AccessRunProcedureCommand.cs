@@ -12,12 +12,12 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Macros
 {
-    [Command(Name = "access.procedures.run", Tooltip = "This command runs an existing Access procedure (sub) or function")]
+    [Command(Name = "access.runprocedure", Tooltip = "This command runs an existing Access procedure (sub) or function")]
     public class AccessRunProcedureCommand : Command
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Tooltip = "Name of the macro to be executed", Required = true)]
+            [Argument(Tooltip = "Name of the procedure to be executed", Required = true)]
             public TextStructure ProcedureName { get; set; }
         }
 

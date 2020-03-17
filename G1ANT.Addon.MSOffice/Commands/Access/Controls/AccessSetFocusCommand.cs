@@ -11,12 +11,12 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
 {
-    [Command(Name = "access.controls.focus.set", Tooltip = "Set focus on control selected by path")]
+    [Command(Name = "access.setcontrolfocus", Tooltip = "Set focus on control selected by path")]
     public class AccessSetFocusCommand : Command
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Required = true, Tooltip = "Path to the control. See `access.control.find` tooltip for path examples")]
+            [Argument(Required = true, Tooltip = "Path to the control. See `access.getcontrol` tooltip for path examples")]
             public TextStructure Path { get; set; }
         }
 

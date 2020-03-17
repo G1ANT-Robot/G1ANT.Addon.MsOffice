@@ -12,15 +12,15 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Controls.Items
 {
-    [Command(Name = "access.controls.items.selected.setbyindex", Tooltip = "Set if item of Access control selected by path is selected")]
+    [Command(Name = "access.setselectionofcontrolitem", Tooltip = "Set if item of Access control is selected")]
     public class AccessSetSelectedItemCommand : Command
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Required = true, Tooltip = "Path to the control. See `access.control.find` tooltip for path examples")]
+            [Argument(Required = true, Tooltip = "Path to the control. See `access.getcontrol` tooltip for path examples")]
             public TextStructure Path { get; set; }
 
-            [Argument(Required = true, Tooltip = "Index of item starting from 0")]
+            [Argument(Required = true, Tooltip = "Index of item (starting from 0)")]
             public IntegerStructure Index { get; set; }
 
             [Argument(Required = true, Tooltip = "True if item should be selected, otherwise false")]

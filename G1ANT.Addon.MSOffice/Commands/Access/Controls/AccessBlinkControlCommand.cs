@@ -12,12 +12,12 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
 {
-    [Command(Name = "access.controls.blink", Tooltip = "Blink Access control")]
+    [Command(Name = "access.blinkcontrol", Tooltip = "Blink Access control")]
     public class AccessBlinkControlCommand : Command
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Required = true, Tooltip = "Path to the control. See `access.control.find` tooltip for path examples")]
+            [Argument(Required = true, Tooltip = "Path to the control. See `access.getcontrol` tooltip for path examples")]
             public TextStructure Path { get; set; }
         }
 

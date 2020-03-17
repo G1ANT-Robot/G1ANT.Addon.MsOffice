@@ -13,12 +13,12 @@ using Newtonsoft.Json.Linq;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
 {
-    [Command(Name = "access.controls.parent.get", Tooltip = "Get detailed information about control by path")]
+    [Command(Name = "access.getcontrolparent", Tooltip = "Get detailed information about control by path")]
     public class AccessGetControlParentCommand : Command
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Required = true, Tooltip = "Path to the control. See `access.control.find` tooltip for path examples")]
+            [Argument(Required = true, Tooltip = "Path to the control. See `access.getcontrol` tooltip for path examples")]
             public TextStructure Path { get; set; }
 
             [Argument(Tooltip = "Name of a variable where the command's result will be stored")]

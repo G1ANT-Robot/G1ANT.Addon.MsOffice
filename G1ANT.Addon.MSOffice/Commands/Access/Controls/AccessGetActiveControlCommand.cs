@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
 {
-    [Command(Name = "access.controls.active.get", Tooltip = "Get detailed information about active control of Access application")]
+    [Command(Name = "access.getactivecontrol", Tooltip = "Get detailed information about active control of Access application")]
     public class AccessGetActiveControlCommand : Command
     {
         public class Arguments : CommandArguments
