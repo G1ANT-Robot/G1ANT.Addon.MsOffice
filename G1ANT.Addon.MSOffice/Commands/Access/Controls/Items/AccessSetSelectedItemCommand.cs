@@ -32,7 +32,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Controls.Items
 
         public void Execute(Arguments arguments)
         {
-            var control = AccessManager.CurrentAccess.GetAccessControlByPath(arguments.Path.Value);
+            var control = AccessManager.CurrentAccess.GetControlByPath(arguments.Path.Value);
             control.SetItemSelected(arguments.Index.Value, arguments.IsSelected.Value);
         }
     }

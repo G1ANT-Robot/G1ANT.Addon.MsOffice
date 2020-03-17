@@ -49,7 +49,7 @@ namespace G1ANT.Addon.MSOffice
 
         private AcFormView ToAcFormView(string viewFormType)
         {
-            const string prefix = "acFormView";
+            const string prefix = "ac";
 
             if (!viewFormType.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase))
                 viewFormType = prefix + viewFormType;
@@ -226,7 +226,8 @@ namespace G1ANT.Addon.MSOffice
             application.Visible = true;
         }
 
-        internal AccessControlModel GetAccessControlByPath(string path)
+
+        internal AccessControlModel GetControlByPath(string path)
         {
             return accessFormControlsTreeWalker.GetAccessControlByPath(application, path);
         }
@@ -282,6 +283,17 @@ namespace G1ANT.Addon.MSOffice
         {
             application.DoCmd.Quit(saveChanges ? AcQuitOption.acQuitSaveAll : AcQuitOption.acQuitSaveNone);
             AccessManager.Remove(this);
+        }
+
+
+        internal void CloseCurrentDatabase()
+        {
+            application.CloseCurrentDatabase();
+        }
+
+        internal void RunSQL(string sql, bool useTransaction = false)
+        {
+            application.DoCmd.RunSQL(sql, useTransaction);
         }
 
 
@@ -407,61 +419,6 @@ namespace G1ANT.Addon.MSOffice
         }
 
 
-
-
-        //internal object RunMacro(string macroName, string args = null)
-        //{
-        //    List<object> arguments = new List<object> { macroName };
-        //    object result = null;
-        //    if (!string.IsNullOrEmpty(args))
-        //    {
-        //        arguments.AddRange(args.Split(','));
-        //    }
-        //    result = application.GetType().InvokeMember("Run", BindingFlags.InvokeMethod, null, this.application, arguments.ToArray());
-        //    return result;
-        //}
-        //internal void InsertText(string text, bool replaceAllText)
-        //{
-        //    if (!replaceAllText)
-        //    {
-        //        document.Content.InsertAfter(text);
-        //    }
-        //    else
-        //    {
-        //        document.Content.Select();
-        //        document.Content.Text = text;
-        //    }
-        //}
-        //internal string GetText()
-        //{
-        //    return document.Content.Text;
-        //}
-        //internal void InsertParagraph()
-        //{
-        //    document.Content.InsertParagraph();
-        //}
-
-        //internal void ReplaceWord(string from, string to, bool Match, bool WholeWord)
-        //{
-        //    document.Content.Find.Execute(from, Match, WholeWord, false, false, false, true, false, 1, to, 2, false, false, false, false);
-
-        //}
-
-        //internal void Save(string path)
-        //{
-        //    if (string.IsNullOrEmpty(path))
-        //    {
-        //        document.SaveAs();
-        //    }
-        //    else
-        //    {
-        //        if (string.IsNullOrEmpty(Path.GetDirectoryName(path)))
-        //            this.path = application.Options.DefaultFilePath[Word.WdDefaultFilePath.wdDocumentsPath] + "\\" + path;
-        //        else
-        //            this.path = path;
-        //        document.SaveAs(this.path);
-        //    }
-        //}
 
         //internal void Export(string path, string type)
         //{

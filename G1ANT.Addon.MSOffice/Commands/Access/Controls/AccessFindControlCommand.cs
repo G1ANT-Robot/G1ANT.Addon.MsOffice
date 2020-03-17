@@ -30,7 +30,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
 
         public void Execute(Arguments arguments)
         {
-            var result = AccessManager.CurrentAccess.GetAccessControlByPath(arguments.Path.Value);
+            var result = AccessManager.CurrentAccess.GetControlByPath(arguments.Path.Value);
 
             Scripter.Variables.SetVariableValue(arguments.Result.Value, new JsonStructure(JObject.FromObject(result)));
         }

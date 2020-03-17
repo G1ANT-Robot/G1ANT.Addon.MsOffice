@@ -25,7 +25,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
 
         public void Execute(Arguments arguments)
         {
-            var control = AccessManager.CurrentAccess.GetAccessControlByPath(arguments.Path.Value);
+            var control = AccessManager.CurrentAccess.GetControlByPath(arguments.Path.Value);
             control.SetFocus();
         }
     }
