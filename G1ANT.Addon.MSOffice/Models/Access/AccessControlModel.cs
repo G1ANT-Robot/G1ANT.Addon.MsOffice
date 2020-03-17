@@ -8,7 +8,7 @@
 *
 */
 
-using G1ANT.Addon.MSOffice.Api.Access;
+using G1ANT.Addon.MSOffice.Helpers.Access;
 using Microsoft.Office.Interop.Access;
 using Newtonsoft.Json;
 using System;
@@ -193,7 +193,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             if (Control.Application.hWndAccessApp() != model.Control.Application.hWndAccessApp())
                 return 1;
 
-            return model.Name == this.Name ? 0 : 1; // names of controls seem to be unique
+            return model.Name == Name ? 0 : 1; // names of controls seem to be unique
         }
     }
 }

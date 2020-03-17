@@ -10,6 +10,7 @@
 
 using G1ANT.Addon.MSOffice.Access;
 using G1ANT.Addon.MSOffice.Api.Access;
+using G1ANT.Addon.MSOffice.Helpers.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Language;
 using Microsoft.Office.Interop.Access;
@@ -63,7 +64,7 @@ namespace G1ANT.Addon.MSOffice
                 windowMode = prefix + windowMode;
             return (AcWindowMode)Enum.Parse(typeof(AcWindowMode), windowMode, true);
         }
-        
+
 
         private AcOpenDataMode ToAcOpenDataMode(bool createNew, bool openReadonly)
         {
@@ -81,7 +82,7 @@ namespace G1ANT.Addon.MSOffice
 
             return AcFormOpenDataMode.acFormEdit;
         }
-        
+
 
         internal void OpenForm(
             string name,

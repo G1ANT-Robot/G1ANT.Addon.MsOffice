@@ -104,7 +104,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\Access\AccessControlPropertyHelper.cs" />
+    <Compile Include="Helpers\Access\AccessControlPropertyHelper.cs" />
     <Compile Include="Api\Access\AccessFormControlsTreeWalker.cs" />
     <Compile Include="Api\Access\IAccessFormControlsTreeWalker.cs" />
     <Compile Include="Api\Access\IRunningObjectTableService.cs" />
@@ -165,6 +165,8 @@
     <Compile Include="Models\Access\Dao\AccessQueryPropertyModel.cs" />
     <Compile Include="Models\Access\INameModel.cs" />
     <Compile Include="Models\Access\NameValueModel.cs" />
+    <Compile Include="Models\Access\ModuleModel.cs" />
+    <Compile Include="Models\Access\ResourceModel.cs" />
     <Compile Include="Models\Access\RotApplicationModel.cs" />
     <Compile Include="Api\Access\RunningObjectTableService.cs" />
     <Compile Include="Api\Access\OleAccWrapper.cs" />

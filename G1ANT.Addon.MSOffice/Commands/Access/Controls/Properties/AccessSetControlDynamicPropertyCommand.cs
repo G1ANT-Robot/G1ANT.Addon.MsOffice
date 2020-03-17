@@ -8,7 +8,7 @@
 *
 */
 
-using G1ANT.Addon.MSOffice.Api.Access;
+using G1ANT.Addon.MSOffice.Helpers.Access;
 using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Controls.Properties

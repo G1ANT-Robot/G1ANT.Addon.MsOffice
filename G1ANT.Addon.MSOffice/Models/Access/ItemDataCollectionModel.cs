@@ -8,7 +8,7 @@
 *
 */
 
-using G1ANT.Addon.MSOffice.Api.Access;
+using G1ANT.Addon.MSOffice.Helpers.Access;
 using System;
 using System.Collections.Generic;
 using System.Linq;

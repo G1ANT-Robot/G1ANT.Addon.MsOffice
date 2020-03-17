@@ -9,7 +9,7 @@
 */
 
 using G1ANT.Addon.MSOffice.Api;
-using G1ANT.Addon.MSOffice.Api.Access;
+using G1ANT.Addon.MSOffice.Helpers.Access;
 using G1ANT.Language;
 using System;
 
