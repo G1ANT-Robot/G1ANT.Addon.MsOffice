@@ -108,6 +108,7 @@
     <Compile Include="Api\Access\AccessFormControlsTreeWalker.cs" />
     <Compile Include="Api\Access\IAccessFormControlsTreeWalker.cs" />
     <Compile Include="Api\Access\IRunningObjectTableService.cs" />
+    <Compile Include="Api\StructureConverter.cs" />
     <Compile Include="Commands\Access\AccessCloseDatabaseCommand.cs" />
     <Compile Include="Commands\Access\AccessKillOrphanedProcessesCommand.cs" />
     <Compile Include="Commands\Access\AccessJoinCommand.cs" />
@@ -115,6 +116,10 @@
     <Compile Include="Commands\Access\AccessOpenProjectCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessGetControlValueCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessSetControlValueCommand.cs" />
+    <Compile Include="Commands\Access\Controls\Properties\AccessGetControlDynamicPropertyCommand.cs" />
+    <Compile Include="Commands\Access\Controls\Properties\AccessSetControlDynamicPropertyCommand.cs" />
+    <Compile Include="Commands\Access\Controls\Properties\AccessSetControlPropertyCommand.cs" />
+    <Compile Include="Commands\Access\Controls\Properties\AccessGetControlPropertyCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessCloseViewCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessCloseTableCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessCloseStoredProcedureCommand.cs" />
@@ -129,6 +134,10 @@
     <Compile Include="Commands\Access\Data\AccessOpenDatabaseDiagramCommand.cs" />
     <Compile Include="Commands\Access\Forms\AccessCloseFormCommand.cs" />
     <Compile Include="Commands\Access\Forms\AccessOpenFormCommand.cs" />
+    <Compile Include="Commands\Access\Forms\Properties\AccessGetFormDynamicPropertyCommand.cs" />
+    <Compile Include="Commands\Access\Forms\Properties\AccessGetFormPropertyCommand.cs" />
+    <Compile Include="Commands\Access\Forms\Properties\AccessSetFormDynamicPropertyCommand.cs" />
+    <Compile Include="Commands\Access\Forms\Properties\AccessSetFormPropertyCommand.cs" />
     <Compile Include="Commands\Access\Macros\AccessRunProcedureCommand.cs" />
     <Compile Include="Controllers\Access\ITooltipService.cs" />
     <Compile Include="Controllers\Access\TooltipService.cs" />
