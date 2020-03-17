@@ -51,6 +51,18 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             }
         }
 
+        internal string GetValue()
+        {
+            try
+            {
+                return ((dynamic)Control).Value;
+            }
+            catch (COMException ex)
+            {
+                throw new Exception("Error getting the value", ex);
+            }
+        }
+
         public void SetFocus() => Control.SetFocus();
 
         public AccessControlModel GetParent()
