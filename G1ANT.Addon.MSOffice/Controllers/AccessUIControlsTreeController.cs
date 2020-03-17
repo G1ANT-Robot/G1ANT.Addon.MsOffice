@@ -6,7 +6,9 @@ using G1ANT.Addon.MSOffice.Models.Access.Data;
 using G1ANT.Language;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -70,6 +72,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
         const string TablesLabel = "Tables";
         const string ViewsLabel = "Views";
         const string PropertiesLabel = "Properties";
+        const string DynamicPropertiesLabel = "Dynamic Properties";
         const string InternalName = "internal";
 
         internal void SelectedApplicationChanged(RotApplicationModel rotApplicationModel)
@@ -413,6 +416,16 @@ namespace G1ANT.Addon.MSOffice.Controllers
             }
         }
 
+
+        private TreeNode[] CreateObjectProperties(object accessObject)
+        {
+            var objectProperties = TypeDescriptor.GetProperties(accessObject);
+            return objectProperties
+                .Cast<PropertyDescriptor>()
+                .Select(p => new TreeNode($"{p.Name}: {p.GetValue(accessObject)}"))
+                .ToArray();
+        }
+
         private void LoadControlNodes(TreeNode treeNode, AccessFormModel accessFormModel)
         {
             if (IsEmptyNode(treeNode))
@@ -421,7 +434,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
                 if (treeNode.Name == InternalName && treeNode.Text == PropertiesLabel)
                 {
-                    treeNode.Nodes.AddRange(CreatePropertyNodes(accessFormModel.Form.Properties));
+                    treeNode.Nodes.Add(new TreeNode(DynamicPropertiesLabel, CreatePropertyNodes(accessFormModel.Form.Properties)));
+                    treeNode.Nodes.AddRange(CreateObjectProperties(accessFormModel.Form));
                     return;
                 }
 
@@ -459,7 +473,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
                 if (treeNode.Name == InternalName && treeNode.Text == PropertiesLabel)
                 {
-                    treeNode.Nodes.AddRange(CreatePropertyNodes(accessControlModel.Control.Properties));
+                    treeNode.Nodes.Add(new TreeNode(DynamicPropertiesLabel, CreatePropertyNodes(accessControlModel.Control.Properties)));
+                    treeNode.Nodes.AddRange(CreateObjectProperties(accessControlModel.Control));
                     return;
                 }
 
