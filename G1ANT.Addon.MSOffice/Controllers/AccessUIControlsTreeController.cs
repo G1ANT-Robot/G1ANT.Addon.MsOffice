@@ -3,6 +3,7 @@ using G1ANT.Addon.MSOffice.Controllers.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Addon.MSOffice.Models.Access.Dao;
 using G1ANT.Addon.MSOffice.Models.Access.Data;
+using G1ANT.Addon.MSOffice.Models.Access.VBE;
 using G1ANT.Language;
 using System;
 using System.Collections.Generic;
@@ -17,19 +18,24 @@ namespace G1ANT.Addon.MSOffice.Controllers
 {
     public class AccessUIControlsTreeController
     {
+        private const string ApplicationLabel = "Application";
         private const string FormsLabel = "Forms";
         private const string MacrosLabel = "Macros";
         private const string ReportsLabel = "Reports";
         private const string ResourcesLabel = "Resources";
         private const string ModulesLabel = "Modules";
+
+        private const string DatabaseLabel = "Database";
         private const string DatabaseDiagramsLabel = "Database Diagrams";
         private const string FunctionsLabel = "Functions";
         private const string QueriesLabel = "Queries";
         private const string StoredProceduresLabel = "Stored Prodecures";
         private const string TablesLabel = "Tables";
         private const string ViewsLabel = "Views";
+
         private const string PropertiesLabel = "Properties";
         private const string DynamicPropertiesLabel = "Dynamic Properties";
+
         private const string InternalName = "internal";
 
         private IMainForm mainForm;
@@ -124,12 +130,13 @@ namespace G1ANT.Addon.MSOffice.Controllers
             controlsTree.Nodes.AddRange(
                 new TreeNode[]
                 {
+                    new TreeNode(ApplicationLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                     new TreeNode(FormsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                     new TreeNode(MacrosLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                     new TreeNode(ReportsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                     new TreeNode(ResourcesLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                     new TreeNode(ModulesLabel) { Tag = rotApplicationModel, Nodes = { "" } },
-                    new TreeNode("Database") {
+                    new TreeNode(DatabaseLabel) {
                         Nodes = {
                             new TreeNode(DatabaseDiagramsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                             new TreeNode(FunctionsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
@@ -318,6 +325,9 @@ namespace G1ANT.Addon.MSOffice.Controllers
             {
                 switch (treeNode.Text)
                 {
+                    case ApplicationLabel:
+                        LoadApplicationNodes(treeNode, rotApplicationModel);
+                        break;
                     case FormsLabel:
                         LoadFormNodes(treeNode, rotApplicationModel);
                         break;
@@ -359,6 +369,47 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
             ApplyExpandedTreeNodes(treeNode.Nodes);
             controlsTree.EndUpdate();
+        }
+
+        private void LoadApplicationNodes(TreeNode parentNode, RotApplicationModel rotApplicationModel)
+        {
+            if (IsEmptyNode(parentNode))
+            {
+                parentNode.Nodes.Clear();
+                var app = rotApplicationModel.Application;
+
+                var vbe = new VbeModel(app.VBE);
+                var vbeProjectsNode = new TreeNode("Projects", vbe.Projects.Select(p => new TreeNode(p.ToString())).ToArray());
+                var vbeWindowsNode = new TreeNode("Windows", vbe.Windows.Select(w => new TreeNode(w.ToString())).ToArray());
+                var vbeAddinsNode = new TreeNode("Addins", vbe.Addins.Select(a => new TreeNode(a.ToString())).ToArray());
+
+                var vbeNode = new TreeNode(
+                    $"VBE Version: {vbe.Version}",
+                    new TreeNode[] {
+                        new TreeNode($"MainWindow: {vbe.MainWindow}"),
+                        vbeWindowsNode,
+                        new TreeNode($"Active project {vbe.ActiveVBProject}"),
+                        vbeProjectsNode,
+                        vbeAddinsNode
+                    }
+                );
+
+                parentNode.Nodes.AddRange(
+                    new TreeNode[]
+                    {
+                        new TreeNode($"Name: {app.Name}"),
+                        new TreeNode($"Version: {app.Version}"),
+                        new TreeNode($"BaseConnectionString: {app.CurrentProject.BaseConnectionString}"),
+                        new TreeNode($"Current Object Name: {app.CurrentObjectName}"),
+                        new TreeNode($"Current Object Type: {app.CurrentObjectType}"),
+                        vbeNode,
+                    }
+                );
+
+                var tempVars = new TempVarCollectionModel(app.TempVars);
+                if (tempVars.Any())
+                    parentNode.Nodes.Add(new TreeNode($"Temp Vars", tempVars.Select(t => new TreeNode(t.ToString())).ToArray()));
+            }
         }
 
         private void LoadModulePropertyNodes(TreeNode parentNode, ModuleModel model)

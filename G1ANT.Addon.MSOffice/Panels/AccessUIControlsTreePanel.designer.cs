@@ -39,13 +39,13 @@
             this.controlsTree = new System.Windows.Forms.TreeView();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.highlightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copynameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyNodeDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acDesignToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.copynameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -139,11 +139,18 @@
             this.highlightToolStripMenuItem.Text = "&Highlight";
             this.highlightToolStripMenuItem.Click += new System.EventHandler(this.highlightToolStripMenuItem_Click);
             // 
+            // copynameToolStripMenuItem
+            // 
+            this.copynameToolStripMenuItem.Name = "copynameToolStripMenuItem";
+            this.copynameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copynameToolStripMenuItem.Text = "&Copy to clipboard";
+            this.copynameToolStripMenuItem.Click += new System.EventHandler(this.copynameToolStripMenuItem_Click);
+            // 
             // copyNodeDetailsToolStripMenuItem
             // 
             this.copyNodeDetailsToolStripMenuItem.Name = "copyNodeDetailsToolStripMenuItem";
             this.copyNodeDetailsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.copyNodeDetailsToolStripMenuItem.Text = "&Copy node details";
+            this.copyNodeDetailsToolStripMenuItem.Text = "Copy &node details";
             this.copyNodeDetailsToolStripMenuItem.Click += new System.EventHandler(this.copyNodeDetailsToolStripMenuItem_Click);
             // 
             // loadFormToolStripMenuItem
@@ -189,13 +196,6 @@
             this.comboBox1.Size = new System.Drawing.Size(222, 21);
             this.comboBox1.TabIndex = 1;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
-            // copynameToolStripMenuItem
-            // 
-            this.copynameToolStripMenuItem.Name = "copynameToolStripMenuItem";
-            this.copynameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.copynameToolStripMenuItem.Text = "Copy &name";
-            this.copynameToolStripMenuItem.Click += new System.EventHandler(this.copynameToolStripMenuItem_Click);
             // 
             // AccessControlsTreePanel
             // 

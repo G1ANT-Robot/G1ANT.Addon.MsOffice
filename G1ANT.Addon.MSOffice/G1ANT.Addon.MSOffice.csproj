@@ -239,6 +239,17 @@
     <Compile Include="Models\Access\AccessObjectPropertyModel.cs" />
     <Compile Include="Models\Access\ItemDataCollectionModel.cs" />
     <Compile Include="Models\Access\SelectedItemDataCollectionModel.cs" />
+    <Compile Include="Models\Access\TempVars\TempVarCollectionModel.cs" />
+    <Compile Include="Models\Access\TempVars\TempVarModel.cs" />
+    <Compile Include="Models\Access\VBE\VbeAddinCollectionModel.cs" />
+    <Compile Include="Models\Access\VBE\VbeAddinModel.cs" />
+    <Compile Include="Models\Access\VBE\VbeModel.cs" />
+    <Compile Include="Models\Access\VBE\VbeProjectCollectionModel.cs" />
+    <Compile Include="Models\Access\VBE\VbeProjectModel.cs" />
+    <Compile Include="Models\Access\VBE\VbeReferenceCollectionModel.cs" />
+    <Compile Include="Models\Access\VBE\VbeReferenceModel.cs" />
+    <Compile Include="Models\Access\VBE\VbeWindowCollectionModel.cs" />
+    <Compile Include="Models\Access\VBE\VbeWindowModel.cs" />
     <Compile Include="Panels\AccessUIControlsTreePanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
