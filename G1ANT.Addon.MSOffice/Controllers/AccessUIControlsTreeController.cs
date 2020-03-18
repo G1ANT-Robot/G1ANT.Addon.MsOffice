@@ -480,7 +480,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 treeNode.Nodes.Clear();
 
                 var formAccessObjects = new AccessObjectFormCollectionModel(rotApplicationModel);
-                foreach (var accessObject in formAccessObjects)
+                foreach (var accessObject in formAccessObjects.OrderByDescending(f => f.IsLoaded).ThenBy(f => f.Name))
                 {
                     if (accessObject.IsLoaded)
                     {
@@ -578,6 +578,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
         private TreeNode[] CreateDynamicPropertyNodes(MSAccess.Properties properties)
         {
             return new AccessDynamicPropertiesModel(properties)
+                .OrderBy(p => p.Key)
                 .Select(p => new TreeNode($"{p.Key}: {p.Value}"))
                 .ToArray();
         }
@@ -587,6 +588,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
             var objectProperties = TypeDescriptor.GetProperties(accessObject);
             return objectProperties
                 .Cast<PropertyDescriptor>()
+                .OrderBy(p => p.Name)
                 .Select(p => new TreeNode($"{p.Name}: {p.GetValue(accessObject)}"))
                 .ToArray();
         }
