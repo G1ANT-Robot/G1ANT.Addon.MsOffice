@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Controls.Properties
 {
-    [Command(Name = "access.getControlproperties", Tooltip = "Get list of value and name of properties of control of form of Access application")]
+    [Command(Name = "access.getcontrolproperties", Tooltip = "Get list of value and name of properties of control of form of Access application")]
     public class AccessGetControlPropertiesCommand : Command
     {
         public class Arguments : CommandArguments
