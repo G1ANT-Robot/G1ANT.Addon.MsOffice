@@ -11,21 +11,24 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
 {
-    [Command(Name = "access.clickcontrol", Tooltip = "Executes action assigned to a click at control selected by path")]
-    public class AccessControlExecuteOnClickCommand : Command
+    [Command(Name = "access.executecontrolevent", Tooltip = "Executes action assigned to a event at control selected by path. This command has several limitations")]
+    public class AccessControlExecuteEventCommand : Command
     {
         public class Arguments : CommandArguments
         {
             [Argument(Required = true, Tooltip = "Path to the control. See `access.getcontrol` tooltip for path examples")]
             public TextStructure Path { get; set; }
+
+            [Argument(Required = true, Tooltip = "Event name, i.e. OnClick, OnEnter")]
+            public TextStructure EventName { get; set; }
         }
 
-        public AccessControlExecuteOnClickCommand(AbstractScripter scripter) : base(scripter)
+        public AccessControlExecuteEventCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.ExecuteDefaultClickEvent(arguments.Path.Value);
+            AccessManager.CurrentAccess.ExecuteEvents(arguments.Path.Value, arguments.EventName.Value);
         }
     }
 }

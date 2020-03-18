@@ -94,6 +94,8 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 
         internal AccessDynamicPropertiesModel GetDynamicProperties() => new AccessDynamicPropertiesModel(Control.Properties);
 
+        internal T GetPropertyValue<T>(string name) => (T)Convert.ChangeType(GetPropertyValue(name), typeof(T));
+
         internal object GetPropertyValue(string name)
         {
             try

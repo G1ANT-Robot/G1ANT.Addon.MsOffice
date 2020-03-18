@@ -104,6 +104,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Access\Controls\AccessControlExecuteEventCommand.cs" />
     <Compile Include="Helpers\Access\AccessControlPropertyHelper.cs" />
     <Compile Include="Api\Access\AccessFormControlsTreeWalker.cs" />
     <Compile Include="Api\Access\IAccessFormControlsTreeWalker.cs" />

@@ -152,29 +152,61 @@ namespace G1ANT.Addon.MSOffice
             );
         }
 
-        internal void ExecuteOnClick(string path)
+
+        /// <summary>
+        /// Executes handler assigned to OnClick property; if there's no handler action is repeated for OnEnter property.
+        /// </summary>
+        /// <param name="path"></param>
+        internal void ExecuteDefaultClickEvent(string path)
+        {
+            ExecuteEvents(path, "OnClick", "OnEnter");
+        }
+
+        internal void ExecuteEvents(string path, params string[] eventNames)
         {
             var controlPath = new ControlPathModel(path);
             var control = accessFormControlsTreeWalker.GetAccessControlByPath(application, controlPath);
 
-            var onClickCode = control.TryGetDynamicPropertyValue<string>("OnClick");
-            if (onClickCode == "[Event Procedure]")
+            var formName = controlPath.FormName;
+            var form = new AccessFormModel(application.Forms[formName], false, false, false);
+
+            foreach (var eventName in eventNames)
             {
-                var formName = controlPath.FormName;
+                if (ExecuteHandlerCode(form, control, eventName))
+                    return;
+            }
 
-                var form = application.Forms[formName];
+            throw new Exception("No action to execute found");
+        }
 
+        private bool ExecuteHandlerCode(AccessFormModel form, AccessControlModel control, string actionName)
+        {
+            var handlerCode = control.GetPropertyValue<string>(actionName);
+            if (!string.IsNullOrEmpty(handlerCode))
+            {
+                ExecuteCode(form, control, handlerCode);
+                return true;
+            }
+
+            return false;
+        }
+
+        private void ExecuteCode(AccessFormModel formModel, AccessControlModel control, string code)
+        {
+            if (code == "[Event Procedure]")
+            {
                 //form.SetFocus();
-                //control.Control.Form.SetFocus();
-                control.Control.SetFocus();
+                control.SetFocus();
 
-                RobotWin32.SetForegroundWindow((IntPtr)form.Hwnd);
+                RobotWin32.SetForegroundWindow((IntPtr)formModel.Hwnd);
                 System.Windows.Forms.SendKeys.SendWait("{ENTER}");
             }
-            else
+            else if (!string.IsNullOrEmpty(code))
             {
-                application.DoCmd.RunMacro(onClickCode);
+                application.DoCmd.RunMacro(code);
             }
+            else
+                throw new Exception("Code to execute is empty");
         }
 
 
