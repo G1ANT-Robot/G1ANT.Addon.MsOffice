@@ -184,16 +184,17 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public void Blink(string propertyName = "ForeColor")
         {
             const string fallbackPropertyName = "FontUnderline";
-            var originColor = this.TryGetDynamicPropertyValue<int>(propertyName);
-            var originFontUnderline = this.TryGetDynamicPropertyValue<bool>(fallbackPropertyName);
+            if (!this.TryGetDynamicPropertyValue(propertyName, out int originColor))
+                return;
+            this.TryGetDynamicPropertyValue(fallbackPropertyName, out bool originFontUnderline);
 
             for (var i = 0; i < 3; ++i)
             {
-                this.SetDynamicPropertyValue(propertyName, (originColor & 0xffffff) ^ 0xffffff);
-                this.SetDynamicPropertyValue(fallbackPropertyName, !originFontUnderline);
+                this.TrySetDynamicPropertyValue(propertyName, (originColor & 0xffffff) ^ 0xffffff);
+                this.TrySetDynamicPropertyValue(fallbackPropertyName, !originFontUnderline);
                 Thread.Sleep(500);
-                this.SetDynamicPropertyValue(propertyName, originColor);
-                this.SetDynamicPropertyValue(fallbackPropertyName, originFontUnderline);
+                this.TrySetDynamicPropertyValue(propertyName, originColor);
+                this.TrySetDynamicPropertyValue(fallbackPropertyName, originFontUnderline);
                 Thread.Sleep(500);
             }
         }
