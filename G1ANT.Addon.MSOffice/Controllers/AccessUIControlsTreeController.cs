@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -18,6 +17,21 @@ namespace G1ANT.Addon.MSOffice.Controllers
 {
     public class AccessUIControlsTreeController
     {
+        private const string FormsLabel = "Forms";
+        private const string MacrosLabel = "Macros";
+        private const string ReportsLabel = "Reports";
+        private const string ResourcesLabel = "Resources";
+        private const string ModulesLabel = "Modules";
+        private const string DatabaseDiagramsLabel = "Database Diagrams";
+        private const string FunctionsLabel = "Functions";
+        private const string QueriesLabel = "Queries";
+        private const string StoredProceduresLabel = "Stored Prodecures";
+        private const string TablesLabel = "Tables";
+        private const string ViewsLabel = "Views";
+        private const string PropertiesLabel = "Properties";
+        private const string DynamicPropertiesLabel = "Dynamic Properties";
+        private const string InternalName = "internal";
+
         private IMainForm mainForm;
         public bool initialized = false;
         private readonly IRunningObjectTableService runningObjectTableService;
@@ -31,13 +45,17 @@ namespace G1ANT.Addon.MSOffice.Controllers
             TreeView controlsTree, ComboBox applications,
             IRunningObjectTableService runningObjectTableService,
             ITooltipService tooltipService
-            )
+        )
         {
             this.runningObjectTableService = runningObjectTableService;
             this.tooltipService = tooltipService;
             this.controlsTree = controlsTree;
             this.applications = applications;
+
+            //controlsTree.DrawMode = TreeViewDrawMode.OwnerDrawText;
+            //controlsTree.DrawNode += controlsTree_DrawNode;
         }
+
 
         public void Initialize(IMainForm mainForm) => this.mainForm = mainForm;
 
@@ -62,20 +80,32 @@ namespace G1ANT.Addon.MSOffice.Controllers
             }
         }
 
-        const string FormsLabel = "Forms";
-        const string MacrosLabel = "Macros";
-        const string ReportsLabel = "Reports";
-        const string ResourcesLabel = "Resources";
-        const string ModulesLabel = "Modules";
-        const string DatabaseDiagramsLabel = "Database Diagrams";
-        const string FunctionsLabel = "Functions";
-        const string QueriesLabel = "Queries";
-        const string StoredProceduresLabel = "Stored Prodecures";
-        const string TablesLabel = "Tables";
-        const string ViewsLabel = "Views";
-        const string PropertiesLabel = "Properties";
-        const string DynamicPropertiesLabel = "Dynamic Properties";
-        const string InternalName = "internal";
+        //private void controlsTree_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        //{
+        //    if (e.Node.Text == "")
+        //        return;
+
+        //    if (e.Node.Tag is AccessControlModel accessControlModel)
+        //    {
+        //        var boldText = accessControlModel.Caption ?? "";
+        //        var normalText = $"{accessControlModel.Name} {accessControlModel.Type}";
+
+        //        using (Font font = new Font(controlsTree.Font, FontStyle.Bold))
+        //        {
+        //            using (Brush brush = new SolidBrush(controlsTree.ForeColor))
+        //            {
+        //                e.Graphics.DrawString(boldText, font, brush, e.Bounds.Left, e.Bounds.Top);
+
+        //                var s = e.Graphics.MeasureString(boldText, controlsTree.Font);
+        //                e.Graphics.DrawString(normalText, controlsTree.Font, brush, e.Bounds.Left + (int)s.Width + 10, e.Bounds.Top);
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        e.DrawDefault = true;
+        //    }
+        //}
 
         internal void SelectedApplicationChanged(RotApplicationModel rotApplicationModel)
         {
@@ -207,7 +237,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         private static string GetNameForNode(AccessControlModel model)
         {
-            return $"{model.Name} {model.Type} {model.Value}";
+            return $"{model.Caption} {model.Name} {model.Type} {model.Value}";
         }
 
         private static string GetNameForNode(AccessFormModel model)

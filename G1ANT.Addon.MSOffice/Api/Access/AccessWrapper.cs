@@ -181,7 +181,7 @@ namespace G1ANT.Addon.MSOffice
 
         private bool ExecuteHandlerCode(AccessFormModel form, AccessControlModel control, string actionName)
         {
-            var handlerCode = control.GetPropertyValue<string>(actionName);
+            var handlerCode = control.TryGetPropertyValue<string>(actionName);
             if (!string.IsNullOrEmpty(handlerCode))
             {
                 ExecuteCode(form, control, handlerCode);

@@ -25,7 +25,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public string Name { get; }
         public string Type { get; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public dynamic Caption { get; private set; }
+        public string Caption { get; private set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public dynamic Value { get; private set; }
@@ -45,8 +45,8 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             Control = control ?? throw new ArgumentNullException(nameof(control));
             Name = control.Name;
             Type = ((AcControlType)this.TryGetDynamicPropertyValue<int>("ControlType")).ToString();
-            Caption = this.TryGetDynamicPropertyValue<string>("Caption");
-            Value = this.TryGetDynamicPropertyValue<string>("Value");
+            Caption = TryGetPropertyValue<string>("Caption");
+            Value = TryGetPropertyValue<string>("Value");
 
             if (getProperties && control.Properties.Count > 0)
                 LoadProperties();
@@ -54,6 +54,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             if (getChildrenRecursively)
                 LoadChildren(getProperties);
         }
+
 
         public void LoadProperties()
         {
@@ -94,7 +95,17 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 
         internal AccessDynamicPropertiesModel GetDynamicProperties() => new AccessDynamicPropertiesModel(Control.Properties);
 
-        internal T GetPropertyValue<T>(string name) => (T)Convert.ChangeType(GetPropertyValue(name), typeof(T));
+        internal T TryGetPropertyValue<T>(string name)
+        {
+            try
+            {
+                return (T)Convert.ChangeType(GetPropertyValue(name), typeof(T));
+            }
+            catch
+            {
+                return default(T);
+            }
+        }
 
         internal object GetPropertyValue(string name)
         {
@@ -134,10 +145,15 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 
         public List<ItemDataModel> GetItemsSelected() => new SelectedItemDataCollectionModel(this);
         public ItemDataCollectionModel GetItems() => new ItemDataCollectionModel(this);
-        public bool IsItemSelected(int index) => Control.Selected[index] != 0;
-        public void SetItemSelected(int index, bool selected) => Control.Selected[index] = selected ? 1 : 0;
+        public bool IsItemSelected(int index) => Control.Selected[ToItemIndex(index)] != 0;
+        public void SetItemSelected(int index, bool selected) => Control.Selected[ToItemIndex(index)] = selected ? 1 : 0;
 
 
+        private int ToItemIndex(int i)
+        {
+            var isHeaderVisible = TryGetPropertyValue<bool>("ColumnHeads");
+            return isHeaderVisible ? i + 1 : i;
+        }
 
         public int GetChildrenCount()
         {
