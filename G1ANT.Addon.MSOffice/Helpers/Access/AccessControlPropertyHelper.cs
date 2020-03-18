@@ -23,6 +23,19 @@ namespace G1ANT.Addon.MSOffice.Helpers.Access
             }
         }
 
+        public static bool TrySetDynamicPropertyValue<T>(this AccessControlModel control, string propertyName, T value)
+        {
+            try
+            {
+                control.SetDynamicPropertyValue<T>(propertyName, value);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static void SetDynamicPropertyValue<T>(this AccessControlModel control, string propertyName, T value)
         {
             control.Control.Properties[propertyName].Value = value;
