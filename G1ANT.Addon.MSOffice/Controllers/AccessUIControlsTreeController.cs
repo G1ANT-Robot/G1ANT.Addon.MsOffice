@@ -133,7 +133,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
             controlsTree.Nodes.AddRange(
                 new TreeNode[]
                 {
-                    new TreeNode(ApplicationLabel) { Tag = rotApplicationModel, Nodes = { "" } },
+                    new LazyTreeNode(ApplicationLabel, () => GetApplicationNodes(rotApplicationModel)) { Tag = rotApplicationModel },
                     new TreeNode(FormsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                     new TreeNode(MacrosLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                     new TreeNode(ReportsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
@@ -342,10 +342,12 @@ namespace G1ANT.Addon.MSOffice.Controllers
             var oldCursor = Cursor.Current;
             Cursor.Current = Cursors.WaitCursor;
 
-            if (treeNode.Tag is AccessControlModel accessControlModel)
-                LoadControlNodes(treeNode, accessControlModel);
-            else if (treeNode.Tag is AccessFormModel accessFormModel)
-                LoadControlNodes(treeNode, accessFormModel);
+            if (treeNode is LazyTreeNode lazyTreeNode)
+                lazyTreeNode.LoadLazyChildren();
+            //else if (treeNode.Tag is AccessControlModel accessControlModel)
+            //    LoadControlNodes(treeNode, accessControlModel);
+            //else if (treeNode.Tag is AccessFormModel accessFormModel)
+            //    LoadControlNodes(treeNode, accessFormModel);
             else if (treeNode.Tag is ModuleModel moduleModel)
                 LoadModulePropertyNodes(treeNode, moduleModel);
             else if (treeNode.Tag is AccessQueryModel accessQueryModel)
@@ -354,9 +356,9 @@ namespace G1ANT.Addon.MSOffice.Controllers
             {
                 switch (treeNode.Text)
                 {
-                    case ApplicationLabel:
-                        LoadApplicationNodes(treeNode, rotApplicationModel);
-                        break;
+                    //case ApplicationLabel:
+                    //    LoadApplicationNodes(treeNode, rotApplicationModel);
+                    //    break;
                     case FormsLabel:
                         LoadFormNodes(treeNode, rotApplicationModel);
                         break;
@@ -428,9 +430,18 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 parentNode.Nodes.AddRange(
                     new TreeNode[]
                     {
-                        new TreeNode("Fields", details.Fields.Select(f => new TreeNode(f.Name, GetObjectPropertiesAsTreeNodes(f))).ToArray()),
-                        new TreeNode("Parameters", details.Parameters.Select(p => new TreeNode($"{p.Name}: {p.Value}, type: {p.Type}")).ToArray()),
-                        new TreeNode("Properties", details.Properties.Select(p => new TreeNode($"{p.Name}: {p.Value}, type: {p.PropertyType}")).ToArray()),
+                        new LazyTreeNode(
+                            "Fields",
+                            () => details.Fields.Select(f => new LazyTreeNode(f.Name, () => GetObjectPropertiesAsTreeNodes(f)))
+                        ),
+                        new LazyTreeNode(
+                            "Parameters",
+                            () => details.Parameters.Select(p => new TreeNode($"{p.Name}: {p.Value}, type: {p.Type}"))
+                        ),
+                        new LazyTreeNode(
+                            "Properties",
+                            () => details.Properties.Select(p => new TreeNode($"{p.Name}: {p.Value}, type: {p.PropertyType}"))
+                        ),
                         new TreeNode($"SQL: {details.SQL}"),
                         //new TreeNode($"Name: {details.Name}"),
                         new TreeNode($"DateCreated: {details.DateCreated}"),
@@ -458,9 +469,18 @@ namespace G1ANT.Addon.MSOffice.Controllers
                     tableDefs.Select(td => new TreeNode(
                         td.ToString(),
                         new TreeNode[] {
-                            new TreeNode("Fields", td.Fields.Value.Select(f => new TreeNode(f.Name, GetObjectPropertiesAsTreeNodes(f))).ToArray()),
-                            new TreeNode("Properties", td.Properties.Value.Select(p => new TreeNode(p.Name, GetObjectPropertiesAsTreeNodes(p))).ToArray()),
-                            new TreeNode("Indexes", td.Indexes.Value.Select(i => new TreeNode(i.Name, GetObjectPropertiesAsTreeNodes(i))).ToArray()),
+                            new LazyTreeNode(
+                                "Fields",
+                                () => td.Fields.Value.Select(f => new LazyTreeNode(f.Name, () => GetObjectPropertiesAsTreeNodes(f)))
+                            ),
+                            new LazyTreeNode(
+                                "Properties",
+                                () => td.Properties.Value.Select(p => new LazyTreeNode(p.Name, () => GetObjectPropertiesAsTreeNodes(p)))
+                            ),
+                            new LazyTreeNode(
+                                "Indexes",
+                                () => td.Indexes.Value.Select(i => new LazyTreeNode(i.Name, () => GetObjectPropertiesAsTreeNodes(i)))
+                            ),
                             new TreeNode($"DateCreated: {td.DateCreated}"),
                             new TreeNode($"LastUpdated: {td.LastUpdated}"),
                             new TreeNode($"Connect: {td.Connect}"),
@@ -474,46 +494,43 @@ namespace G1ANT.Addon.MSOffice.Controllers
             }
         }
 
-        private void LoadApplicationNodes(TreeNode parentNode, RotApplicationModel rotApplicationModel)
+        private List<TreeNode> GetApplicationNodes(RotApplicationModel rotApplicationModel)
         {
-            if (IsEmptyNode(parentNode))
+            var app = rotApplicationModel.Application;
+
+            var vbe = new VbeModel(app.VBE);
+            var vbeProjectsNode = new TreeNode("Projects", vbe.Projects.Select(p => new TreeNode(p.ToString())).ToArray());
+            var vbeWindowsNode = new TreeNode("Windows", vbe.Windows.Select(w => new TreeNode(w.ToString())).ToArray());
+            var vbeAddinsNode = new TreeNode("Addins", vbe.Addins.Select(a => new TreeNode(a.ToString())).ToArray());
+
+            var vbeNode = new TreeNode(
+                $"VBE Version: {vbe.Version}",
+                new TreeNode[] {
+                    new TreeNode($"MainWindow: {vbe.MainWindow}"),
+                    vbeWindowsNode,
+                    new TreeNode($"Active project {vbe.ActiveVBProject}"),
+                    vbeProjectsNode,
+                    vbeAddinsNode
+                }
+            );
+
+            var result = new List<TreeNode>()
             {
-                parentNode.Nodes.Clear();
-                var app = rotApplicationModel.Application;
+                new TreeNode($"Name: {app.Name}"),
+                new TreeNode($"Version: {app.Version}"),
+                new TreeNode($"ADOConnectString: {app.ADOConnectString}"),
+                new TreeNode($"BaseConnectionString: {app.CurrentProject.BaseConnectionString}"),
+                new TreeNode($"Current Object Name: {app.CurrentObjectName}"),
+                new TreeNode($"Current Object Type: {app.CurrentObjectType}"),
+                vbeNode,
+            };
 
-                var vbe = new VbeModel(app.VBE);
-                var vbeProjectsNode = new TreeNode("Projects", vbe.Projects.Select(p => new TreeNode(p.ToString())).ToArray());
-                var vbeWindowsNode = new TreeNode("Windows", vbe.Windows.Select(w => new TreeNode(w.ToString())).ToArray());
-                var vbeAddinsNode = new TreeNode("Addins", vbe.Addins.Select(a => new TreeNode(a.ToString())).ToArray());
 
-                var vbeNode = new TreeNode(
-                    $"VBE Version: {vbe.Version}",
-                    new TreeNode[] {
-                        new TreeNode($"MainWindow: {vbe.MainWindow}"),
-                        vbeWindowsNode,
-                        new TreeNode($"Active project {vbe.ActiveVBProject}"),
-                        vbeProjectsNode,
-                        vbeAddinsNode
-                    }
-                );
+            var tempVars = new TempVarCollectionModel(app.TempVars);
+            if (tempVars.Any())
+                result.Add(new TreeNode($"Temp Vars", tempVars.Select(t => new TreeNode(t.ToString())).ToArray()));
 
-                parentNode.Nodes.AddRange(
-                    new TreeNode[]
-                    {
-                        new TreeNode($"Name: {app.Name}"),
-                        new TreeNode($"Version: {app.Version}"),
-                        new TreeNode($"ADOConnectString: {app.ADOConnectString}"),
-                        new TreeNode($"BaseConnectionString: {app.CurrentProject.BaseConnectionString}"),
-                        new TreeNode($"Current Object Name: {app.CurrentObjectName}"),
-                        new TreeNode($"Current Object Type: {app.CurrentObjectType}"),
-                        vbeNode,
-                    }
-                );
-
-                var tempVars = new TempVarCollectionModel(app.TempVars);
-                if (tempVars.Any())
-                    parentNode.Nodes.Add(new TreeNode($"Temp Vars", tempVars.Select(t => new TreeNode(t.ToString())).ToArray()));
-            }
+            return result;
         }
 
         private void LoadModulePropertyNodes(TreeNode parentNode, ModuleModel model)
@@ -608,9 +625,6 @@ namespace G1ANT.Addon.MSOffice.Controllers
             }
         }
 
-
-
-
         private TreeNode CreatePropertyNode(object model)
         {
             var node = new TreeNode(PropertiesLabel)
@@ -642,13 +656,13 @@ namespace G1ANT.Addon.MSOffice.Controllers
                     {
                         var formModel = new AccessFormModel(rotApplicationModel.Application.Forms[accessObject.Name], false, false, false);
 
-                        var childNode = new TreeNode(GetNameForNode(formModel))
+                        var childNode = new LazyTreeNode(GetNameForNode(formModel), () => GetControlNodes(formModel))
                         {
                             Tag = formModel,
                             ToolTipText = tooltipService.GetTooltip(formModel)
                         };
-                        if (formModel.Form.Controls.Count > 0)
-                            childNode.Nodes.Add("");
+                        //if (formModel.Form.Controls.Count > 0)
+                        //    childNode.Nodes.Add("");
                         treeNode.Nodes.Add(childNode);
                     }
                     else
@@ -665,52 +679,64 @@ namespace G1ANT.Addon.MSOffice.Controllers
         }
 
 
-        private void LoadControlNodes(TreeNode treeNode, AccessFormModel accessFormModel)
+        private List<TreeNode> GetControlNodes(AccessFormModel accessFormModel)
         {
-            if (IsEmptyNode(treeNode))
-            {
-                treeNode.Nodes.Clear();
+            //if (IsEmptyNode(treeNode))
+            //{
+            //    treeNode.Nodes.Clear();
+            var result = new List<TreeNode>();
+            //if (treeNode.Name == InternalName && treeNode.Text == PropertiesLabel)
+            //    {
+            //        treeNode.Nodes.Add(new TreeNode(DynamicPropertiesLabel, CreateDynamicPropertyNodes(accessFormModel.Form.Properties)));
+            //        treeNode.Nodes.AddRange(CreatePropertyNodes(accessFormModel.Form));
+            //        return;
+            //    }
 
-                if (treeNode.Name == InternalName && treeNode.Text == PropertiesLabel)
-                {
-                    treeNode.Nodes.Add(new TreeNode(DynamicPropertiesLabel, CreateDynamicPropertyNodes(accessFormModel.Form.Properties)));
-                    treeNode.Nodes.AddRange(CreatePropertyNodes(accessFormModel.Form));
-                    return;
-                }
+            result.Add(
+                new LazyTreeNode(
+                    PropertiesLabel,
+                    () => new List<TreeNode>() {
+                        new LazyTreeNode(DynamicPropertiesLabel, () => CreateDynamicPropertyNodes(accessFormModel.Form.Properties))
+                    }.Concat(CreatePropertyNodes(accessFormModel.Form))
+                )
+            );
 
-                treeNode.Nodes.Add(CreatePropertyNode(accessFormModel));
+
+            //treeNode.Nodes.Add(CreatePropertyNode(accessFormModel));
 
                 accessFormModel.LoadControls(false);
 
                 foreach (var childModel in accessFormModel.Controls)
                 {
-                    var childNode = new TreeNode(GetNameForNode(childModel))
+                    var childNode = new LazyTreeNode(GetNameForNode(childModel), () => GetControlNodes(childModel))
                     {
                         Tag = childModel,
                         ToolTipText = tooltipService.GetTooltip(childModel),
-                        Nodes = { "" }
+                        //Nodes = { "" }
                     };
 
-                    treeNode.Nodes.Add(childNode);
+                    result.Add(childNode);
                 }
 
-            }
+            return result;
+            //}
         }
 
-        private void LoadControlNodes(TreeNode treeNode, AccessControlModel accessControlModel)
+        private List<TreeNode> GetControlNodes(AccessControlModel accessControlModel)
         {
-            if (IsEmptyNode(treeNode))
-            {
-                treeNode.Nodes.Clear();
+            var result = new List<TreeNode>();
 
-                if (treeNode.Name == InternalName && treeNode.Text == PropertiesLabel)
-                {
-                    treeNode.Nodes.Add(new TreeNode(DynamicPropertiesLabel, CreateDynamicPropertyNodes(accessControlModel.Control.Properties)));
-                    treeNode.Nodes.AddRange(CreatePropertyNodes(accessControlModel.Control));
-                    return;
-                }
+            result.Add(
+                new LazyTreeNode(
+                    PropertiesLabel,
+                    () => new List<TreeNode>() {
+                        new LazyTreeNode(DynamicPropertiesLabel, () => CreateDynamicPropertyNodes(accessControlModel.Control.Properties))
+                    }.Concat(CreatePropertyNodes(accessControlModel.Control))
+                )
+            );
+                
 
-                treeNode.Nodes.Add(CreatePropertyNode(accessControlModel));
+                //treeNode.Nodes.Add(CreatePropertyNode(accessControlModel));
 
                 if (accessControlModel.GetChildrenCount() > 0)
                 {
@@ -718,17 +744,17 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
                     foreach (var childModel in accessControlModel.Children)
                     {
-                        var childNode = new TreeNode(GetNameForNode(childModel))
+                        var childNode = new LazyTreeNode(GetNameForNode(childModel), () => GetControlNodes(childModel))
                         {
                             Tag = childModel,
                             ToolTipText = tooltipService.GetTooltip(childModel),
-                            Nodes = { "" }
+                            //Nodes = { "" }
                         };
 
-                        treeNode.Nodes.Add(childNode);
+                        result.Add(childNode);
                     }
                 }
-            }
+            return result;
         }
 
         private TreeNode[] CreateDynamicPropertyNodes(MSAccess.Properties properties)
