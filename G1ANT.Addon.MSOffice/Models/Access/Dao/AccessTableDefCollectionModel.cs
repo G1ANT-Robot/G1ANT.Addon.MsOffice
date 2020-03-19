@@ -165,6 +165,8 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
             LastUpdated = tableDef.LastUpdated;
             Updatable = tableDef.Updatable;
         }
+
+        public override string ToString() => Name;
     }
 
     internal class AccessTableDefCollectionModel : List<AccessTableDefModel>

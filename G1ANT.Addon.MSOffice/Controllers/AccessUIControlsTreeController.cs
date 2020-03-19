@@ -364,8 +364,9 @@ namespace G1ANT.Addon.MSOffice.Controllers
                         LoadAccessObjectNodes(treeNode, new AccessObjectMacroCollectionModel(rotApplicationModel));
                         break;
                     case QueriesLabel:
-                        try   { LoadQueryNodes(treeNode, rotApplicationModel); }
-                        catch {
+                        try { LoadQueryNodes(treeNode, rotApplicationModel); }
+                        catch
+                        {
                             LoadAccessObjectNodes(treeNode, new AccessObjectQueryCollectionModel(rotApplicationModel));
                         }
                         break;
@@ -411,7 +412,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
         {
             return @object
                 .GetType()
-                .GetProperties(BindingFlags.Public)
+                .GetProperties()
                 .Select(p => new TreeNode($"{p.Name}: {p.GetValue(@object)}"))
                 .ToArray();
         }
@@ -445,9 +446,32 @@ namespace G1ANT.Addon.MSOffice.Controllers
             }
         }
 
-        private void LoadTableDefNodes(TreeNode treeNode, Database database)
+        private void LoadTableDefNodes(TreeNode parentNode, Database database)
         {
-            throw new NotImplementedException();
+            if (IsEmptyNode(parentNode))
+            {
+                parentNode.Nodes.Clear();
+
+                var tableDefs = new AccessTableDefCollectionModel(database.TableDefs);
+
+                parentNode.Nodes.AddRange(
+                    tableDefs.Select(td => new TreeNode(
+                        td.ToString(),
+                        new TreeNode[] {
+                            new TreeNode("Fields", td.Fields.Value.Select(f => new TreeNode(f.Name, GetObjectPropertiesAsTreeNodes(f))).ToArray()),
+                            new TreeNode("Properties", td.Properties.Value.Select(p => new TreeNode(p.Name, GetObjectPropertiesAsTreeNodes(p))).ToArray()),
+                            new TreeNode("Indexes", td.Indexes.Value.Select(i => new TreeNode(i.Name, GetObjectPropertiesAsTreeNodes(i))).ToArray()),
+                            new TreeNode($"DateCreated: {td.DateCreated}"),
+                            new TreeNode($"LastUpdated: {td.LastUpdated}"),
+                            new TreeNode($"Connect: {td.Connect}"),
+                            new TreeNode($"RecordCount: {td.RecordCount}"),
+                            new TreeNode($"SourceTableName: {td.SourceTableName}"),
+                            new TreeNode($"Updatable: {td.Updatable}"),
+                        }
+                    ) { Tag = tableDefs }).ToArray()
+
+                );
+            }
         }
 
         private void LoadApplicationNodes(TreeNode parentNode, RotApplicationModel rotApplicationModel)
