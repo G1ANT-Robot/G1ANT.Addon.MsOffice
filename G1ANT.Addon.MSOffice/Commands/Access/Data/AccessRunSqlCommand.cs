@@ -11,9 +11,9 @@
 using G1ANT.Language;
 using System;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access.Data
 {
-    [Command(Name = "access.runsql", Tooltip = "This command runs an SQL query in open Access database")]
+    [Command(Name = "access.runsql", Tooltip = "This command runs a non-selective (insert, update, alter, create, ...) SQL query in open Access database. If you need to select some data use command `access.executesql`")]
     public class AccessRunSqlCommand : Command
     {
         public class Arguments : CommandArguments
@@ -30,7 +30,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Access
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.RunSQL(arguments.SQL.Value, arguments.UseTransaction.Value);
+            AccessManager.CurrentAccess.RunSql(arguments.SQL.Value, arguments.UseTransaction.Value);
         }
     }
 }

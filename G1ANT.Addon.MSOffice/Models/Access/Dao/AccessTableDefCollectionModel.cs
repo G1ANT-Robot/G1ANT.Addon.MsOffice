@@ -27,7 +27,11 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
     {
         public AccessDaoPropertyCollection(Microsoft.Office.Interop.Access.Dao.Properties properties)
         {
-            AddRange(properties.Cast<Microsoft.Office.Interop.Access.Dao.Property>().Select(p => new AccessDaoPropertyModel(p)));
+            try
+            {
+                AddRange(properties.Cast<Microsoft.Office.Interop.Access.Dao.Property>().Select(p => new AccessDaoPropertyModel(p)));
+            }
+            catch { }
         }
     }
 

@@ -107,6 +107,10 @@
   <ItemGroup>
     <Compile Include="Api\Access\LazyTreeNode.cs" />
     <Compile Include="Commands\Access\Controls\AccessControlExecuteEventCommand.cs" />
+    <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectDetailsCommand.cs" />
+    <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectCommand.cs" />
+    <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectNameCommand.cs" />
+    <Compile Include="Commands\Access\Data\AccessExecuteSqlCommand.cs" />
     <Compile Include="Helpers\Access\AccessControlPropertyHelper.cs" />
     <Compile Include="Api\Access\AccessFormControlsTreeWalker.cs" />
     <Compile Include="Api\Access\IAccessFormControlsTreeWalker.cs" />
@@ -115,7 +119,7 @@
     <Compile Include="Commands\Access\AccessCloseDatabaseCommand.cs" />
     <Compile Include="Commands\Access\AccessKillOrphanedProcessesCommand.cs" />
     <Compile Include="Commands\Access\AccessJoinCommand.cs" />
-    <Compile Include="Commands\Access\AccessRunSqlCommand.cs" />
+    <Compile Include="Commands\Access\Data\AccessRunSqlCommand.cs" />
     <Compile Include="Commands\Access\AccessOpenProjectCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessGetControlValueCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessSetControlValueCommand.cs" />

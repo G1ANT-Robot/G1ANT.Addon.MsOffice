@@ -10,12 +10,13 @@
 
 using G1ANT.Addon.MSOffice.Access;
 using G1ANT.Addon.MSOffice.Api.Access;
-using G1ANT.Addon.MSOffice.Helpers.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
+using G1ANT.Addon.MSOffice.Models.Access.Dao;
 using G1ANT.Language;
 using Microsoft.Office.Interop.Access;
 using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.Linq;
 
 namespace G1ANT.Addon.MSOffice
@@ -38,6 +39,57 @@ namespace G1ANT.Addon.MSOffice
             this.accessFormControlsTreeWalker = accessFormControlsTreeWalker;
             this.runningObjectTableService = runningObjectTableService;
         }
+
+        internal AccessTableDefModel GetTableDetails(object sourceObjectName)
+        {
+            var currentDb = application.CurrentDb();
+            return new AccessTableDefModel(currentDb.TableDefs[sourceObjectName]);
+        }
+
+
+        internal List<List<object>> GetTableContents(string sourceObjectName)
+        {
+            return ExecuteSql($"select * from {sourceObjectName}");
+        }
+
+        internal List<List<object>> ExecuteSql(string sql, string connectionString = null)
+        {
+            connectionString = connectionString ?? application.ADOConnectString;
+
+            using (var connection = new OleDbConnection(connectionString))
+            using (var command = new OleDbCommand(sql, connection))
+            {
+                connection.Open();
+
+                var reader = command.ExecuteReader();
+                var columnNames = Enumerable.Range(0, reader.FieldCount).Select(i => (object)reader.GetName(i)).ToList();
+
+                var result = new List<List<object>>
+                {
+                    columnNames
+                };
+
+                while (reader.Read())
+                {
+                    var row = new List<object>(reader.FieldCount);
+                    for (var i = 0; i < reader.FieldCount; ++i)
+                        row.Add(reader.GetValue(i));
+
+                    result.Add(row);
+                }
+
+                connection.Close();
+
+                return result;
+            }
+        }
+
+        internal void RunSql(string sql, bool useTransaction = false)
+        {
+            application.DoCmd.RunSQL(sql, useTransaction);
+        }
+
+
 
         private AcView ToAcView(string viewType)
         {
@@ -324,12 +376,6 @@ namespace G1ANT.Addon.MSOffice
             application.CloseCurrentDatabase();
         }
 
-        internal void RunSQL(string sql, bool useTransaction = false)
-        {
-            application.DoCmd.RunSQL(sql, useTransaction);
-        }
-
-
         internal void Save(string objectType, string objectName)
         {
             var acObjectType = (AcObjectType)Enum.Parse(typeof(AcObjectType), objectType);
@@ -445,9 +491,7 @@ namespace G1ANT.Addon.MSOffice
 
 
         internal void Test()
-        {
-            var afs = application.CurrentProject.Resources;
-            var reports = application.CurrentProject.AllReports.Cast<AccessObject>().ToList();
+       {
 
         }
 
