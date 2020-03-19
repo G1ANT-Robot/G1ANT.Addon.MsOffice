@@ -21,8 +21,8 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
         public AccessQueryPropertyModel(Property property)
         {
             Name = property.Name;
-            Value = property.Value;
             PropertyType = ((DataTypeEnum)property.Type).ToString();
+            try { Value = property.Value; } catch { }
         }
     }
 }

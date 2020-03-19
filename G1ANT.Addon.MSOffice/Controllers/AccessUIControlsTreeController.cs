@@ -5,10 +5,12 @@ using G1ANT.Addon.MSOffice.Models.Access.Dao;
 using G1ANT.Addon.MSOffice.Models.Access.Data;
 using G1ANT.Addon.MSOffice.Models.Access.VBE;
 using G1ANT.Language;
+using Microsoft.Office.Interop.Access.Dao;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -31,6 +33,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
         private const string QueriesLabel = "Queries";
         private const string StoredProceduresLabel = "Stored Prodecures";
         private const string TablesLabel = "Tables";
+        private const string TableDefsLabel = "Table definitions";
         private const string ViewsLabel = "Views";
 
         private const string PropertiesLabel = "Properties";
@@ -44,8 +47,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
         private readonly ITooltipService tooltipService;
         private readonly TreeView controlsTree;
         private readonly ComboBox applications;
-        public List<object> expandedTreeNodeModels = new List<object>();
-        private object selectedTreeNodeModel;
+        public List<TreeNode> expandedTreeNodes = new List<TreeNode>();
+        private TreeNode selectedTreeNode;
 
         public AccessUIControlsTreeController(
             TreeView controlsTree, ComboBox applications,
@@ -121,7 +124,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 return;
             }
 
-            selectedTreeNodeModel = controlsTree.SelectedNode?.Tag;
+            selectedTreeNode = controlsTree.SelectedNode;
             CollectExpandedTreeNodeModels(controlsTree.Nodes);
 
             controlsTree.BeginUpdate();
@@ -143,6 +146,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
                             new TreeNode(QueriesLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                             new TreeNode(StoredProceduresLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                             new TreeNode(TablesLabel) { Tag = rotApplicationModel, Nodes = { "" } },
+                            new TreeNode(TableDefsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                             new TreeNode(ViewsLabel) { Tag = rotApplicationModel, Nodes = { "" } },
                         },
                     }
@@ -259,7 +263,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         private string GetNameForNode(AccessQueryModel model)
         {
-            return $"{model.Name} {model.Type}";
+            return model.Name;
+            //return $"{model.Name} {model.Type}";
         }
 
 
@@ -268,16 +273,23 @@ namespace G1ANT.Addon.MSOffice.Controllers
             var expandedNodes = nodes.Cast<TreeNode>()
                 .Where(tn => tn.IsExpanded)
                 .ToList();
-            expandedNodes.ForEach(en =>
-            {
-                expandedTreeNodeModels.Add(en.Tag);
-                CollectExpandedTreeNodeModels(en.Nodes);
-            });
+
+            expandedTreeNodes.AddRange(expandedNodes);
+            expandedNodes.ForEach(en => CollectExpandedTreeNodeModels(en.Nodes));
+        }
+
+
+        private bool AreNodesSame(TreeNode sourceNode, TreeNode destNode)
+        {
+            return sourceNode.Text == destNode.Text && AreModelsSame(sourceNode.Tag, destNode.Tag);
         }
 
 
         private bool AreModelsSame(object source, object dest)
         {
+            if (source == null && dest == null)
+                return true;
+
             if (source == null || dest == null)
                 return false;
 
@@ -292,28 +304,43 @@ namespace G1ANT.Addon.MSOffice.Controllers
         {
             foreach (TreeNode node in nodes)
             {
-                var nodeModel = node.Tag;
-
-                if (selectedTreeNodeModel != null && AreModelsSame(nodeModel, selectedTreeNodeModel))
-                    controlsTree.SelectedNode = node;
-
-                var expandedTreeNodeModel = expandedTreeNodeModels.FirstOrDefault(etn => AreModelsSame(etn, nodeModel));
-                if (expandedTreeNodeModel != null)
+                if (selectedTreeNode != null && AreNodesSame(node, selectedTreeNode))
                 {
-                    expandedTreeNodeModels.Remove(expandedTreeNodeModel);
+                    controlsTree.SelectedNode = node;
+                    selectedTreeNode = null;
+                }
 
-                    LoadChildNodes(node);
+                var expandedTreeNode = expandedTreeNodes.FirstOrDefault(etn => AreNodesSame(etn, node));
+                if (expandedTreeNode != null)
+                {
+                    expandedTreeNodes.Remove(expandedTreeNode);
+
+                    TryLoadChildNodes(node);
                     node.Expand();
 
-                    ApplyExpandedTreeNodes(node.Nodes);
-                    expandedTreeNodeModels.Remove(expandedTreeNodeModel);
+                    if (!IsEmptyNode(node))
+                        ApplyExpandedTreeNodes(node.Nodes);
                 }
+            }
+        }
+
+        public void TryLoadChildNodes(TreeNode treeNode)
+        {
+            try
+            {
+                LoadChildNodes(treeNode);
+            }
+            catch (Exception ex)
+            {
+                treeNode.Nodes.Add($"Exception while loading node contents: {ex.Message}");
             }
         }
 
         public void LoadChildNodes(TreeNode treeNode)
         {
             controlsTree.BeginUpdate();
+            var oldCursor = Cursor.Current;
+            Cursor.Current = Cursors.WaitCursor;
 
             if (treeNode.Tag is AccessControlModel accessControlModel)
                 LoadControlNodes(treeNode, accessControlModel);
@@ -321,6 +348,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 LoadControlNodes(treeNode, accessFormModel);
             else if (treeNode.Tag is ModuleModel moduleModel)
                 LoadModulePropertyNodes(treeNode, moduleModel);
+            else if (treeNode.Tag is AccessQueryModel accessQueryModel)
+                LoadQueryDetailsPropertyNodes(treeNode, accessQueryModel);
             else if (treeNode.Tag is RotApplicationModel rotApplicationModel)
             {
                 switch (treeNode.Text)
@@ -335,8 +364,10 @@ namespace G1ANT.Addon.MSOffice.Controllers
                         LoadAccessObjectNodes(treeNode, new AccessObjectMacroCollectionModel(rotApplicationModel));
                         break;
                     case QueriesLabel:
-                        LoadAccessObjectNodes(treeNode, new AccessObjectQueryCollectionModel(rotApplicationModel));
-                        //LoadQueryNodes(treeNode, rotApplicationModel);
+                        try   { LoadQueryNodes(treeNode, rotApplicationModel); }
+                        catch {
+                            LoadAccessObjectNodes(treeNode, new AccessObjectQueryCollectionModel(rotApplicationModel));
+                        }
                         break;
                     case ReportsLabel:
                         LoadAccessObjectNodes(treeNode, new AccessObjectReportCollectionModel(rotApplicationModel));
@@ -364,11 +395,59 @@ namespace G1ANT.Addon.MSOffice.Controllers
                     case ViewsLabel:
                         LoadAccessObjectNodes(treeNode, new AccessObjectViewCollectionModel(rotApplicationModel));
                         break;
+                    case TableDefsLabel:
+                        LoadTableDefNodes(treeNode, rotApplicationModel.Application.CurrentDb());
+                        break;
                 }
             }
 
             ApplyExpandedTreeNodes(treeNode.Nodes);
             controlsTree.EndUpdate();
+            Cursor.Current = oldCursor;
+        }
+
+
+        private TreeNode[] GetObjectPropertiesAsTreeNodes(object @object)
+        {
+            return @object
+                .GetType()
+                .GetProperties(BindingFlags.Public)
+                .Select(p => new TreeNode($"{p.Name}: {p.GetValue(@object)}"))
+                .ToArray();
+        }
+
+        private void LoadQueryDetailsPropertyNodes(TreeNode parentNode, AccessQueryModel accessQueryModel)
+        {
+            if (IsEmptyNode(parentNode))
+            {
+                parentNode.Nodes.Clear();
+
+                var details = accessQueryModel.Details.Value;
+
+                parentNode.Nodes.AddRange(
+                    new TreeNode[]
+                    {
+                        new TreeNode("Fields", details.Fields.Select(f => new TreeNode(f.Name, GetObjectPropertiesAsTreeNodes(f))).ToArray()),
+                        new TreeNode("Parameters", details.Parameters.Select(p => new TreeNode($"{p.Name}: {p.Value}, type: {p.Type}")).ToArray()),
+                        new TreeNode("Properties", details.Properties.Select(p => new TreeNode($"{p.Name}: {p.Value}, type: {p.PropertyType}")).ToArray()),
+                        new TreeNode($"SQL: {details.SQL}"),
+                        //new TreeNode($"Name: {details.Name}"),
+                        new TreeNode($"DateCreated: {details.DateCreated}"),
+                        new TreeNode($"LastUpdated: {details.LastUpdated}"),
+                        new TreeNode($"Connect: {details.Connect}"),
+                        new TreeNode($"MaxRecords: {details.MaxRecords}"),
+                        new TreeNode($"RecordsAffected: {details.RecordsAffected}"),
+                        new TreeNode($"ReturnsRecords: {details.ReturnsRecords}"),
+                        new TreeNode($"Type: {details.Type}"),
+                        new TreeNode($"Updatable: {details.Updatable}")
+                    }
+                );
+            }
+        }
+
+        private void LoadTableDefNodes(TreeNode treeNode, Database database)
+        {
+            throw new NotImplementedException();
         }
 
         private void LoadApplicationNodes(TreeNode parentNode, RotApplicationModel rotApplicationModel)
@@ -399,6 +478,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
                     {
                         new TreeNode($"Name: {app.Name}"),
                         new TreeNode($"Version: {app.Version}"),
+                        new TreeNode($"ADOConnectString: {app.ADOConnectString}"),
                         new TreeNode($"BaseConnectionString: {app.CurrentProject.BaseConnectionString}"),
                         new TreeNode($"Current Object Name: {app.CurrentObjectName}"),
                         new TreeNode($"Current Object Type: {app.CurrentObjectType}"),
@@ -483,25 +563,26 @@ namespace G1ANT.Addon.MSOffice.Controllers
         }
 
 
-        //private void LoadQueryNodes(TreeNode treeNode, RotApplicationModel rotApplicationModel)
-        //{
-        //    if (IsEmptyNode(treeNode))
-        //    {
-        //        treeNode.Nodes.Clear();
+        private void LoadQueryNodes(TreeNode treeNode, RotApplicationModel rotApplicationModel)
+        {
+            if (IsEmptyNode(treeNode))
+            {
+                treeNode.Nodes.Clear();
 
-        //        //var queries = new AccessQueryCollectionModel(rotApplicationModel);
-        //        var queries = new AccessObjectQueryCollectionModel(rotApplicationModel);
-        //        foreach (var query in queries)
-        //        {
-        //            var childNode = new TreeNode(GetNameForNode(query))
-        //            {
-        //                Tag = query,
-        //                ToolTipText = tooltipService.GetTooltip(query)
-        //            };
-        //            treeNode.Nodes.Add(childNode);
-        //        }
-        //    }
-        //}
+                var queries = new AccessQueryCollectionModel(rotApplicationModel);
+                //var queries = new AccessObjectQueryCollectionModel(rotApplicationModel);
+                foreach (var query in queries)
+                {
+                    var childNode = new TreeNode(GetNameForNode(query))
+                    {
+                        Tag = query,
+                        ToolTipText = tooltipService.GetTooltip(query),
+                        Nodes = { "" }
+                    };
+                    treeNode.Nodes.Add(childNode);
+                }
+            }
+        }
 
 
 

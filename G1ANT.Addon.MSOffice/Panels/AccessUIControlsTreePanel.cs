@@ -38,7 +38,7 @@ namespace G1ANT.Addon.MSOffice.Panels
 
         public override void RefreshContent() => controller.InitRootElements();
 
-        private void controlsTree_BeforeExpand(object sender, TreeViewCancelEventArgs e) => controller.LoadChildNodes(e.Node);
+        private void controlsTree_BeforeExpand(object sender, TreeViewCancelEventArgs e) => controller.TryLoadChildNodes(e.Node);
 
         private void controlsTree_DoubleClick(object sender, EventArgs e) => controller.InsertPathIntoScript(controlsTree.SelectedNode);
 

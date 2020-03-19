@@ -8,7 +8,6 @@
 *
 */
 
-using G1ANT.Language;
 using Microsoft.Office.Interop.Access.Dao;
 using System;
 using System.Collections.Generic;
@@ -16,9 +15,21 @@ using System.Linq;
 
 namespace G1ANT.Addon.MSOffice.Models.Access.Dao
 {
-    public class AccessQueryModel
+    public class AccessQueryModel : INameModel
     {
-        public QueryDef Query { get; }
+        public string Name { get; }
+        public Lazy<AccessQueryDetailsModel> Details;
+
+        public AccessQueryModel(QueryDef query)
+        {
+            Name = query.Name;
+            Details = new Lazy<AccessQueryDetailsModel>(() => new AccessQueryDetailsModel(query));
+        }
+    }
+
+    public class AccessQueryDetailsModel : INameModel
+    {
+        //public QueryDef Query { get; }
         public string Name { get; }
         public string SQL { get; }
         public string Connect { get; }
@@ -27,33 +38,34 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
         public AccessQueryFieldCollectionModel Fields { get; }
         public int MaxRecords { get; }
         public AccessQueryParameterCollectionModel Parameters { get; }
-        public dynamic Prepare { get; }
         public AccessQueryPropertyCollectionModel Properties { get; }
         public int RecordsAffected { get; }
         public bool ReturnsRecords { get; }
-        public bool StillExecuting { get; }
+        //public bool? StillExecuting { get; }
         public string Type { get; }
         public bool Updatable { get; }
 
-        public AccessQueryModel(QueryDef query)
+        public AccessQueryDetailsModel(QueryDef query)
         {
-            Query = query ?? throw new ArgumentNullException(nameof(query));
-
-            Name = query.Name;
-            SQL = query.SQL;
-            Connect = query.Connect;
-            DateCreated = query.DateCreated;
-            LastUpdated = query.LastUpdated;
-            Fields = new AccessQueryFieldCollectionModel(query.Fields);
-            MaxRecords = query.MaxRecords;
-            Parameters = new AccessQueryParameterCollectionModel(query.Parameters);
-            Prepare = query.Prepare?.ToString();
-            Properties = new AccessQueryPropertyCollectionModel(query.Properties);
-            RecordsAffected = query.RecordsAffected;
-            ReturnsRecords = query.ReturnsRecords;
-            StillExecuting = query.StillExecuting;
-            Type = ((QueryDefTypeEnum)query.Type).ToString();
-            Updatable = query.Updatable;
+            //Query = query ?? throw new ArgumentNullException(nameof(query));
+            try
+            {
+                Name = query.Name;
+                SQL = query.SQL;
+                Connect = query.Connect;
+                DateCreated = query.DateCreated;
+                LastUpdated = query.LastUpdated;
+                Fields = new AccessQueryFieldCollectionModel(query.Fields);
+                MaxRecords = query.MaxRecords;
+                Parameters = new AccessQueryParameterCollectionModel(query.Parameters);
+                Properties = new AccessQueryPropertyCollectionModel(query.Properties);
+                RecordsAffected = query.RecordsAffected;
+                ReturnsRecords = query.ReturnsRecords;
+                //try { StillExecuting = query.StillExecuting; } catch { }
+                Type = ((QueryDefTypeEnum)query.Type).ToString();
+                Updatable = query.Updatable;
+            }
+            catch { }
         }
 
     }
@@ -62,18 +74,12 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
     {
         public AccessQueryCollectionModel(RotApplicationModel rotApplicationModel)
         {
-            try
-            {
-                AddRange(
-                    rotApplicationModel.Application.CurrentDb().QueryDefs
-                        .OfType<QueryDef>()
-                        .Select(q => new AccessQueryModel(q))
-                );
-            }
-            catch (Exception ex)
-            {
-                RobotMessageBox.Show(ex.Message);
-            }
+            AddRange(
+                rotApplicationModel.Application.CurrentDb().QueryDefs
+                    .OfType<QueryDef>()
+                    .Select(q => new AccessQueryModel(q))
+            );
         }
     }
 }
+
