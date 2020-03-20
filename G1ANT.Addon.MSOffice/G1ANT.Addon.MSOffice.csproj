@@ -106,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\Access\LazyTreeNode.cs" />
+    <Compile Include="Commands\Access\AccessGetApplicationDetailsCommand.cs" />
     <Compile Include="Commands\Access\Application\AccessSetNewPasswordCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessControlExecuteEventCommand.cs" />
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectDetailsCommand.cs" />
