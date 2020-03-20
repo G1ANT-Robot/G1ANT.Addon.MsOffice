@@ -8,15 +8,22 @@
 *
 */
 
+using Microsoft.Office.Interop.Access;
+
 namespace G1ANT.Addon.MSOffice.Models.Access.Data
 {
     public class AccessObjectFunctionCollectionModel : AccessObjectCollectionModel
     {
         public AccessObjectFunctionCollectionModel(RotApplicationModel rotApplicationModel)
+            : this(rotApplicationModel.Application.CurrentData.AllFunctions)
+        { }
+        
+            
+        public AccessObjectFunctionCollectionModel(AllObjects functions)
         {
             try
             {
-                Initialize(rotApplicationModel.Application.CurrentData.AllFunctions);
+                Initialize(functions);
             }
             catch
             { }

@@ -11,10 +11,10 @@
 using G1ANT.Language;
 using Newtonsoft.Json.Linq;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access.Data
+namespace G1ANT.Addon.MSOffice.Commands.Access.Data.Functions
 {
-    [Command(Name = "access.gettables", Tooltip = "This command get a list of Access Tables")]
-    public class AccessGetTablesCommand : Command
+    [Command(Name = "access.getfunctions", Tooltip = "This command get a list of Access Functions")]
+    public class AccessGetFunctionsCommand : Command
     {
         public class Arguments : CommandArguments
         {
@@ -22,12 +22,12 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Data
             public VariableStructure Result { get; set; } = new VariableStructure("result");
         }
 
-        public AccessGetTablesCommand(AbstractScripter scripter) : base(scripter)
+        public AccessGetFunctionsCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            var result = AccessManager.CurrentAccess.GetTableNames();
+            var result = AccessManager.CurrentAccess.GetFunctionNames();
             Scripter.Variables.SetVariableValue(arguments.Result.Value, new JsonStructure(JArray.FromObject(result)));
         }
     }

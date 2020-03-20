@@ -30,7 +30,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Data
 
         public void Execute(Arguments arguments)
         {
-            var result = AccessManager.CurrentAccess.GetTableDatails(arguments.Name.Value);
+            var result = AccessManager.CurrentAccess.GetTableDetails(arguments.Name.Value);
             Scripter.Variables.SetVariableValue(arguments.Result.Value, new JsonStructure(JObject.FromObject(result)));
         }
     }

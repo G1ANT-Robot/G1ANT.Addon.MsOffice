@@ -12,6 +12,7 @@ using G1ANT.Addon.MSOffice.Access;
 using G1ANT.Addon.MSOffice.Api.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Addon.MSOffice.Models.Access.Dao;
+using G1ANT.Addon.MSOffice.Models.Access.Data;
 using G1ANT.Language;
 using Microsoft.Office.Interop.Access;
 using System;
@@ -37,6 +38,13 @@ namespace G1ANT.Addon.MSOffice
                 .ToList();
         }
 
+        internal List<string> GetFunctionNames()
+        {
+            return new AccessObjectFunctionCollectionModel(application.CurrentData.AllFunctions)
+                .Select(t => t.Name)
+                .ToList();
+        }
+
         internal List<string> GetTableNames()
         {
             return new AccessTableDefCollectionModel(application.CurrentDb().TableDefs)
@@ -44,15 +52,10 @@ namespace G1ANT.Addon.MSOffice
                 .ToList();
         }
 
-        internal AccessTableDefModel GetTableDatails(string name)
-        {
-            return new AccessTableDefModel(application.CurrentDb().TableDefs[name]);
-        }
+        internal AccessObjectModel GetFunctionDetails(string name) => new AccessObjectModel(application.CurrentData.AllFunctions[name]);
+        internal AccessTableDefModel GetTableDetails(string name) => new AccessTableDefModel(application.CurrentDb().TableDefs[name]);
+        internal AccessQueryDetailsModel GetQueryDetails(string name) => new AccessQueryDetailsModel(application.CurrentDb().QueryDefs[name]);
 
-        internal AccessQueryDetailsModel GetQueryDatails(string name)
-        {
-            return new AccessQueryDetailsModel(application.CurrentDb().QueryDefs[name]);
-        }
 
         internal AccessWrapper(
             IAccessFormControlsTreeWalker accessFormControlsTreeWalker,

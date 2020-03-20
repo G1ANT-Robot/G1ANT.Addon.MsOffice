@@ -11,26 +11,26 @@
 using G1ANT.Language;
 using Newtonsoft.Json.Linq;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access.Data
+namespace G1ANT.Addon.MSOffice.Commands.Access.Data.Functions
 {
-    [Command(Name = "access.getquerydetails", Tooltip = "This command gets details of Access Query")]
-    public class AccessGetQueryDetailsCommand : Command
+    [Command(Name = "access.getfunctiondetails", Tooltip = "This command gets details of Access Function")]
+    public class AccessGetFunctionDetailsCommand : Command
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Required = true, Tooltip = "Name of the query (one from `access.getqueries` command)")]
+            [Argument(Required = true, Tooltip = "Name of the Function (one from `access.getfunctions` command)")]
             public TextStructure Name { get; set; }
 
             [Argument(Tooltip = "Name of a variable where the command's result will be stored")]
             public VariableStructure Result { get; set; } = new VariableStructure("result");
         }
 
-        public AccessGetQueryDetailsCommand(AbstractScripter scripter) : base(scripter)
+        public AccessGetFunctionDetailsCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            var result = AccessManager.CurrentAccess.GetQueryDetails(arguments.Name.Value);
+            var result = AccessManager.CurrentAccess.GetFunctionDetails(arguments.Name.Value);
             Scripter.Variables.SetVariableValue(arguments.Result.Value, new JsonStructure(JObject.FromObject(result)));
         }
     }
