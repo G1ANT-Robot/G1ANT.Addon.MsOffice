@@ -10,21 +10,21 @@
 
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access.Application
 {
-    [Command(Name = "access.show", Tooltip = "Show current Access application")]
-    public class AccessShowCommand : Command
+    [Command(Name = "access.close", Tooltip = "This command closes Access database instance. Consider usage of `access.quit` in order to close Access process")]
+    public class AccessCloseCommand : Command
     {
         public class Arguments : CommandArguments
         {
         }
 
-        public AccessShowCommand(AbstractScripter scripter) : base(scripter)
+        public AccessCloseCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.Show();
+            AccessManager.CurrentAccess.CloseDatabase();
         }
     }
 }

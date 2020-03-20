@@ -9,7 +9,7 @@
 */
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access.Application
 {
     [Command(Name = "access.quit", Tooltip = "This command quits Access instance")]
     public class AccessQuitCommand : Command

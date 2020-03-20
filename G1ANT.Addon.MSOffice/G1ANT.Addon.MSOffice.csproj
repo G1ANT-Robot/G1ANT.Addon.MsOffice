@@ -106,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\Access\LazyTreeNode.cs" />
+    <Compile Include="Commands\Access\Application\AccessSetNewPasswordCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessControlExecuteEventCommand.cs" />
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectDetailsCommand.cs" />
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectCommand.cs" />
@@ -123,6 +124,8 @@
     <Compile Include="Commands\Access\Data\AccessExecuteSqlCommand.cs" />
     <Compile Include="Commands\Access\Data\Views\AccessGetViewDetailsCommand.cs" />
     <Compile Include="Commands\Access\Data\Views\AccessGetViewsCommand.cs" />
+    <Compile Include="Commands\Access\Printers\AccessGetCurrentPrinterCommand.cs" />
+    <Compile Include="Commands\Access\Printers\AccessGetPrintersCommand.cs" />
     <Compile Include="Forms\DataTableForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -134,9 +137,8 @@
     <Compile Include="Api\Access\IAccessFormControlsTreeWalker.cs" />
     <Compile Include="Api\Access\IRunningObjectTableService.cs" />
     <Compile Include="Api\StructureConverter.cs" />
-    <Compile Include="Commands\Access\AccessCloseDatabaseCommand.cs" />
-    <Compile Include="Commands\Access\AccessKillOrphanedProcessesCommand.cs" />
-    <Compile Include="Commands\Access\AccessJoinCommand.cs" />
+    <Compile Include="Commands\Access\Application\AccessKillOrphanedProcessesCommand.cs" />
+    <Compile Include="Commands\Access\Application\AccessJoinCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessRunSqlCommand.cs" />
     <Compile Include="Commands\Access\AccessOpenProjectCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessGetControlValueCommand.cs" />
@@ -192,6 +194,8 @@
     <Compile Include="Models\Access\INameModel.cs" />
     <Compile Include="Models\Access\NameValueModel.cs" />
     <Compile Include="Models\Access\ModuleModel.cs" />
+    <Compile Include="Models\Access\Printers\AccessPrinterCollectionModel.cs" />
+    <Compile Include="Models\Access\Printers\AccessPrinterModel.cs" />
     <Compile Include="Models\Access\ResourceModel.cs" />
     <Compile Include="Models\Access\RotApplicationModel.cs" />
     <Compile Include="Api\Access\RunningObjectTableService.cs" />
@@ -210,7 +214,7 @@
     <Compile Include="Commands\Access\Macros\AccessRunMacroCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessSetFocusCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessFindControlCommand.cs" />
-    <Compile Include="Commands\Access\AccessSaveCommand.cs" />
+    <Compile Include="Commands\Access\Application\AccessSaveCommand.cs" />
     <Compile Include="Commands\Access\Forms\AccessGetFormCommand.cs" />
     <Compile Include="Api\ExcelManager.cs" />
     <Compile Include="Api\ExcelWrapper.cs" />
@@ -222,9 +226,9 @@
     <Compile Include="Api\WordWrapper.cs" />
     <Compile Include="Commands\Access\Forms\AccessGetFormsCommand.cs" />
     <Compile Include="Commands\Access\AccessHideCommand.cs" />
-    <Compile Include="Commands\Access\AccessCloseCommand.cs" />
-    <Compile Include="Commands\Access\AccessQuitCommand.cs" />
-    <Compile Include="Commands\Access\AccessShowCommand.cs" />
+    <Compile Include="Commands\Access\Application\AccessCloseCommand.cs" />
+    <Compile Include="Commands\Access\Application\AccessQuitCommand.cs" />
+    <Compile Include="Commands\Access\Application\AccessShowCommand.cs" />
     <Compile Include="Commands\Access\AccessSwitchCommand.cs" />
     <Compile Include="Commands\Excel\ExcelActivateSheetCommand.cs" />
     <Compile Include="Commands\Excel\ExcelAddSheetCommand.cs" />

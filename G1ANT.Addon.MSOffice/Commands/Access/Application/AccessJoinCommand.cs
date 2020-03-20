@@ -11,7 +11,7 @@
 using G1ANT.Language;
 using System;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access
+namespace G1ANT.Addon.MSOffice.Commands.Access.Application
 {
     [Command(Name = "access.join", Tooltip = "This command joins to an existing Access instance")]
     public class AccessJoinCommand : Command
