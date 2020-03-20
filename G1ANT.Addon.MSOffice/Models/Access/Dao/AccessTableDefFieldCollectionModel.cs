@@ -14,11 +14,11 @@ using System.Linq;
 
 namespace G1ANT.Addon.MSOffice.Models.Access.Dao
 {
-    internal class AccessTableDefCollectionModel : List<AccessTableDefModel>
+    internal class AccessTableDefFieldCollectionModel : List<AccessTableDefFieldModel>
     {
-        public AccessTableDefCollectionModel(TableDefs tableDefs)
+        public AccessTableDefFieldCollectionModel(Fields fields)
         {
-            AddRange(tableDefs.Cast<TableDef>().Select(td => new AccessTableDefModel(td)));
+            AddRange(fields.Cast<Field>().Select(f => new AccessTableDefFieldModel(f)));
         }
     }
 }

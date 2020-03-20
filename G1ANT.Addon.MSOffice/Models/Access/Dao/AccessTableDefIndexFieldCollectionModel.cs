@@ -8,17 +8,17 @@
 *
 */
 
-using Microsoft.Office.Interop.Access.Dao;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace G1ANT.Addon.MSOffice.Models.Access.Dao
 {
-    internal class AccessTableDefCollectionModel : List<AccessTableDefModel>
+    internal class AccessTableDefIndexFieldCollectionModel : List<AccessTableDefIndexFieldModel>
     {
-        public AccessTableDefCollectionModel(TableDefs tableDefs)
+        public AccessTableDefIndexFieldCollectionModel(IEnumerable indexFields)
         {
-            AddRange(tableDefs.Cast<TableDef>().Select(td => new AccessTableDefModel(td)));
+            AddRange(indexFields.Cast<dynamic>().Select(f => new AccessTableDefIndexFieldModel(f)));
         }
     }
 }
