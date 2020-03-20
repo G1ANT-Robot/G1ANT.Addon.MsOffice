@@ -16,6 +16,7 @@ using G1ANT.Addon.MSOffice.Models.Access.Data;
 using G1ANT.Addon.MSOffice.Models.Access.Printers;
 using G1ANT.Language;
 using Microsoft.Office.Interop.Access;
+using Microsoft.Office.Interop.Access.Dao;
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
