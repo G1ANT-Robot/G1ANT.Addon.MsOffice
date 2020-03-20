@@ -10,7 +10,7 @@
 
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access.Data
+namespace G1ANT.Addon.MSOffice.Commands.Access.Data.Functions
 {
     [Command(Name = "access.closefunction", Tooltip = "This command closes and optionally saves an Access Database Diagram")]
     public class AccessCloseFunctionCommand : Command

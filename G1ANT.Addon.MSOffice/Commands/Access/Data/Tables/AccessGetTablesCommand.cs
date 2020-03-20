@@ -11,7 +11,7 @@
 using G1ANT.Language;
 using Newtonsoft.Json.Linq;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access.Data
+namespace G1ANT.Addon.MSOffice.Commands.Access.Data.Tables
 {
     [Command(Name = "access.gettables", Tooltip = "This command get a list of Access Tables")]
     public class AccessGetTablesCommand : Command

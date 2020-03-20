@@ -10,7 +10,7 @@
 
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access.Data
+namespace G1ANT.Addon.MSOffice.Commands.Access.Data.Queries
 {
     [Command(Name = "access.openquery", Tooltip = "This command opens an Access Query")]
     public class AccessOpenQueryCommand : Command

@@ -10,7 +10,7 @@
 
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access.Data
+namespace G1ANT.Addon.MSOffice.Commands.Access.Data.Functions
 {
     [Command(Name = "access.openfunction", Tooltip = "This command opens an existing Access Function")]
     public class AccessOpenFunctionCommand : Command

@@ -10,7 +10,7 @@
 
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access.Data
+namespace G1ANT.Addon.MSOffice.Commands.Access.Data.Queries
 {
     [Command(Name = "access.closequery", Tooltip = "This command closes and optionally saves an Access Query")]
     public class AccesCloseQueryCommand : Command

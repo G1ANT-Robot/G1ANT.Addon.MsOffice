@@ -18,7 +18,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Data.Functions
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Required = true, Tooltip = "Name of the Function (one from `access.getfunctions` command)")]
+            [Argument(Required = true, Tooltip = "Name of the function (one from `access.getfunctions` command)")]
             public TextStructure Name { get; set; }
 
             [Argument(Tooltip = "Name of a variable where the command's result will be stored")]

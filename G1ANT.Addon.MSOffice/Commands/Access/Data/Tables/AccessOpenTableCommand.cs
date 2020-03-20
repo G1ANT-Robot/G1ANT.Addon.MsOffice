@@ -10,7 +10,7 @@
 
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access.Data
+namespace G1ANT.Addon.MSOffice.Commands.Access.Data.Tables
 {
     [Command(Name = "access.opentable", Tooltip = "This command opens an Access Table")]
     public class AccessOpenTableCommand : Command

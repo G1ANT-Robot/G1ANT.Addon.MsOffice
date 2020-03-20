@@ -11,7 +11,7 @@
 using G1ANT.Language;
 using Newtonsoft.Json.Linq;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access.Data
+namespace G1ANT.Addon.MSOffice.Commands.Access.Data.Queries
 {
     [Command(Name = "access.getquerydetails", Tooltip = "This command gets details of Access Query")]
     public class AccessGetQueryDetailsCommand : Command
