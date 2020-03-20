@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Printers
 {
-    [Command(Name = "access.getallprinters", Tooltip = "Get the detailed list of all Printers available to Access")]
+    [Command(Name = "access.getprinters", Tooltip = "Get the detailed list of all Printers available to Access")]
     public class AccessGetPrintersCommand : Command
     {
         public class Arguments : CommandArguments
