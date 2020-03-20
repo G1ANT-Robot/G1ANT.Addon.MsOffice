@@ -25,6 +25,8 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
             Name = query.Name;
             Details = new Lazy<AccessQueryDetailsModel>(() => new AccessQueryDetailsModel(query));
         }
+
+        public override string ToString() => Name;
     }
 
     public class AccessQueryDetailsModel : INameModel

@@ -33,7 +33,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             Name = @object.Name;
             FullName = @object.FullName;
             IsLoaded = @object.IsLoaded;
-            TypeName = ((AcObjectType)@object.Type).ToString();
+            TypeName = @object.Type.ToString();
             Type = @object.Type;
             Attributes = @object.Attributes;
             DateCreated = @object.DateCreated;
@@ -53,5 +53,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 
             return model.FullName == this.FullName && model.Name == this.Name ? 0 : 1;// && model.Form.GetDependencyInfo().Dependants.
         }
+
+        public override string ToString() => $"{Name}{(Name != FullName ? " " + FullName : "")}";// {(IsLoaded ? "" : "(not loaded)")}";
     }
 }

@@ -214,5 +214,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 
             return model.Name == Name ? 0 : 1; // names of controls seem to be unique
         }
+
+        public override string ToString() => $"{Caption} {Name} {Type} {Value}";;
     }
 }

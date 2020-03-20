@@ -128,5 +128,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 
             return model.Name == this.Name ? 0 : 1; // names of forms seem to be unique
         }
+
+        public override string ToString() => $"{Name}{(Name != Caption ? " " + Caption : "")}{(Name != FormName ? " " + FormName : "")}";
     }
 }
