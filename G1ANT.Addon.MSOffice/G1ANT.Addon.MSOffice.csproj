@@ -111,6 +111,8 @@
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectDetailsCommand.cs" />
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectCommand.cs" />
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectNameCommand.cs" />
+    <Compile Include="Commands\Access\Data\AccessCommitTransactionCommand.cs" />
+    <Compile Include="Commands\Access\Data\AccessBeginTransactionCommand.cs" />
     <Compile Include="Commands\Access\Data\DatabaseDiagrams\AccessGetDatabaseDiagramDetailsCommand.cs" />
     <Compile Include="Commands\Access\Data\DatabaseDiagrams\AccessGetDatabaseDiagramsCommand.cs" />
     <Compile Include="Commands\Access\Data\Functions\AccessGetFunctionDetailsCommand.cs" />

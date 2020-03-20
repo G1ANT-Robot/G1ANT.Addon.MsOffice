@@ -581,5 +581,16 @@ namespace G1ANT.Addon.MSOffice
         {
             application.CodeDb().NewPassword(oldPassword, newPassword);
         }
+
+
+        public void BeginTransaction()
+        {
+            application.CodeDb().BeginTrans();
+        }
+
+        public void CommitTransaction()
+        {
+            application.CodeDb().CommitTrans();
+        }
     }
 }
