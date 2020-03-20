@@ -24,6 +24,12 @@ namespace G1ANT.Addon.MSOffice.Models.Access
     {
         public string Name { get; }
         public string Type { get; }
+
+        public int Top { get; }
+        public int Left { get; }
+        public int Width { get; }
+        public int Height { get; }
+
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Caption { get; private set; }
 
@@ -47,6 +53,11 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             Type = ((AcControlType)this.TryGetDynamicPropertyValue<int>("ControlType")).ToString();
             Caption = TryGetPropertyValue<string>("Caption");
             Value = TryGetPropertyValue<string>("Value");
+
+            Left = TryGetPropertyValue<int>("Left");
+            Top = TryGetPropertyValue<int>("Top");
+            Width = TryGetPropertyValue<int>("Width");
+            Height = TryGetPropertyValue<int>("Height");
 
             if (getProperties && control.Properties.Count > 0)
                 LoadProperties();
@@ -185,17 +196,30 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         {
             const string fallbackPropertyName = "FontUnderline";
             if (!this.TryGetDynamicPropertyValue(propertyName, out int originColor))
+            {
+                Shake();
                 return;
+            }
             this.TryGetDynamicPropertyValue(fallbackPropertyName, out bool originFontUnderline);
 
-            for (var i = 0; i < 3; ++i)
+            for (var i = 0; i < 6; ++i)
             {
                 this.TrySetDynamicPropertyValue(propertyName, (originColor & 0xffffff) ^ 0xffffff);
                 this.TrySetDynamicPropertyValue(fallbackPropertyName, !originFontUnderline);
-                Thread.Sleep(500);
+                Thread.Sleep(200);
                 this.TrySetDynamicPropertyValue(propertyName, originColor);
                 this.TrySetDynamicPropertyValue(fallbackPropertyName, originFontUnderline);
-                Thread.Sleep(500);
+                Thread.Sleep(200);
+            }
+        }
+
+        private void Shake()
+        {
+            var random = new Random();
+            for (var i = 0; i < 50; ++i)
+            {
+                Control.Move(Top + random.Next(-200, 200), Left + random.Next(-200, 200));
+                Thread.Sleep(50);
             }
         }
 
@@ -215,6 +239,6 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             return model.Name == Name ? 0 : 1; // names of controls seem to be unique
         }
 
-        public override string ToString() => $"{Caption} {Name} {Type} {Value}";;
+        public override string ToString() => $"{Caption} {Name} {Type} {Value}";
     }
 }
