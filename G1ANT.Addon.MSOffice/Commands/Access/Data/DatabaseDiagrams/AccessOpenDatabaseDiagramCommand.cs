@@ -10,7 +10,7 @@
 
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access.Data
+namespace G1ANT.Addon.MSOffice.Commands.Access.Data.DatabaseDiagrams
 {
     [Command(Name = "access.opendatabasediagram", Tooltip = "This command opens an Access Database Diagram")]
     public class AccessOpenDatabaseDiagramCommand : Command

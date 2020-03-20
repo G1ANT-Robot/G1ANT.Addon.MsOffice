@@ -10,26 +10,26 @@
 
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access.Data
+namespace G1ANT.Addon.MSOffice.Commands.Access.Data.StoredProcedures
 {
-    [Command(Name = "access.closedatabasediagram", Tooltip = "This command closes and optionally saves an Access Database Diagram")]
-    public class AccessCloseDatabaseDiagramCommand : Command
+    [Command(Name = "access.closestoredprocedure", Tooltip = "This command closes and optionally saves an Access Stored Procedure")]
+    public class AccesCloseStoredProcedureCommand : Command
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Tooltip = "Name of the diagram to close", Required = true)]
+            [Argument(Tooltip = "Name of the stored procedure to close", Required = true)]
             public TextStructure Name { get; set; }
 
             [Argument(Tooltip = "Set to true to save changes, false to discard them, don't set any value to prompt user")]
             public BooleanStructure SaveChanges { get; set; }
         }
 
-        public AccessCloseDatabaseDiagramCommand(AbstractScripter scripter) : base(scripter)
+        public AccesCloseStoredProcedureCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.Close(Microsoft.Office.Interop.Access.AcObjectType.acDiagram, arguments.Name.Value, arguments.SaveChanges?.Value);
+            AccessManager.CurrentAccess.Close(Microsoft.Office.Interop.Access.AcObjectType.acStoredProcedure, arguments.Name.Value, arguments.SaveChanges?.Value);
         }
     }
 }

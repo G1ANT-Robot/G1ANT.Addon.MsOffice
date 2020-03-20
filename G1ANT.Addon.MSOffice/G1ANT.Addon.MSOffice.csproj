@@ -110,13 +110,19 @@
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectDetailsCommand.cs" />
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectCommand.cs" />
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectNameCommand.cs" />
+    <Compile Include="Commands\Access\Data\DatabaseDiagrams\AccessGetDatabaseDiagramDetailsCommand.cs" />
+    <Compile Include="Commands\Access\Data\DatabaseDiagrams\AccessGetDatabaseDiagramsCommand.cs" />
     <Compile Include="Commands\Access\Data\Functions\AccessGetFunctionDetailsCommand.cs" />
     <Compile Include="Commands\Access\Data\Functions\AccessGetFunctionsCommand.cs" />
     <Compile Include="Commands\Access\Data\Queries\AccessGetQueriesCommand.cs" />
     <Compile Include="Commands\Access\Data\Queries\AccessGetQueryDetailsCommand.cs" />
+    <Compile Include="Commands\Access\Data\StoredProcedures\AccessGetStoredProcedureDetailsCommand.cs" />
+    <Compile Include="Commands\Access\Data\StoredProcedures\AccessGetStoredProceduresCommand.cs" />
     <Compile Include="Commands\Access\Data\Tables\AccessGetTableDetailsCommand.cs" />
     <Compile Include="Commands\Access\Data\Tables\AccessGetTablesCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessExecuteSqlCommand.cs" />
+    <Compile Include="Commands\Access\Data\Views\AccessGetViewDetailsCommand.cs" />
+    <Compile Include="Commands\Access\Data\Views\AccessGetViewsCommand.cs" />
     <Compile Include="Forms\DataTableForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -141,18 +147,18 @@
     <Compile Include="Commands\Access\Controls\Properties\AccessSetControlDynamicPropertyCommand.cs" />
     <Compile Include="Commands\Access\Controls\Properties\AccessSetControlPropertyCommand.cs" />
     <Compile Include="Commands\Access\Controls\Properties\AccessGetControlPropertyCommand.cs" />
-    <Compile Include="Commands\Access\Data\AccessCloseViewCommand.cs" />
+    <Compile Include="Commands\Access\Data\Views\AccessCloseViewCommand.cs" />
     <Compile Include="Commands\Access\Data\Tables\AccessCloseTableCommand.cs" />
-    <Compile Include="Commands\Access\Data\AccessCloseStoredProcedureCommand.cs" />
+    <Compile Include="Commands\Access\Data\StoredProcedures\AccessCloseStoredProcedureCommand.cs" />
     <Compile Include="Commands\Access\Data\Queries\AccessCloseQueryCommand.cs" />
     <Compile Include="Commands\Access\Data\Functions\AccessCloseFunctionCommand.cs" />
-    <Compile Include="Commands\Access\Data\AccessCloseDatabaseDiagramCommand.cs" />
+    <Compile Include="Commands\Access\Data\DatabaseDiagrams\AccessCloseDatabaseDiagramCommand.cs" />
     <Compile Include="Commands\Access\Data\Functions\AccessOpenFunctionCommand..cs" />
     <Compile Include="Commands\Access\Data\Tables\AccessOpenTableCommand.cs" />
     <Compile Include="Commands\Access\Data\Queries\AccessOpenQueryCommand.cs" />
-    <Compile Include="Commands\Access\Data\AccessOpenStoredProcedureCommand.cs" />
-    <Compile Include="Commands\Access\Data\AccessOpenViewCommand.cs" />
-    <Compile Include="Commands\Access\Data\AccessOpenDatabaseDiagramCommand.cs" />
+    <Compile Include="Commands\Access\Data\StoredProcedures\AccessOpenStoredProcedureCommand.cs" />
+    <Compile Include="Commands\Access\Data\Views\AccessOpenViewCommand.cs" />
+    <Compile Include="Commands\Access\Data\DatabaseDiagrams\AccessOpenDatabaseDiagramCommand.cs" />
     <Compile Include="Commands\Access\Forms\AccessCloseFormCommand.cs" />
     <Compile Include="Commands\Access\Forms\AccessOpenFormCommand.cs" />
     <Compile Include="Commands\Access\Forms\Properties\AccessGetFormDynamicPropertyCommand.cs" />

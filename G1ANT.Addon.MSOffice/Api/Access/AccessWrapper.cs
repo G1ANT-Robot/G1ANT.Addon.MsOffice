@@ -38,9 +38,31 @@ namespace G1ANT.Addon.MSOffice
                 .ToList();
         }
 
+
         internal List<string> GetFunctionNames()
         {
             return new AccessObjectFunctionCollectionModel(application.CurrentData.AllFunctions)
+                .Select(t => t.Name)
+                .ToList();
+        }
+
+        internal List<string> GetDatabaseDiagramNames()
+        {
+            return new AccessObjectFunctionCollectionModel(application.CurrentData.AllDatabaseDiagrams)
+                .Select(t => t.Name)
+                .ToList();
+        }
+
+        internal List<string> GetStoredProcedureNames()
+        {
+            return new AccessObjectFunctionCollectionModel(application.CurrentData.AllStoredProcedures)
+                .Select(t => t.Name)
+                .ToList();
+        }
+
+        internal List<string> GetViewNames()
+        {
+            return new AccessObjectFunctionCollectionModel(application.CurrentData.AllViews)
                 .Select(t => t.Name)
                 .ToList();
         }
@@ -52,6 +74,9 @@ namespace G1ANT.Addon.MSOffice
                 .ToList();
         }
 
+        internal AccessObjectModel GetDatabaseDiagramDetails(string name) => new AccessObjectModel(application.CurrentData.AllStoredProcedures[name]);
+        internal AccessObjectModel GetStoredProcedureDetails(string name) => new AccessObjectModel(application.CurrentData.AllDatabaseDiagrams[name]);
+        internal AccessObjectModel GetViewDetails(string name) => new AccessObjectModel(application.CurrentData.AllViews[name]);
         internal AccessObjectModel GetFunctionDetails(string name) => new AccessObjectModel(application.CurrentData.AllFunctions[name]);
         internal AccessTableDefModel GetTableDetails(string name) => new AccessTableDefModel(application.CurrentDb().TableDefs[name]);
         internal AccessQueryDetailsModel GetQueryDetails(string name) => new AccessQueryDetailsModel(application.CurrentDb().QueryDefs[name]);

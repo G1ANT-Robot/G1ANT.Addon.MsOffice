@@ -10,26 +10,26 @@
 
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access.Data
+namespace G1ANT.Addon.MSOffice.Commands.Access.Data.DatabaseDiagrams
 {
-    [Command(Name = "access.closeview", Tooltip = "This command closes and optionally saves an Access View")]
-    public class AccesCloseViewCommand : Command
+    [Command(Name = "access.closedatabasediagram", Tooltip = "This command closes and optionally saves an Access Database Diagram")]
+    public class AccessCloseDatabaseDiagramCommand : Command
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Tooltip = "Name of the view to close", Required = true)]
+            [Argument(Tooltip = "Name of the diagram to close", Required = true)]
             public TextStructure Name { get; set; }
 
             [Argument(Tooltip = "Set to true to save changes, false to discard them, don't set any value to prompt user")]
             public BooleanStructure SaveChanges { get; set; }
         }
 
-        public AccesCloseViewCommand(AbstractScripter scripter) : base(scripter)
+        public AccessCloseDatabaseDiagramCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.Close(Microsoft.Office.Interop.Access.AcObjectType.acServerView, arguments.Name.Value, arguments.SaveChanges?.Value);
+            AccessManager.CurrentAccess.Close(Microsoft.Office.Interop.Access.AcObjectType.acDiagram, arguments.Name.Value, arguments.SaveChanges?.Value);
         }
     }
 }

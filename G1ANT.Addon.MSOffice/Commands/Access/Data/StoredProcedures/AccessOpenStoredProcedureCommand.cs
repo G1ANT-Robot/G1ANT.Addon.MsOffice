@@ -10,10 +10,10 @@
 
 using G1ANT.Language;
 
-namespace G1ANT.Addon.MSOffice.Commands.Access.Data
+namespace G1ANT.Addon.MSOffice.Commands.Access.Data.StoredProcedures
 {
-    [Command(Name = "access.openview", Tooltip = "This command opens an Access AccessOpenStoredProcedureCommandiew")]
-    public class AccessOpenViewCommand : Command
+    [Command(Name = "access.openstoredprocedure", Tooltip = "This command opens an Access Stored Procedure")]
+    public class AccessOpenStoredProcedureCommand : Command
     {
         public class Arguments : CommandArguments
         {
@@ -30,12 +30,12 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Data
             public BooleanStructure CreateNew { get; set; } = new BooleanStructure(false);
         }
 
-        public AccessOpenViewCommand(AbstractScripter scripter) : base(scripter)
+        public AccessOpenStoredProcedureCommand(AbstractScripter scripter) : base(scripter)
         { }
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.OpenFunction(arguments.Name.Value, arguments.ViewType.Value, arguments.CreateNew.Value, arguments.Readonly.Value);
+            AccessManager.CurrentAccess.OpenStoredProcedure(arguments.Name.Value, arguments.ViewType.Value, arguments.CreateNew.Value, arguments.Readonly.Value);
         }
     }
 }
