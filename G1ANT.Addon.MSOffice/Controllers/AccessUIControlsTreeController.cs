@@ -4,6 +4,7 @@ using G1ANT.Addon.MSOffice.Forms;
 using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Addon.MSOffice.Models.Access.Dao;
 using G1ANT.Addon.MSOffice.Models.Access.Data;
+using G1ANT.Addon.MSOffice.Models.Access.Printers;
 using G1ANT.Addon.MSOffice.Models.Access.VBE;
 using G1ANT.Language;
 using Microsoft.Office.Interop.Access.Dao;
@@ -35,6 +36,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
         private const string StoredProceduresLabel = "Stored Prodecures";
         private const string TablesLabel = "Tables";
         private const string ViewsLabel = "Views";
+
+        private const string PrintersLabel = "Printers";
 
         private const string PropertiesLabel = "Properties";
         private const string DynamicPropertiesLabel = "Dynamic Properties";
@@ -164,7 +167,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
                                 () => GetAccessObjectNodes(new AccessObjectViewCollectionModel(rotApplicationModel))
                             ) { Tag = rotApplicationModel },
                         },
-                    }
+                    },
+                    new LazyTreeNode(PrintersLabel, () => GetPrinterNodes()),
                 }
             );
 
@@ -172,11 +176,16 @@ namespace G1ANT.Addon.MSOffice.Controllers
             controlsTree.EndUpdate();
         }
 
+        private IEnumerable<TreeNode> GetPrinterNodes()
+        {
+            return new AccessPrinterCollectionModel(GetCurrentApplication().Printers).Select(p => new LazyTreeNode(p.Name, () => GetObjectPropertiesAsTreeNodes(p)) { Tag = p });
+        }
+
         internal void ViewDataFromTable(string tableName)
         {
             try
             {
-                var app = GetCurrentApplication().Application;
+                var app = GetCurrentApplication();
                 var form = new DataTableForm();
                 using (var connection = new OleDbConnection(app.ADOConnectString))
                 {
@@ -195,13 +204,13 @@ namespace G1ANT.Addon.MSOffice.Controllers
             var selectedNode = controlsTree.SelectedNode;
             var model = (AccessObjectModel)selectedNode.Tag;
 
-            var applicationModel = GetCurrentApplication();
+            var application = GetCurrentApplication();
             new Thread(() =>
             {
                 try
                 {
-                    OpenForm(model, openInDesigner, applicationModel);
-                    var newNode = GetLoadedFormNode(applicationModel.Application, selectedNode.Text);
+                    OpenForm(model, openInDesigner, application);
+                    var newNode = GetLoadedFormNode(application, selectedNode.Text);
                     controlsTree.FindForm().Invoke((MethodInvoker) delegate { ReplaceNode(selectedNode, newNode); });
 
                 }
@@ -219,22 +228,22 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 controlsTree.SelectedNode = newNode;
         }
 
-        private RotApplicationModel GetCurrentApplication()
+        private MSAccess.Application GetCurrentApplication()
         {
-            return (RotApplicationModel)applications.SelectedItem;
+            return ((RotApplicationModel)applications.SelectedItem).Application;
         }
 
-        private static void OpenForm(AccessObjectModel formToLoad, bool openInDesigner, RotApplicationModel applicationModel)
+        private void OpenForm(AccessObjectModel formToLoad, bool openInDesigner, MSAccess.Application application)
         {
             try
             {
                 var formName = formToLoad.FullName ?? formToLoad.Name;
-                applicationModel.Application.DoCmd.OpenForm(
+                application.DoCmd.OpenForm(
                     formName,
                     openInDesigner ? MSAccess.AcFormView.acDesign : MSAccess.AcFormView.acNormal
                 );
 
-                var form = applicationModel.Application.Forms[formName];
+                var form = application.Forms[formName];
                 form.SetFocus();
                 RobotWin32.BringWindowToFront((IntPtr)form.Hwnd);
             }
@@ -249,7 +258,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
         {
             try
             {
-                var app = GetCurrentApplication().Application;
+                var app = GetCurrentApplication();
                 var name = report.FullName ?? report.Name;
 
                 switch (report.Type)
@@ -503,7 +512,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         private IEnumerable<TreeNode> GetModuleNodes()
         {
-            var modules = GetCurrentApplication().Application.Modules;
+            var modules = GetCurrentApplication().Modules;
 
             return modules.Cast<MSAccess.Module>()
                 .Select(m => new ModuleModel(m))
@@ -514,7 +523,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         private IEnumerable<TreeNode> GetResourceNodes()
         {
-            var resources = GetCurrentApplication().Application.CurrentProject.Resources;
+            var resources = GetCurrentApplication().CurrentProject.Resources;
 
             return resources.Cast<MSAccess.SharedResource>()
                 .Select(r => new ResourceModel(r))

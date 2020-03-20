@@ -13,6 +13,7 @@ using G1ANT.Addon.MSOffice.Api.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Addon.MSOffice.Models.Access.Dao;
 using G1ANT.Addon.MSOffice.Models.Access.Data;
+using G1ANT.Addon.MSOffice.Models.Access.Printers;
 using G1ANT.Language;
 using Microsoft.Office.Interop.Access;
 using System;
@@ -565,5 +566,20 @@ namespace G1ANT.Addon.MSOffice
         //        throw;
         //    }
         //}
+
+        public AccessPrinterCollectionModel GetPrinters()
+        {
+            return new AccessPrinterCollectionModel(application.Printers);
+        }
+
+        public AccessPrinterModel GetCurrentPrinter()
+        {
+            return new AccessPrinterModel(application.Printer);
+        }
+
+        public void SetNewPassword(string oldPassword, string newPassword)
+        {
+            application.CodeDb().NewPassword(oldPassword, newPassword);
+        }
     }
 }
