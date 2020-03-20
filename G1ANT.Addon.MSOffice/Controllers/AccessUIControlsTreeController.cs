@@ -1,5 +1,6 @@
 ﻿using G1ANT.Addon.MSOffice.Api.Access;
 using G1ANT.Addon.MSOffice.Controllers.Access;
+using G1ANT.Addon.MSOffice.Forms;
 using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Addon.MSOffice.Models.Access.Dao;
 using G1ANT.Addon.MSOffice.Models.Access.Data;
@@ -9,6 +10,7 @@ using Microsoft.Office.Interop.Access.Dao;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.OleDb;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -32,7 +34,6 @@ namespace G1ANT.Addon.MSOffice.Controllers
         private const string QueriesLabel = "Queries";
         private const string StoredProceduresLabel = "Stored Prodecures";
         private const string TablesLabel = "Tables";
-        private const string TableDefsLabel = "Table definitions";
         private const string ViewsLabel = "Views";
 
         private const string PropertiesLabel = "Properties";
@@ -150,17 +151,12 @@ namespace G1ANT.Addon.MSOffice.Controllers
                             new LazyTreeNode(
                                 QueriesLabel,
                                 () => GetQueryNodes(rotApplicationModel)) { Tag = rotApplicationModel },
-                                //() => GetAccessObjectNodes(new AccessObjectQueryCollectionModel(rotApplicationModel))) { Tag = rotApplicationModel },
                             new LazyTreeNode(
                                 StoredProceduresLabel,
                                 () => GetAccessObjectNodes(new AccessObjectStoredProcedureCollectionModel(rotApplicationModel))
                             ) { Tag = rotApplicationModel },
                             new LazyTreeNode(
                                 TablesLabel,
-                                () => GetAccessObjectNodes(new AccessObjectTableCollectionModel(rotApplicationModel))
-                            ) { Tag = rotApplicationModel },
-                            new LazyTreeNode(
-                                TableDefsLabel,
                                 () => GetTableDefNodes(rotApplicationModel.Application.CurrentDb())
                             ) { Tag = rotApplicationModel },
                             new LazyTreeNode(
@@ -176,7 +172,23 @@ namespace G1ANT.Addon.MSOffice.Controllers
             controlsTree.EndUpdate();
         }
 
-
+        internal void ViewDataFromTable(string tableName)
+        {
+            try
+            {
+                var app = GetCurrentApplication().Application;
+                var form = new DataTableForm();
+                using (var connection = new OleDbConnection(app.ADOConnectString))
+                {
+                    form.LoadData(connection, tableName);
+                    form.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                RobotMessageBox.Show($"Exception while loading data from {tableName}: {ex.Message}");
+            }
+        }
 
         internal void TryOpenForm(AccessObjectModel formToLoad, bool openInDesigner)
         {
@@ -416,7 +428,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
                     new TreeNode($"Updatable: {td.Updatable}"),
                 }
             )
-            { Tag = tableDefs });
+            { Tag = td });
         }
 
         private List<TreeNode> GetApplicationNodes(RotApplicationModel rotApplicationModel)

@@ -2,6 +2,7 @@
 using G1ANT.Addon.MSOffice.Controllers;
 using G1ANT.Addon.MSOffice.Controllers.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
+using G1ANT.Addon.MSOffice.Models.Access.Dao;
 using G1ANT.Language;
 using System;
 using System.Linq;
@@ -83,6 +84,7 @@ namespace G1ANT.Addon.MSOffice.Panels
             highlightToolStripMenuItem.Available = clickedModel is AccessControlModel;
             copyNodeDetailsToolStripMenuItem.Available = clickedModel is AccessControlModel;
 
+            viewDataToolStripMenuItem.Available = clickedModel is AccessTableDefModel;
 
             e.Cancel = !contextMenuStrip.Items.OfType<ToolStripMenuItem>().Any(item => item.Available);
         }
@@ -111,5 +113,7 @@ namespace G1ANT.Addon.MSOffice.Panels
             var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
             controller.OpenAccessObject(model);
         }
+
+        private void viewDataToolStripMenuItem_Click(object sender, EventArgs e) => controller.ViewDataFromTable(controlsTree.SelectedNode.Text);
     }
 }
