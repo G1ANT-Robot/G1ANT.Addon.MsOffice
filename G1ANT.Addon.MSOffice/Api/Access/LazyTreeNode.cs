@@ -26,7 +26,8 @@ namespace G1ANT.Addon.MSOffice.Api.Access
             if (IsEmpty())
             {
                 Nodes.Clear();
-                Nodes.AddRange(treeNodeFactory().ToArray());
+                try { Nodes.AddRange(treeNodeFactory().ToArray()); }
+                catch { }
             }
         }
 

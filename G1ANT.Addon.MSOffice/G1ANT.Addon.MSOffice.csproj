@@ -111,6 +111,8 @@
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectDetailsCommand.cs" />
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectCommand.cs" />
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectNameCommand.cs" />
+    <Compile Include="Commands\Access\Data\AccessGetBaseConnectionStringCommand.cs" />
+    <Compile Include="Commands\Access\Data\AccessGetConnectionStringCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessCommitTransactionCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessBeginTransactionCommand.cs" />
     <Compile Include="Commands\Access\Data\DatabaseDiagrams\AccessGetDatabaseDiagramDetailsCommand.cs" />
@@ -174,7 +176,10 @@
     <Compile Include="Commands\Access\Macros\AccessRunProcedureCommand.cs" />
     <Compile Include="Controllers\Access\ITooltipService.cs" />
     <Compile Include="Controllers\Access\TooltipService.cs" />
+    <Compile Include="Models\Access\AccessApplicationModel.cs" />
+    <Compile Include="Models\Access\AccessCurrentProjectModel.cs" />
     <Compile Include="Models\Access\AccessDynamicPropertiesModel.cs" />
+    <Compile Include="Models\Access\AccessObjectPropertyCollectionModel.cs" />
     <Compile Include="Models\Access\AccessObjectReportCollectionModel.cs" />
     <Compile Include="Models\Access\Dao\AccessDaoPropertyCollectionModel.cs" />
     <Compile Include="Models\Access\Dao\AccessDaoPropertyModel.cs" />

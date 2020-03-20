@@ -556,5 +556,11 @@ namespace G1ANT.Addon.MSOffice
 
         public void BeginTransaction() => application.CodeDb().BeginTrans();
         public void CommitTransaction(bool forceFlush = false) => application.CodeDb().CommitTrans(forceFlush ? (int)CommitTransOptionsEnum.dbForceOSFlush : 0);
+
+        public string GetAdoConnectionString() => application.ADOConnectString;
+        public string GetBaseConnectionString() => application.CurrentProject.BaseConnectionString;
+
+
+        public AccessApplicationModel GetApplicationDetails() => new AccessApplicationModel(application);
     }
 }

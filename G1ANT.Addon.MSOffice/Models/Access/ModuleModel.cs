@@ -1,4 +1,5 @@
 ﻿using Microsoft.Office.Interop.Access;
+using Newtonsoft.Json;
 using System;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
@@ -7,6 +8,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
     {
         public string Name { get; }
         public AcModuleType Type { get; }
+        [JsonIgnore]
         public Module Module { get; }
         public string TypeName { get; }
         public int CountOfDeclarationLines { get; }

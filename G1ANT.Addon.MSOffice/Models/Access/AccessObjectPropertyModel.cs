@@ -7,6 +7,7 @@
 *    See License.txt file in the project root for full license information.
 *
 */
+
 using Microsoft.Office.Interop.Access;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
@@ -15,19 +16,11 @@ namespace G1ANT.Addon.MSOffice.Models.Access
     {
         public string Name { get; set; }
         public string Value { get; set; }
-        //public ICollection<AccessObjectPropertyModel> Children { get; set; } = new List<AccessObjectPropertyModel>();
 
         public AccessObjectPropertyModel(AccessObjectProperty property)
         {
             Name = property.Name;
             Value = property.Value?.ToString();
-
-            //if (property.Value is AccessObjectProperties properties)
-            //{
-            //    Children = properties.Cast<AccessObjectProperty>()
-            //        .Select(p => new AccessObjectPropertyModel(p))
-            //        .ToList();
-            //}
         }
     }
 }

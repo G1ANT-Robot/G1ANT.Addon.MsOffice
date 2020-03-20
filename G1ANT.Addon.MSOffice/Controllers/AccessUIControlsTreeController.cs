@@ -38,12 +38,16 @@ namespace G1ANT.Addon.MSOffice.Controllers
         private const string QueriesLabel = "Queries";
         private const string StoredProceduresLabel = "Stored Prodecures";
         private const string TablesLabel = "Tables";
+        private const string FieldsLabel = "Fields";
+        private const string IndexesLabel = "Indexes";
         private const string ViewsLabel = "Views";
         private const string ContainersLabel = "Containers";
+        private const string DocumentsLabel = "Documents";
 
         private const string PrintersLabel = "Printers";
 
         private const string PropertiesLabel = "Properties";
+        private const string ParametersLabel = "Parameters";
         private const string DynamicPropertiesLabel = "Dynamic Properties";
 
         private const string InternalName = "internal";
@@ -199,7 +203,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
                     () => GetObjectPropertiesAsTreeNodes(model.Properties.Value)
                 ),
                 new LazyTreeNode(
-                    "Documents",
+                    DocumentsLabel,
                     () => GetContainerDocumentsNodes(model.Documents.Value)
                 ),
             }.Concat(GetObjectPropertiesAsTreeNodes(model));
@@ -463,7 +467,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
                     () => details.Fields.Select(f => new LazyTreeNode(f.Name, () => GetObjectPropertiesAsTreeNodes(f)))
                 ),
                 new LazyTreeNode(
-                    "Parameters",
+                    ParametersLabel,
                     () => details.Parameters.Select(p => new LazyTreeNode(
                         p.ToString(),
                         () => p.Properties.Select(pp => new LazyTreeNode(
@@ -473,7 +477,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
                     ))
                 ),
                 new LazyTreeNode(
-                    "Properties",
+                    PropertiesLabel,
                     () => details.Properties.Select(p => new TreeNode(p.ToString()))
                 ),
                 new TreeNode($"SQL: {details.SQL}"),
@@ -497,15 +501,15 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 td.ToString(),
                 new TreeNode[] {
                     new LazyTreeNode(
-                        "Fields",
+                        FieldsLabel,
                         () => td.Fields.Value.Select(f => new LazyTreeNode(f.Name, () => GetObjectPropertiesAsTreeNodes(f)))
                     ),
                     new LazyTreeNode(
-                        "Properties",
+                        PropertiesLabel,
                         () => td.Properties.Value.Select(p => new LazyTreeNode(p.Name, () => GetObjectPropertiesAsTreeNodes(p)))
                     ),
                     new LazyTreeNode(
-                        "Indexes",
+                        IndexesLabel,
                         () => td.Indexes.Value.Select(i => new LazyTreeNode(i.Name, () => GetObjectPropertiesAsTreeNodes(i)))
                     ),
                     new TreeNode($"DateCreated: {td.DateCreated}"),
