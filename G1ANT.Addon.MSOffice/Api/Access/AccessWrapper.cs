@@ -588,9 +588,9 @@ namespace G1ANT.Addon.MSOffice
             application.CodeDb().BeginTrans();
         }
 
-        public void CommitTransaction()
+        public void CommitTransaction(bool forceFlush = false)
         {
-            application.CodeDb().CommitTrans();
+            application.CodeDb().CommitTrans(forceFlush ? (int)CommitTransOptionsEnum.dbForceOSFlush : 0);
         }
     }
 }

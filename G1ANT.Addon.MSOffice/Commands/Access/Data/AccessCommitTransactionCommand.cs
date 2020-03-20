@@ -17,6 +17,8 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Data
     {
         public class Arguments : CommandArguments
         {
+            [Argument(Tooltip = "This forces the database engine to immediately flush all updates to disk, instead of caching them temporarily. False by default")]
+            public BooleanStructure Flush { get; set; } = new BooleanStructure(false);
         }
 
         public AccessCommitTransactionCommand(AbstractScripter scripter) : base(scripter)
@@ -24,7 +26,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Data
 
         public void Execute(Arguments arguments)
         {
-            AccessManager.CurrentAccess.CommitTransaction();
+            AccessManager.CurrentAccess.CommitTransaction(arguments.Flush.Value);
         }
     }
 }
