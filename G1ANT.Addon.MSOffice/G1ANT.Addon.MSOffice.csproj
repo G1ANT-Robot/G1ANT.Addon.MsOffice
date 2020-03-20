@@ -110,7 +110,17 @@
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectDetailsCommand.cs" />
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectCommand.cs" />
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectNameCommand.cs" />
+    <Compile Include="Commands\Access\Data\Queries\AccessGetQueriesCommand.cs" />
+    <Compile Include="Commands\Access\Data\Queries\AccessGetQueryDetailsCommand.cs" />
+    <Compile Include="Commands\Access\Data\Tables\AccessGetTableDetailsCommand.cs" />
+    <Compile Include="Commands\Access\Data\Tables\AccessGetTablesCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessExecuteSqlCommand.cs" />
+    <Compile Include="Forms\DataTableForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DataTableForm.Designer.cs">
+      <DependentUpon>DataTableForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\Access\AccessControlPropertyHelper.cs" />
     <Compile Include="Api\Access\AccessFormControlsTreeWalker.cs" />
     <Compile Include="Api\Access\IAccessFormControlsTreeWalker.cs" />
@@ -130,14 +140,14 @@
     <Compile Include="Commands\Access\Controls\Properties\AccessSetControlPropertyCommand.cs" />
     <Compile Include="Commands\Access\Controls\Properties\AccessGetControlPropertyCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessCloseViewCommand.cs" />
-    <Compile Include="Commands\Access\Data\AccessCloseTableCommand.cs" />
+    <Compile Include="Commands\Access\Data\Tables\AccessCloseTableCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessCloseStoredProcedureCommand.cs" />
-    <Compile Include="Commands\Access\Data\AccessCloseQueryCommand.cs" />
+    <Compile Include="Commands\Access\Data\Queries\AccessCloseQueryCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessCloseFunctionCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessCloseDatabaseDiagramCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessOpenFunctionCommand..cs" />
-    <Compile Include="Commands\Access\Data\AccessOpenTableCommand.cs" />
-    <Compile Include="Commands\Access\Data\AccessOpenQueryCommand.cs" />
+    <Compile Include="Commands\Access\Data\Tables\AccessOpenTableCommand.cs" />
+    <Compile Include="Commands\Access\Data\Queries\AccessOpenQueryCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessOpenStoredProcedureCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessOpenViewCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessOpenDatabaseDiagramCommand.cs" />
@@ -207,7 +217,6 @@
     <Compile Include="Commands\Access\AccessCloseCommand.cs" />
     <Compile Include="Commands\Access\AccessQuitCommand.cs" />
     <Compile Include="Commands\Access\AccessShowCommand.cs" />
-    <Compile Include="Commands\Access\AccessTestCommand.cs" />
     <Compile Include="Commands\Access\AccessSwitchCommand.cs" />
     <Compile Include="Commands\Excel\ExcelActivateSheetCommand.cs" />
     <Compile Include="Commands\Excel\ExcelAddSheetCommand.cs" />
@@ -301,6 +310,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\DataTableForm.resx">
+      <DependentUpon>DataTableForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\AccessUIControlsTreePanel.resx">
       <DependentUpon>AccessUIControlsTreePanel.cs</DependentUpon>
     </EmbeddedResource>

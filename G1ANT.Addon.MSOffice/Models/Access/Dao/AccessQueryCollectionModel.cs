@@ -69,15 +69,18 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
             }
             catch { }
         }
-
     }
 
     public class AccessQueryCollectionModel : List<AccessQueryModel>
     {
-        public AccessQueryCollectionModel(RotApplicationModel rotApplicationModel)
+
+        public AccessQueryCollectionModel(RotApplicationModel rotApplicationModel) : this(rotApplicationModel.Application.CurrentDb())
+        { }
+
+        public AccessQueryCollectionModel(Database database)
         {
             AddRange(
-                rotApplicationModel.Application.CurrentDb().QueryDefs
+                database.QueryDefs
                     .OfType<QueryDef>()
                     .Select(q => new AccessQueryModel(q))
             );

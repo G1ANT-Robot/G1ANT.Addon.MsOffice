@@ -30,6 +30,30 @@ namespace G1ANT.Addon.MSOffice
 
         internal int Id { get; }
 
+        internal List<string> GetQueryNames()
+        {
+            return new AccessQueryCollectionModel(application.CurrentDb())
+                .Select(q => q.Name)
+                .ToList();
+        }
+
+        internal List<string> GetTableNames()
+        {
+            return new AccessTableDefCollectionModel(application.CurrentDb().TableDefs)
+                .Select(t => t.Name)
+                .ToList();
+        }
+
+        internal AccessTableDefModel GetTableDatails(string name)
+        {
+            return new AccessTableDefModel(application.CurrentDb().TableDefs[name]);
+        }
+
+        internal AccessQueryDetailsModel GetQueryDatails(string name)
+        {
+            return new AccessQueryDetailsModel(application.CurrentDb().QueryDefs[name]);
+        }
+
         internal AccessWrapper(
             IAccessFormControlsTreeWalker accessFormControlsTreeWalker,
             IRunningObjectTableService runningObjectTableService
@@ -489,45 +513,6 @@ namespace G1ANT.Addon.MSOffice
         //    args.ForEach(arg => MouseWin32.MouseEvent(arg.dwFlags, arg.dx, arg.dy, arg.dwData));
         //}
 
-
-        internal void Test()
-       {
-
-        }
-
-
-
-        //internal void Export(string path, string type)
-        //{
-        //    if (string.IsNullOrEmpty(type))
-        //    {
-        //        type = path.Split('.').LastOrDefault();
-        //    }
-        //    try
-        //    {
-        //        string outPath = string.IsNullOrEmpty(path) ? this.path : path;
-        //        Word.WdExportFormat format;
-
-        //        switch (type.ToLower())
-        //        {
-        //            case "pdf":
-        //                format = Word.WdExportFormat.wdExportFormatPDF;
-        //                break;
-        //            case "xps":
-        //                format = Word.WdExportFormat.wdExportFormatXPS;
-        //                break;
-        //            default:
-        //                throw new ApplicationException("Unknown format type");
-        //        }
-
-        //        document.ExportAsFixedFormat(path, format);
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //        throw;
-        //    }
-        //}
 
         //private void Application_WindowDeactivate(Word.Document Doc, Word.Window Wn)
         //{
