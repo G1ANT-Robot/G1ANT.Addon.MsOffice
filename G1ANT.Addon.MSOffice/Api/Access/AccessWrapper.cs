@@ -138,11 +138,7 @@ namespace G1ANT.Addon.MSOffice
             }
         }
 
-        internal void RunSql(string sql, bool useTransaction = false)
-        {
-            application.DoCmd.RunSQL(sql, useTransaction);
-        }
-
+        internal void RunSql(string sql, bool useTransaction = false) => application.DoCmd.RunSQL(sql, useTransaction);
 
 
         private AcView ToAcView(string viewType)
@@ -263,10 +259,7 @@ namespace G1ANT.Addon.MSOffice
         /// Executes handler assigned to OnClick property; if there's no handler action is repeated for OnEnter property.
         /// </summary>
         /// <param name="path"></param>
-        internal void ExecuteDefaultClickEvent(string path)
-        {
-            ExecuteEvents(path, "OnClick", "OnEnter");
-        }
+        internal void ExecuteDefaultClickEvent(string path) => ExecuteEvents(path, "OnClick", "OnEnter");
 
         internal void ExecuteEvents(string path, params string[] eventNames)
         {
@@ -360,10 +353,8 @@ namespace G1ANT.Addon.MSOffice
             application.OpenAccessProject(path, openExclusive);
         }
 
-        internal void Show()
-        {
-            application.Visible = true;
-        }
+        internal void Show() => application.Visible = true;
+        internal void Hide() => application.Visible = false;
 
 
         internal AccessControlModel GetControlByPath(string path)
@@ -381,10 +372,6 @@ namespace G1ANT.Addon.MSOffice
             return new AccessFormModel(application.Screen.ActiveForm, true, true, false);
         }
 
-        internal void Hide()
-        {
-            application.Visible = false;
-        }
 
         internal ICollection<AccessObjectModel> GetAllProjectForms()
         {
@@ -413,10 +400,7 @@ namespace G1ANT.Addon.MSOffice
         }
 
 
-        internal void CloseDatabase()
-        {
-            application.DoCmd.CloseDatabase();
-        }
+        internal void CloseDatabase() => application.DoCmd.CloseDatabase();
 
         internal void Quit(bool saveChanges)
         {
@@ -424,11 +408,8 @@ namespace G1ANT.Addon.MSOffice
             AccessManager.Remove(this);
         }
 
+        internal void CloseCurrentDatabase() => application.CloseCurrentDatabase();
 
-        internal void CloseCurrentDatabase()
-        {
-            application.CloseCurrentDatabase();
-        }
 
         internal void Save(string objectType, string objectName)
         {
@@ -568,30 +549,12 @@ namespace G1ANT.Addon.MSOffice
         //    }
         //}
 
-        public AccessPrinterCollectionModel GetPrinters()
-        {
-            return new AccessPrinterCollectionModel(application.Printers);
-        }
+        public AccessPrinterCollectionModel GetPrinters() => new AccessPrinterCollectionModel(application.Printers);
+        public AccessPrinterModel GetCurrentPrinter() => new AccessPrinterModel(application.Printer);
 
-        public AccessPrinterModel GetCurrentPrinter()
-        {
-            return new AccessPrinterModel(application.Printer);
-        }
+        public void SetNewPassword(string oldPassword, string newPassword) => application.CodeDb().NewPassword(oldPassword, newPassword);
 
-        public void SetNewPassword(string oldPassword, string newPassword)
-        {
-            application.CodeDb().NewPassword(oldPassword, newPassword);
-        }
-
-
-        public void BeginTransaction()
-        {
-            application.CodeDb().BeginTrans();
-        }
-
-        public void CommitTransaction(bool forceFlush = false)
-        {
-            application.CodeDb().CommitTrans(forceFlush ? (int)CommitTransOptionsEnum.dbForceOSFlush : 0);
-        }
+        public void BeginTransaction() => application.CodeDb().BeginTrans();
+        public void CommitTransaction(bool forceFlush = false) => application.CodeDb().CommitTrans(forceFlush ? (int)CommitTransOptionsEnum.dbForceOSFlush : 0);
     }
 }
