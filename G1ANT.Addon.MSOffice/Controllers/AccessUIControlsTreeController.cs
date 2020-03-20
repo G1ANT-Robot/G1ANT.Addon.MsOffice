@@ -3,12 +3,15 @@ using G1ANT.Addon.MSOffice.Controllers.Access;
 using G1ANT.Addon.MSOffice.Forms;
 using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Addon.MSOffice.Models.Access.Dao;
+using G1ANT.Addon.MSOffice.Models.Access.Dao.Containers;
+using G1ANT.Addon.MSOffice.Models.Access.Dao.Documents;
 using G1ANT.Addon.MSOffice.Models.Access.Data;
 using G1ANT.Addon.MSOffice.Models.Access.Printers;
 using G1ANT.Addon.MSOffice.Models.Access.VBE;
 using G1ANT.Language;
 using Microsoft.Office.Interop.Access.Dao;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.OleDb;
@@ -36,6 +39,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
         private const string StoredProceduresLabel = "Stored Prodecures";
         private const string TablesLabel = "Tables";
         private const string ViewsLabel = "Views";
+        private const string ContainersLabel = "Containers";
 
         private const string PrintersLabel = "Printers";
 
@@ -166,6 +170,10 @@ namespace G1ANT.Addon.MSOffice.Controllers
                                 ViewsLabel,
                                 () => GetAccessObjectNodes(new AccessObjectViewCollectionModel(rotApplicationModel))
                             ) { Tag = rotApplicationModel },
+                            new LazyTreeNode(
+                                ContainersLabel,
+                                () => GetContainerNodes(rotApplicationModel)
+                            ),
                         },
                     },
                     new LazyTreeNode(PrintersLabel, () => GetPrinterNodes()),
@@ -174,6 +182,45 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
             ApplyExpandedTreeNodes(controlsTree.Nodes);
             controlsTree.EndUpdate();
+        }
+
+        private IEnumerable<TreeNode> GetContainerNodes(RotApplicationModel rotApplicationModel)
+        {
+            return new AccessContainerCollectionModel(rotApplicationModel.Application.CurrentDb().Containers).Select(
+                c => new LazyTreeNode(c.ToString(), () => GetContainerDetailNodes(c))
+            );
+        }
+
+        private IEnumerable<TreeNode> GetContainerDetailNodes(AccessContainerModel model)
+        {
+            return new TreeNode[] {
+                new LazyTreeNode(
+                    PropertiesLabel,
+                    () => GetObjectPropertiesAsTreeNodes(model.Properties.Value)
+                ),
+                new LazyTreeNode(
+                    "Documents",
+                    () => GetContainerDocumentsNodes(model.Documents.Value)
+                ),
+            }.Concat(GetObjectPropertiesAsTreeNodes(model));
+        }
+
+        private IEnumerable<TreeNode> GetContainerDocumentsNodes(AccessDocumentCollectionModel documents)
+        {
+            foreach (var document in documents)
+            {
+                yield return new LazyTreeNode(
+                    document.Name,
+                    () => new List<TreeNode>()
+                    {
+                        new LazyTreeNode(
+                            PropertiesLabel,
+                            () => document.Properties.Select(p => new TreeNode( p.ToString() ))
+                        )
+                    }.Concat(GetObjectPropertiesAsTreeNodes(document))
+                 );
+            }
+
         }
 
         private IEnumerable<TreeNode> GetPrinterNodes()
@@ -380,10 +427,15 @@ namespace G1ANT.Addon.MSOffice.Controllers
             var oldCursor = Cursor.Current;
             Cursor.Current = Cursors.WaitCursor;
 
-            if (treeNode is LazyTreeNode lazyTreeNode)
-                lazyTreeNode.LoadLazyChildren();
+            try
+            {
+                if (treeNode is LazyTreeNode lazyTreeNode)
+                    lazyTreeNode.LoadLazyChildren();
 
-            ApplyExpandedTreeNodes(treeNode.Nodes);
+                ApplyExpandedTreeNodes(treeNode.Nodes);
+            }
+            catch { }
+
             controlsTree.EndUpdate();
             Cursor.Current = oldCursor;
         }
@@ -394,7 +446,9 @@ namespace G1ANT.Addon.MSOffice.Controllers
             return @object
                 .GetType()
                 .GetProperties()
-                .Select(p => new TreeNode($"{p.Name}: {p.GetValue(@object)}"))
+                .Select(p => new { p.Name, Value = p.GetValue(@object) })
+                .Where(p => !(p.Value is IEnumerable) || p.Value is string)
+                .Select(p => new TreeNode($"{p.Name}: {p.Value}"))
                 .ToArray();
         }
 
@@ -410,11 +464,17 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 ),
                 new LazyTreeNode(
                     "Parameters",
-                    () => details.Parameters.Select(p => new TreeNode($"{p.Name}: {p.Value}, type: {p.Type}"))
+                    () => details.Parameters.Select(p => new LazyTreeNode(
+                        p.ToString(),
+                        () => p.Properties.Select(pp => new LazyTreeNode(
+                            PropertiesLabel,
+                            () => GetObjectPropertiesAsTreeNodes(pp)
+                        ))
+                    ))
                 ),
                 new LazyTreeNode(
                     "Properties",
-                    () => details.Properties.Select(p => new TreeNode($"{p.Name}: {p.Value}, type: {p.PropertyType}"))
+                    () => details.Properties.Select(p => new TreeNode(p.ToString()))
                 ),
                 new TreeNode($"SQL: {details.SQL}"),
                 //new TreeNode($"Name: {details.Name}"),

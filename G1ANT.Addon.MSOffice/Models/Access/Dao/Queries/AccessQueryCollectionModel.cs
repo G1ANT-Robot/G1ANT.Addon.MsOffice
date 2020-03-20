@@ -40,7 +40,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
         public AccessQueryFieldCollectionModel Fields { get; }
         public int MaxRecords { get; }
         public AccessQueryParameterCollectionModel Parameters { get; }
-        public AccessQueryPropertyCollectionModel Properties { get; }
+        public AccessDaoPropertyCollectionModel Properties { get; }
         public int RecordsAffected { get; }
         public bool ReturnsRecords { get; }
         //public bool? StillExecuting { get; }
@@ -60,7 +60,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
                 Fields = new AccessQueryFieldCollectionModel(query.Fields);
                 MaxRecords = query.MaxRecords;
                 Parameters = new AccessQueryParameterCollectionModel(query.Parameters);
-                Properties = new AccessQueryPropertyCollectionModel(query.Properties);
+                Properties = new AccessDaoPropertyCollectionModel(query.Properties);
                 RecordsAffected = query.RecordsAffected;
                 ReturnsRecords = query.ReturnsRecords;
                 //try { StillExecuting = query.StillExecuting; } catch { }

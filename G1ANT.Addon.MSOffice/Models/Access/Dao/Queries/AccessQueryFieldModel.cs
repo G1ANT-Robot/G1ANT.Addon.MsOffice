@@ -24,7 +24,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
         //public string ForeignName { get; }
         public short OrdinalPosition { get; }
         //public dynamic OriginalValue { get; }
-        public Lazy<AccessQueryPropertyCollectionModel> Properties { get; }
+        public Lazy<AccessDaoPropertyCollectionModel> Properties { get; }
         public bool Required { get; }
         public int Size { get; }
         public string SourceField { get; }
@@ -44,7 +44,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
             //ForeignName = field.ForeignName;
             OrdinalPosition = field.OrdinalPosition;
             //OriginalValue = field.OriginalValue;
-            Properties = new Lazy<AccessQueryPropertyCollectionModel>(() => new AccessQueryPropertyCollectionModel(field.Properties));
+            Properties = new Lazy<AccessDaoPropertyCollectionModel>(() => new AccessDaoPropertyCollectionModel(field.Properties));
             Required = field.Required;
             Size = field.Size;
             SourceField = field.SourceField;

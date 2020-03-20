@@ -176,16 +176,20 @@
     <Compile Include="Controllers\Access\TooltipService.cs" />
     <Compile Include="Models\Access\AccessDynamicPropertiesModel.cs" />
     <Compile Include="Models\Access\AccessObjectReportCollectionModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessDaoPropertyCollection.cs" />
+    <Compile Include="Models\Access\Dao\AccessDaoPropertyCollectionModel.cs" />
     <Compile Include="Models\Access\Dao\AccessDaoPropertyModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessTableDefCollectionModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessTableDefFieldCollectionModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessTableDefFieldModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessTableDefIndexCollectionModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessTableDefIndexFieldCollectionModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessTableDefIndexFieldModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessTableDefIndexModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessTableDefModel.cs" />
+    <Compile Include="Models\Access\Dao\Containers\AccessContainerCollectionModel.cs" />
+    <Compile Include="Models\Access\Dao\Containers\AccessContainerModel.cs" />
+    <Compile Include="Models\Access\Dao\Documents\AccessDocumentCollectionModel.cs" />
+    <Compile Include="Models\Access\Dao\Documents\AccessDocumentModel.cs" />
+    <Compile Include="Models\Access\Dao\TableDefs\AccessTableDefCollectionModel.cs" />
+    <Compile Include="Models\Access\Dao\TableDefs\AccessTableDefFieldCollectionModel.cs" />
+    <Compile Include="Models\Access\Dao\TableDefs\AccessTableDefFieldModel.cs" />
+    <Compile Include="Models\Access\Dao\TableDefs\AccessTableDefIndexCollectionModel.cs" />
+    <Compile Include="Models\Access\Dao\TableDefs\AccessTableDefIndexFieldCollectionModel.cs" />
+    <Compile Include="Models\Access\Dao\TableDefs\AccessTableDefIndexFieldModel.cs" />
+    <Compile Include="Models\Access\Dao\TableDefs\AccessTableDefIndexModel.cs" />
+    <Compile Include="Models\Access\Dao\TableDefs\AccessTableDefModel.cs" />
     <Compile Include="Models\Access\Data\AccessObjectViewCollectionModel.cs" />
     <Compile Include="Models\Access\Data\AccessObjectTableCollectionModel.cs" />
     <Compile Include="Models\Access\Data\AccessObjectStoredProcedureCollectionModel.cs" />
@@ -193,15 +197,13 @@
     <Compile Include="Models\Access\Data\AccessObjectDatabaseDiagramCollectionModel.cs" />
     <Compile Include="Models\Access\Data\AccessObjectQueryCollectionModel.cs" />
     <Compile Include="Models\Access\AccessObjectMacroCollectionModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessQueryFieldCollectionModel.cs" />
+    <Compile Include="Models\Access\Dao\Queries\AccessQueryFieldCollectionModel.cs" />
     <Compile Include="Models\Access\AccessObjectFormCollectionModel.cs" />
     <Compile Include="Models\Access\AccessObjectCollectionModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessQueryCollectionModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessQueryFieldModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessQueryParameterCollectionModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessQueryParameterModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessQueryPropertyCollectionModel.cs" />
-    <Compile Include="Models\Access\Dao\AccessQueryPropertyModel.cs" />
+    <Compile Include="Models\Access\Dao\Queries\AccessQueryCollectionModel.cs" />
+    <Compile Include="Models\Access\Dao\Queries\AccessQueryFieldModel.cs" />
+    <Compile Include="Models\Access\Dao\Queries\AccessQueryParameterCollectionModel.cs" />
+    <Compile Include="Models\Access\Dao\Queries\AccessQueryParameterModel.cs" />
     <Compile Include="Models\Access\INameModel.cs" />
     <Compile Include="Models\Access\NameValueModel.cs" />
     <Compile Include="Models\Access\ModuleModel.cs" />
@@ -370,5 +372,6 @@
   <ItemGroup>
     <None Include="Resources\search.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

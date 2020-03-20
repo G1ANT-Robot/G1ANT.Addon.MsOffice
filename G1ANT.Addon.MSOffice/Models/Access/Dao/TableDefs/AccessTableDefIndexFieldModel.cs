@@ -10,12 +10,12 @@
 
 using System;
 
-namespace G1ANT.Addon.MSOffice.Models.Access.Dao
+namespace G1ANT.Addon.MSOffice.Models.Access.Dao.TableDefs
 {
     internal class AccessTableDefIndexFieldModel : INameModel
     {
         public string Name { get; }
-        public Lazy<AccessDaoPropertyCollection> Properties { get; }
+        public Lazy<AccessDaoPropertyCollectionModel> Properties { get; }
         public dynamic Value { get; }
 
         public AccessTableDefIndexFieldModel(dynamic indexField)
@@ -23,7 +23,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
             try
             {
                 Name = indexField.Name;
-                Properties = new Lazy<AccessDaoPropertyCollection>(() => new AccessDaoPropertyCollection(indexField.Properties));
+                Properties = new Lazy<AccessDaoPropertyCollectionModel>(() => new AccessDaoPropertyCollectionModel(indexField.Properties));
                 Value = indexField?.ToString();
             }
             catch { }

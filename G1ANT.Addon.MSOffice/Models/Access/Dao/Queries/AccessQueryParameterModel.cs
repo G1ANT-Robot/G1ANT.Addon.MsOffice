@@ -16,15 +16,17 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
     {
         public string Name { get; }
         public dynamic Value { get; }
-        public AccessQueryPropertyCollectionModel Properties { get; }
+        public AccessDaoPropertyCollectionModel Properties { get; }
         public string Type { get; }
 
         public AccessQueryParameterModel(Parameter parameter)
         {
             Name = parameter.Name;
             Value = parameter.Value;
-            Properties = new AccessQueryPropertyCollectionModel(parameter.Properties);
+            Properties = new AccessDaoPropertyCollectionModel(parameter.Properties);
             Type = ((DataTypeEnum)parameter.Type).ToString();
         }
+
+        public override string ToString() => $"{Name}: {Value}, type: {Type}";
     }
 }

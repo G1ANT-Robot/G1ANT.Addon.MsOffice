@@ -8,20 +8,18 @@
 *
 */
 
+using G1ANT.Addon.MSOffice.Models.Access.Dao.TableDefs;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace G1ANT.Addon.MSOffice.Models.Access.Dao
 {
-    internal class AccessDaoPropertyCollection : List<AccessDaoPropertyModel>
+    internal class AccessTableDefIndexFieldCollectionModel : List<AccessTableDefIndexFieldModel>
     {
-        public AccessDaoPropertyCollection(Microsoft.Office.Interop.Access.Dao.Properties properties)
+        public AccessTableDefIndexFieldCollectionModel(IEnumerable indexFields)
         {
-            try
-            {
-                AddRange(properties.Cast<Microsoft.Office.Interop.Access.Dao.Property>().Select(p => new AccessDaoPropertyModel(p)));
-            }
-            catch { }
+            AddRange(indexFields.Cast<dynamic>().Select(f => new AccessTableDefIndexFieldModel(f)));
         }
     }
 }

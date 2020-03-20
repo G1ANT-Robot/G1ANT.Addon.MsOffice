@@ -20,7 +20,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
         public bool IsClustered { get; }
         public bool IsForeign { get; }
         public bool IgnoreNulls { get; }
-        public Lazy<AccessDaoPropertyCollection> Properties { get; }
+        public Lazy<AccessDaoPropertyCollectionModel> Properties { get; }
         public bool IsUnique { get; }
         public int DistinctCount { get; }
         public dynamic Fields { get; }
@@ -34,7 +34,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
             IsClustered = index.Clustered;
             IsForeign = index.Foreign;
             IgnoreNulls = index.IgnoreNulls;
-            Properties = new Lazy<AccessDaoPropertyCollection>(() => new AccessDaoPropertyCollection(index.Properties));
+            Properties = new Lazy<AccessDaoPropertyCollectionModel>(() => new AccessDaoPropertyCollectionModel(index.Properties));
             IsUnique = index.Unique;
             DistinctCount = index.DistinctCount;
             Fields = new AccessTableDefIndexFieldCollectionModel(index.Fields);

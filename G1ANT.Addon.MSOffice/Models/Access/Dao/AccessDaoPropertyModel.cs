@@ -13,18 +13,18 @@ using System;
 
 namespace G1ANT.Addon.MSOffice.Models.Access.Dao
 {
-    internal class AccessDaoPropertyModel : INameModel
+    public class AccessDaoPropertyModel : INameModel
     {
         public string Name { get; }
         public string Value { get; }
-        public short Type { get; }
+        public DataTypeEnum Type { get; }
 
         public AccessDaoPropertyModel(Property property)
         {
             Name = property.Name;
             try { Value = property.Value?.ToString(); }
             catch (Exception ex) { Value = ex.Message; }
-            Type = property.Type;
+            Type = (DataTypeEnum)property.Type;
         }
 
         public override string ToString() => $"{Name}: {Value}, type: {Type}";

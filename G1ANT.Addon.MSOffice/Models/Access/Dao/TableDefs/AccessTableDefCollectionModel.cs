@@ -9,20 +9,16 @@
 */
 
 using Microsoft.Office.Interop.Access.Dao;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace G1ANT.Addon.MSOffice.Models.Access.Dao
 {
-    public class AccessQueryPropertyModel
+    internal class AccessTableDefCollectionModel : List<AccessTableDefModel>
     {
-        public string Name { get; }
-        public dynamic Value { get; }
-        public string PropertyType { get; }
-
-        public AccessQueryPropertyModel(Property property)
+        public AccessTableDefCollectionModel(Microsoft.Office.Interop.Access.Dao.TableDefs tableDefs)
         {
-            Name = property.Name;
-            PropertyType = ((DataTypeEnum)property.Type).ToString();
-            try { Value = property.Value; } catch { }
+            AddRange(tableDefs.Cast<TableDef>().Select(td => new AccessTableDefModel(td)));
         }
     }
 }

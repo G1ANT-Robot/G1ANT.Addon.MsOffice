@@ -17,7 +17,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
     {
         public string Name { get; }
         public TableDefAttributeEnum Attributes { get; }
-        public Lazy<AccessDaoPropertyCollection> Properties { get; }
+        public Lazy<AccessDaoPropertyCollectionModel> Properties { get; }
         public Lazy<AccessTableDefIndexCollectionModel> Indexes { get; }
         public Lazy<AccessTableDefFieldCollectionModel> Fields { get; }
         public int RecordCount { get; }
@@ -32,7 +32,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
             Name = tableDef.Name;
 
             Attributes = (TableDefAttributeEnum)tableDef.Attributes;
-            Properties = new Lazy<AccessDaoPropertyCollection>(() => new AccessDaoPropertyCollection(tableDef.Properties));
+            Properties = new Lazy<AccessDaoPropertyCollectionModel>(() => new AccessDaoPropertyCollectionModel(tableDef.Properties));
             Indexes = new Lazy<AccessTableDefIndexCollectionModel>(() => new AccessTableDefIndexCollectionModel(tableDef.Indexes));
             Fields = new Lazy<AccessTableDefFieldCollectionModel>(() => new AccessTableDefFieldCollectionModel(tableDef.Fields));
 
