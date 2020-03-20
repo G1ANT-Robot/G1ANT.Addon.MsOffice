@@ -91,15 +91,13 @@ namespace G1ANT.Addon.MSOffice.Panels
 
         private void acNormalToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
-            controller.TryOpenForm(model, false);
+            controller.TryOpenFormFromSelectedNode(false);
             // todo: replace current tree node with loaded form data
         }
 
         private void acDesignToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var model = (AccessObjectModel)controlsTree.SelectedNode.Tag;
-            controller.TryOpenForm(model, true);
+            controller.TryOpenFormFromSelectedNode(true);
             // todo: replace current tree node with loaded form data
         }
 

@@ -190,14 +190,33 @@ namespace G1ANT.Addon.MSOffice.Controllers
             }
         }
 
-        internal void TryOpenForm(AccessObjectModel formToLoad, bool openInDesigner)
+        internal void TryOpenFormFromSelectedNode(bool openInDesigner)
         {
+            var selectedNode = controlsTree.SelectedNode;
+            var model = (AccessObjectModel)selectedNode.Tag;
+
             var applicationModel = GetCurrentApplication();
             new Thread(() =>
             {
-                try { OpenForm(formToLoad, openInDesigner, applicationModel); }
+                try
+                {
+                    OpenForm(model, openInDesigner, applicationModel);
+                    var newNode = GetLoadedFormNode(applicationModel.Application, selectedNode.Text);
+                    controlsTree.FindForm().Invoke((MethodInvoker) delegate { ReplaceNode(selectedNode, newNode); });
+
+                }
                 catch (COMException ex) { RobotMessageBox.Show(ex.Message); }
             }).Start();
+        }
+
+        private void ReplaceNode(TreeNode oldNode, TreeNode newNode)
+        {
+            var isSelected = oldNode.IsSelected;
+            oldNode.Parent.Nodes[oldNode.Index] = newNode;
+            oldNode.Remove();
+
+            if (isSelected)
+                controlsTree.SelectedNode = newNode;
         }
 
         private RotApplicationModel GetCurrentApplication()
@@ -524,37 +543,37 @@ namespace G1ANT.Addon.MSOffice.Controllers
             return node.Nodes.Count == 1 && node.Nodes[0].Text == "";
         }
 
-
-        private List<TreeNode> GetFormNodes(RotApplicationModel rotApplicationModel)
+        private TreeNode GetLoadedFormNode(Microsoft.Office.Interop.Access.Application application, string formName)
         {
-            var result = new List<TreeNode>();
+            var formModel = new AccessFormModel(application.Forms[formName], false, false, false);
+
+            return new LazyTreeNode(formModel.ToString(), () => GetControlNodes(formModel))
+            {
+                Tag = formModel,
+                ToolTipText = tooltipService.GetTooltip(formModel)
+            };
+        }
+
+        private IEnumerable<TreeNode> GetFormNodes(RotApplicationModel rotApplicationModel)
+        {
             var formAccessObjects = new AccessObjectFormCollectionModel(rotApplicationModel);
+
             foreach (var accessObject in formAccessObjects.OrderByDescending(f => f.IsLoaded).ThenBy(f => f.Name))
             {
                 TreeNode childNode;
 
                 if (accessObject.IsLoaded)
                 {
-                    var formModel = new AccessFormModel(rotApplicationModel.Application.Forms[accessObject.Name], false, false, false);
-
-                    childNode = new LazyTreeNode(formModel.ToString(), () => GetControlNodes(formModel))
-                    {
-                        Tag = formModel,
-                        ToolTipText = tooltipService.GetTooltip(formModel)
-                    };
+                    yield return GetLoadedFormNode(rotApplicationModel.Application, accessObject.Name);
                 }
                 else
                 {
-                    childNode = new TreeNode(accessObject.ToString()) {
+                    yield return childNode = new TreeNode(accessObject.ToString()) {
                         Tag = accessObject,
                         ToolTipText = tooltipService.GetTooltip(accessObject)
                     };
                 }
-
-                result.Add(childNode);
             }
-
-            return result;
         }
 
 
