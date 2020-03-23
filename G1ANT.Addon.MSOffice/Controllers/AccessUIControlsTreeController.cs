@@ -677,16 +677,16 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
             accessFormModel.LoadControls(false);
 
-            foreach (var childModel in accessFormModel.Controls)
-            {
-                var childNode = new LazyTreeNode(childModel.ToString(), () => GetControlNodes(childModel))
-                {
-                    Tag = childModel,
-                    ToolTipText = GetDetailedString(childModel),
-                };
-
-                result.Add(childNode);
-            }
+            result.AddRange(
+                accessFormModel.Controls.Select(
+                    cn => new LazyTreeNode(
+                        cn.ToString(),
+                        () => GetControlNodes(cn)
+                    )
+                    { Tag = cn, ToolTipText = GetDetailedString(cn) }
+                )
+            );
+                
 
             return result;
         }

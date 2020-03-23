@@ -240,7 +240,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             return model.Name == Name ? 0 : 1; // names of controls seem to be unique
         }
 
-        public override string ToString() => $"{Caption} {Name} {Type} {Value}";
+        public override string ToString() => $"{(string.IsNullOrEmpty(Caption) ? "" : Caption + " ")}{Name} {Type} {Value}";
 
         public string ToDetailedString()
         {
@@ -248,7 +248,8 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 
             result.AppendLine($"Type: {Type}\r\n");
             result.AppendLine($"Name: {Name}");
-            result.AppendLine($"Caption: {Caption}");
+            if (!string.IsNullOrEmpty(Caption))
+                result.AppendLine($"Caption: {Caption}");
             if (Value != null)
                 result.AppendLine($"Value: {Value}");
 
