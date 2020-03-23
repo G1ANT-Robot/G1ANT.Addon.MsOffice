@@ -140,33 +140,18 @@ namespace G1ANT.Addon.MSOffice
 
         internal void RunSql(string sql, bool useTransaction = false) => application.DoCmd.RunSQL(sql, useTransaction);
 
-
-        private AcView ToAcView(string viewType)
+        internal string ApplyPrefix(string prefix, string name)
         {
-            const string prefix = "acView";
-
-            if (!viewType.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase))
-                viewType = prefix + viewType;
-            return (AcView)Enum.Parse(typeof(AcView), viewType, true);
+            return name.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase) ? name : (prefix + name);
         }
 
-        private AcFormView ToAcFormView(string viewFormType)
-        {
-            const string prefix = "ac";
+        private T ToEnum<T>(string fieldName, string prefixToApply = "ac") => (T)Enum.Parse(typeof(T), ApplyPrefix(prefixToApply, fieldName), true);
 
-            if (!viewFormType.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase))
-                viewFormType = prefix + viewFormType;
-            return (AcFormView)Enum.Parse(typeof(AcFormView), viewFormType, true);
-        }
-
-        private AcWindowMode ToAcWindowMode(string windowMode)
-        {
-            const string prefix = "ac";
-            if (!windowMode.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase))
-                windowMode = prefix + windowMode;
-            return (AcWindowMode)Enum.Parse(typeof(AcWindowMode), windowMode, true);
-        }
-
+        private AcView ToAcView(string viewType) => ToEnum<AcView>(viewType, "acView");
+        private AcFormView ToAcFormView(string viewFormType) => ToEnum<AcFormView>(viewFormType);
+        private AcWindowMode ToAcWindowMode(string windowMode) => ToEnum<AcWindowMode>(windowMode);
+        private AcPrintRange ToAcPrintRange(string printRange) => ToEnum<AcPrintRange>(printRange);
+        private AcPrintQuality ToAcPrintQuality(string printRange) => ToEnum<AcPrintQuality>(printRange);
 
         private AcOpenDataMode ToAcOpenDataMode(bool createNew, bool openReadonly)
         {
@@ -551,6 +536,11 @@ namespace G1ANT.Addon.MSOffice
 
         public AccessPrinterCollectionModel GetPrinters() => new AccessPrinterCollectionModel(application.Printers);
         public AccessPrinterModel GetCurrentPrinter() => new AccessPrinterModel(application.Printer);
+        public void SetCurrentPrinter(string name) => application.Printer = application.Printers[name];
+        public void PrintActiveObject(string printRange = "PrintAll", int pageFrom = 0, int pageTo = 0, string printQuality = "High", int copyCount = 1, bool collateCopies = true)
+        {
+            application.DoCmd.PrintOut(ToAcPrintRange(printRange), pageFrom, pageTo, ToAcPrintQuality(printQuality), copyCount, collateCopies);
+        }
 
         public void SetNewPassword(string oldPassword, string newPassword) => application.CodeDb().NewPassword(oldPassword, newPassword);
 

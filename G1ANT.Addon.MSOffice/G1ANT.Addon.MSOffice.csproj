@@ -129,6 +129,7 @@
     <Compile Include="Commands\Access\Data\AccessExecuteSqlCommand.cs" />
     <Compile Include="Commands\Access\Data\Views\AccessGetViewDetailsCommand.cs" />
     <Compile Include="Commands\Access\Data\Views\AccessGetViewsCommand.cs" />
+    <Compile Include="Commands\Access\Printers\AccessPrintCommand.cs" />
     <Compile Include="Commands\Access\Printers\AccessGetCurrentPrinterCommand.cs" />
     <Compile Include="Commands\Access\Printers\AccessGetPrintersCommand.cs" />
     <Compile Include="Forms\DataTableForm.cs">
