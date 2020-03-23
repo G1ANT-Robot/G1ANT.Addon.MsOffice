@@ -8,6 +8,8 @@
 *
 */
 
+using G1ANT.Addon.MSOffice.Models.Access.AccessObjects;
+
 namespace G1ANT.Addon.MSOffice.Models.Access.Data
 {
     public class AccessObjectDatabaseDiagramCollectionModel : AccessObjectCollectionModel

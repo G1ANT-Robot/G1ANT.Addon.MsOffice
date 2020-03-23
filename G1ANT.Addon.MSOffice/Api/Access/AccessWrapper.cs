@@ -11,6 +11,7 @@
 using G1ANT.Addon.MSOffice.Access;
 using G1ANT.Addon.MSOffice.Api.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
+using G1ANT.Addon.MSOffice.Models.Access.AccessObjects;
 using G1ANT.Addon.MSOffice.Models.Access.Dao;
 using G1ANT.Addon.MSOffice.Models.Access.Data;
 using G1ANT.Addon.MSOffice.Models.Access.Printers;

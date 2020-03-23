@@ -12,7 +12,7 @@ using Microsoft.Office.Interop.Access;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace G1ANT.Addon.MSOffice.Models.Access
+namespace G1ANT.Addon.MSOffice.Models.Access.AccessObjects
 {
     public class AccessObjectCollectionModel : List<AccessObjectModel>
     {

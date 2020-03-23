@@ -8,7 +8,7 @@
 *
 */
 
-namespace G1ANT.Addon.MSOffice.Models.Access
+namespace G1ANT.Addon.MSOffice.Models.Access.AccessObjects
 {
     public class AccessObjectFormCollectionModel : AccessObjectCollectionModel
     {

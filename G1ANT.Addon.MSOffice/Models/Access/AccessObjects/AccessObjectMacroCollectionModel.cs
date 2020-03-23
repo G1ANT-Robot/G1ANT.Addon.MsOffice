@@ -8,15 +8,15 @@
 *
 */
 
-namespace G1ANT.Addon.MSOffice.Models.Access
+namespace G1ANT.Addon.MSOffice.Models.Access.AccessObjects
 {
-    public class AccessObjectReportCollectionModel : AccessObjectCollectionModel
+    public class AccessObjectMacroCollectionModel : AccessObjectCollectionModel
     {
-        public AccessObjectReportCollectionModel(RotApplicationModel rotApplicationModel)
+        public AccessObjectMacroCollectionModel(RotApplicationModel rotApplicationModel)
         {
             try
             {
-                Initialize(rotApplicationModel.Application.CurrentProject.AllReports);
+                Initialize(rotApplicationModel.Application.CurrentProject.AllMacros);
             }
             catch
             { }

@@ -129,6 +129,7 @@
     <Compile Include="Commands\Access\Data\AccessExecuteSqlCommand.cs" />
     <Compile Include="Commands\Access\Data\Views\AccessGetViewDetailsCommand.cs" />
     <Compile Include="Commands\Access\Data\Views\AccessGetViewsCommand.cs" />
+    <Compile Include="Commands\Access\Printers\AccessSetCurrentPrinterCommand.cs" />
     <Compile Include="Commands\Access\Printers\AccessPrintCommand.cs" />
     <Compile Include="Commands\Access\Printers\AccessGetCurrentPrinterCommand.cs" />
     <Compile Include="Commands\Access\Printers\AccessGetPrintersCommand.cs" />
@@ -176,13 +177,12 @@
     <Compile Include="Commands\Access\Forms\Properties\AccessSetFormDynamicPropertyCommand.cs" />
     <Compile Include="Commands\Access\Forms\Properties\AccessSetFormPropertyCommand.cs" />
     <Compile Include="Commands\Access\Macros\AccessRunProcedureCommand.cs" />
-    <Compile Include="Controllers\Access\ITooltipService.cs" />
-    <Compile Include="Controllers\Access\TooltipService.cs" />
     <Compile Include="Models\Access\AccessApplicationModel.cs" />
     <Compile Include="Models\Access\AccessCurrentProjectModel.cs" />
-    <Compile Include="Models\Access\AccessDynamicPropertiesModel.cs" />
-    <Compile Include="Models\Access\AccessObjectPropertyCollectionModel.cs" />
-    <Compile Include="Models\Access\AccessObjectReportCollectionModel.cs" />
+    <Compile Include="Models\Access\Properties\AccessDynamicPropertyCollectionModel.cs" />
+    <Compile Include="Models\Access\Properties\AccessDynamicPropertyModel.cs" />
+    <Compile Include="Models\Access\Properties\AccessObjectPropertyCollectionModel.cs" />
+    <Compile Include="Models\Access\AccessObjects\AccessObjectReportCollectionModel.cs" />
     <Compile Include="Models\Access\Dao\AccessDaoPropertyCollectionModel.cs" />
     <Compile Include="Models\Access\Dao\AccessDaoPropertyModel.cs" />
     <Compile Include="Models\Access\Dao\Containers\AccessContainerCollectionModel.cs" />
@@ -203,17 +203,20 @@
     <Compile Include="Models\Access\Data\AccessObjectFunctionCollectionModel.cs" />
     <Compile Include="Models\Access\Data\AccessObjectDatabaseDiagramCollectionModel.cs" />
     <Compile Include="Models\Access\Data\AccessObjectQueryCollectionModel.cs" />
-    <Compile Include="Models\Access\AccessObjectMacroCollectionModel.cs" />
+    <Compile Include="Models\Access\AccessObjects\AccessObjectMacroCollectionModel.cs" />
     <Compile Include="Models\Access\Dao\Queries\AccessQueryFieldCollectionModel.cs" />
-    <Compile Include="Models\Access\AccessObjectFormCollectionModel.cs" />
-    <Compile Include="Models\Access\AccessObjectCollectionModel.cs" />
+    <Compile Include="Models\Access\AccessObjects\AccessObjectFormCollectionModel.cs" />
+    <Compile Include="Models\Access\AccessObjects\AccessObjectCollectionModel.cs" />
     <Compile Include="Models\Access\Dao\Queries\AccessQueryCollectionModel.cs" />
     <Compile Include="Models\Access\Dao\Queries\AccessQueryFieldModel.cs" />
     <Compile Include="Models\Access\Dao\Queries\AccessQueryParameterCollectionModel.cs" />
     <Compile Include="Models\Access\Dao\Queries\AccessQueryParameterModel.cs" />
+    <Compile Include="Models\Access\Data\AccessReportCollectionModel.cs" />
+    <Compile Include="Models\Access\Data\AccessReportModel.cs" />
+    <Compile Include="Models\Access\IDetailedNameModel.cs" />
     <Compile Include="Models\Access\INameModel.cs" />
     <Compile Include="Models\Access\NameValueModel.cs" />
-    <Compile Include="Models\Access\ModuleModel.cs" />
+    <Compile Include="Models\Access\Modules\ModuleModel.cs" />
     <Compile Include="Models\Access\Printers\AccessPrinterCollectionModel.cs" />
     <Compile Include="Models\Access\Printers\AccessPrinterModel.cs" />
     <Compile Include="Models\Access\ResourceModel.cs" />
@@ -283,8 +286,8 @@
     <Compile Include="Models\Access\AccessMacroModel.cs" />
     <Compile Include="Models\Access\AccessControlModel.cs" />
     <Compile Include="Models\Access\AccessFormModel.cs" />
-    <Compile Include="Models\Access\AccessObjectModel.cs" />
-    <Compile Include="Models\Access\AccessObjectPropertyModel.cs" />
+    <Compile Include="Models\Access\AccessObjects\AccessObjectModel.cs" />
+    <Compile Include="Models\Access\Properties\AccessObjectPropertyModel.cs" />
     <Compile Include="Models\Access\ItemDataCollectionModel.cs" />
     <Compile Include="Models\Access\SelectedItemDataCollectionModel.cs" />
     <Compile Include="Models\Access\TempVars\TempVarCollectionModel.cs" />
@@ -379,6 +382,8 @@
   <ItemGroup>
     <None Include="Resources\search.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Controllers\Access\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

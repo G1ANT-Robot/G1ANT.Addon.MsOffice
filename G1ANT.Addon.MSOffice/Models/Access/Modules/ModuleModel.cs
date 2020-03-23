@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace G1ANT.Addon.MSOffice.Models.Access
+namespace G1ANT.Addon.MSOffice.Models.Access.Modules
 {
     internal class ModuleModel : INameModel
     {

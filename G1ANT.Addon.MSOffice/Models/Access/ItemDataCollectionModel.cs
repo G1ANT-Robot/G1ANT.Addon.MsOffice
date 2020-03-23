@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class ItemDataCollectionModel : List<ItemDataModel>
+    internal class ItemDataCollectionModel : List<ItemDataModel>
     {
         public ItemDataCollectionModel(AccessControlModel control)
         {

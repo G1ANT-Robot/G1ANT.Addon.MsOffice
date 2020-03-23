@@ -1,11 +1,12 @@
 ﻿using G1ANT.Addon.MSOffice.Api.Access;
-using G1ANT.Addon.MSOffice.Controllers.Access;
 using G1ANT.Addon.MSOffice.Forms;
 using G1ANT.Addon.MSOffice.Models.Access;
+using G1ANT.Addon.MSOffice.Models.Access.AccessObjects;
 using G1ANT.Addon.MSOffice.Models.Access.Dao;
 using G1ANT.Addon.MSOffice.Models.Access.Dao.Containers;
 using G1ANT.Addon.MSOffice.Models.Access.Dao.Documents;
 using G1ANT.Addon.MSOffice.Models.Access.Data;
+using G1ANT.Addon.MSOffice.Models.Access.Modules;
 using G1ANT.Addon.MSOffice.Models.Access.Printers;
 using G1ANT.Addon.MSOffice.Models.Access.VBE;
 using G1ANT.Language;
@@ -55,7 +56,6 @@ namespace G1ANT.Addon.MSOffice.Controllers
         private IMainForm mainForm;
         public bool initialized = false;
         private readonly IRunningObjectTableService runningObjectTableService;
-        private readonly ITooltipService tooltipService;
         private readonly TreeView controlsTree;
         private readonly ComboBox applications;
         public List<TreeNode> expandedTreeNodes = new List<TreeNode>();
@@ -63,12 +63,10 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         public AccessUIControlsTreeController(
             TreeView controlsTree, ComboBox applications,
-            IRunningObjectTableService runningObjectTableService,
-            ITooltipService tooltipService
+            IRunningObjectTableService runningObjectTableService
         )
         {
             this.runningObjectTableService = runningObjectTableService;
-            this.tooltipService = tooltipService;
             this.controlsTree = controlsTree;
             this.applications = applications;
 
@@ -147,7 +145,10 @@ namespace G1ANT.Addon.MSOffice.Controllers
                     new LazyTreeNode(ApplicationLabel, () => GetApplicationNodes(rotApplicationModel)) { Tag = rotApplicationModel },
                     new LazyTreeNode(FormsLabel, () => GetFormNodes(rotApplicationModel)) { Tag = rotApplicationModel },
                     new LazyTreeNode(MacrosLabel, () => GetAccessObjectNodes(new AccessObjectMacroCollectionModel(rotApplicationModel))) { Tag = rotApplicationModel },
-                    new LazyTreeNode(ReportsLabel, () => GetAccessObjectNodes(new AccessObjectReportCollectionModel(rotApplicationModel))) { Tag = rotApplicationModel },
+                    
+                    //new LazyTreeNode(ReportsLabel, () => GetAccessObjectNodes(new AccessObjectReportCollectionModel(rotApplicationModel))) { Tag = rotApplicationModel },
+                    new LazyTreeNode(ReportsLabel, () => GetReportNodes(rotApplicationModel)),
+
                     new LazyTreeNode(ResourcesLabel, () => GetResourceNodes()) { Tag = rotApplicationModel },
                     new LazyTreeNode(ModulesLabel, () => GetModuleNodes() ) { Tag = rotApplicationModel },
                     new TreeNode(DatabaseLabel) {
@@ -186,6 +187,15 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
             ApplyExpandedTreeNodes(controlsTree.Nodes);
             controlsTree.EndUpdate();
+        }
+
+        private IEnumerable<TreeNode> GetReportNodes(RotApplicationModel rotApplicationModel)
+        {
+            return new AccessReportCollectionModel(rotApplicationModel.Application.Reports).Select(
+                r => new LazyTreeNode(r.ToString()) { Tag = r }
+                    .Add(new LazyTreeNode(PropertiesLabel, () => r.Properties.Value.Select(p => new TreeNode(p.ToString()))))
+                    .AddRange(() => GetObjectPropertiesAsTreeNodes(r))
+             );
         }
 
         private IEnumerable<TreeNode> GetContainerNodes(RotApplicationModel rotApplicationModel)
@@ -262,7 +272,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 {
                     OpenForm(model, openInDesigner, application);
                     var newNode = GetLoadedFormNode(application, selectedNode.Text);
-                    controlsTree.FindForm().Invoke((MethodInvoker) delegate { ReplaceNode(selectedNode, newNode); });
+                    controlsTree.FindForm().Invoke((MethodInvoker)delegate { ReplaceNode(selectedNode, newNode); });
 
                 }
                 catch (COMException ex) { RobotMessageBox.Show(ex.Message); }
@@ -594,10 +604,14 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 .Select(rm => new TreeNode(rm.ToString()) { Tag = rm });
         }
 
+        private string GetDetailedString(object @object)
+        {
+            return @object is IDetailedNameModel dnm ? dnm.ToDetailedString() : @object?.ToString();
+        }
 
         private IEnumerable<TreeNode> GetAccessObjectNodes(AccessObjectCollectionModel objects)
         {
-            return objects.Select(o => new TreeNode(o.ToString()) { Tag = o, ToolTipText = tooltipService.GetTooltip(o) });
+            return objects.Select(o => new TreeNode(o.ToString()) { Tag = o, ToolTipText = GetDetailedString(o) });
         }
 
 
@@ -607,10 +621,11 @@ namespace G1ANT.Addon.MSOffice.Controllers
             return queries.Select(q => new LazyTreeNode(
                 q.ToString(),
                 () => GetQueryDetailsPropertyNodes(q)
-            ) { Tag = q, ToolTipText = tooltipService.GetTooltip(q), });
+            )
+            { Tag = q, ToolTipText = GetDetailedString(q), });
         }
 
- 
+
         private bool IsEmptyNode(TreeNode node)
         {
             return node.Nodes.Count == 1 && node.Nodes[0].Text == "";
@@ -623,7 +638,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
             return new LazyTreeNode(formModel.ToString(), () => GetControlNodes(formModel))
             {
                 Tag = formModel,
-                ToolTipText = tooltipService.GetTooltip(formModel)
+                ToolTipText = GetDetailedString(formModel)
             };
         }
 
@@ -641,9 +656,10 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 }
                 else
                 {
-                    yield return childNode = new TreeNode(accessObject.ToString()) {
+                    yield return childNode = new TreeNode(accessObject.ToString())
+                    {
                         Tag = accessObject,
-                        ToolTipText = tooltipService.GetTooltip(accessObject)
+                        ToolTipText = GetDetailedString(accessObject)
                     };
                 }
             }
@@ -670,7 +686,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 var childNode = new LazyTreeNode(childModel.ToString(), () => GetControlNodes(childModel))
                 {
                     Tag = childModel,
-                    ToolTipText = tooltipService.GetTooltip(childModel),
+                    ToolTipText = GetDetailedString(childModel),
                 };
 
                 result.Add(childNode);
@@ -700,7 +716,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
                     cm => new LazyTreeNode(
                         cm.ToString(),
                         () => GetControlNodes(cm)
-                    ) { Tag = cm, ToolTipText = tooltipService.GetTooltip(cm) }
+                    )
+                    { Tag = cm, ToolTipText = GetDetailedString(cm) }
                 ));
             }
             return result;
@@ -708,9 +725,9 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         private IEnumerable<TreeNode> CreateDynamicPropertyNodes(MSAccess.Properties properties)
         {
-            return new AccessDynamicPropertiesModel(properties)
-                .OrderBy(p => p.Key)
-                .Select(p => new TreeNode($"{p.Key}: {p.Value}"));
+            return new AccessDynamicPropertyCollectionModel(properties)
+                .OrderBy(p => p.Name)
+                .Select(p => new TreeNode($"{p.Name}: {p.Value}"));
         }
 
         private IEnumerable<TreeNode> CreatePropertyNodes(object accessObject)

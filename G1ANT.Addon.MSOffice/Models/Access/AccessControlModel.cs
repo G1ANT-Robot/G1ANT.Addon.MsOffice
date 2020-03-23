@@ -16,11 +16,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class AccessControlModel : IComparable, INameModel
+    internal class AccessControlModel : IComparable, INameModel, IDetailedNameModel
     {
         public string Name { get; }
         public string Type { get; }
@@ -43,7 +44,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public ICollection<AccessControlModel> Children;
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public AccessDynamicPropertiesModel Properties;
+        public AccessDynamicPropertyCollectionModel Properties;
 
 
         public AccessControlModel(_Control control, bool getProperties = true, bool getChildrenRecursively = true)
@@ -69,7 +70,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 
         public void LoadProperties()
         {
-            Properties = new AccessDynamicPropertiesModel(Control.Properties);
+            Properties = new AccessDynamicPropertyCollectionModel(Control.Properties);
         }
 
         internal void SetValue(string value)
@@ -104,7 +105,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
                 .ToList();
         }
 
-        internal AccessDynamicPropertiesModel GetDynamicProperties() => new AccessDynamicPropertiesModel(Control.Properties);
+        internal AccessDynamicPropertyCollectionModel GetDynamicProperties() => new AccessDynamicPropertyCollectionModel(Control.Properties);
 
         internal T TryGetPropertyValue<T>(string name)
         {
@@ -240,5 +241,18 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         }
 
         public override string ToString() => $"{Caption} {Name} {Type} {Value}";
+
+        public string ToDetailedString()
+        {
+            var result = new StringBuilder();
+
+            result.AppendLine($"Type: {Type}\r\n");
+            result.AppendLine($"Name: {Name}");
+            result.AppendLine($"Caption: {Caption}");
+            if (Value != null)
+                result.AppendLine($"Value: {Value}");
+
+            return result.ToString();
+        }
     }
 }

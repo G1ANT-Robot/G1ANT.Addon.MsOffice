@@ -12,10 +12,11 @@ using Microsoft.Office.Interop.Access.Dao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace G1ANT.Addon.MSOffice.Models.Access.Dao
 {
-    public class AccessQueryModel : INameModel
+    public class AccessQueryModel : INameModel, IDetailedNameModel
     {
         public string Name { get; }
         public Lazy<AccessQueryDetailsModel> Details;
@@ -26,7 +27,27 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
             Details = new Lazy<AccessQueryDetailsModel>(() => new AccessQueryDetailsModel(query));
         }
 
+
         public override string ToString() => Name;
+
+        public string ToDetailedString()
+        {
+            var result = new StringBuilder();
+
+            result.AppendLine($"Name: {Name}");
+            //result.AppendLine($"Type: {Type}");
+            //result.AppendLine($"DateCreated: {DateCreated}");
+            //result.AppendLine($"DateModified: {LastUpdated}");
+            //result.AppendLine($"Connect: {Connect}");
+            ////result.AppendLine($"Fields: {string.Join(", ", Fields.Select(f => f.Name))}");
+            //result.AppendLine($"RecordsAffected: {RecordsAffected}");
+            //result.AppendLine($"ReturnsRecords: {ReturnsRecords}");
+            //result.AppendLine($"SQL: {SQL}");
+            //result.AppendLine($"Type: {Type}");
+            //result.AppendLine($"Updatable: {Updatable}");
+
+            return result.ToString();
+        }
     }
 
     public class AccessQueryDetailsModel : INameModel

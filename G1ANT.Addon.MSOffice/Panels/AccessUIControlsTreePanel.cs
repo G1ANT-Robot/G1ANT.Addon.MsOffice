@@ -1,7 +1,7 @@
 ﻿using G1ANT.Addon.MSOffice.Api.Access;
 using G1ANT.Addon.MSOffice.Controllers;
-using G1ANT.Addon.MSOffice.Controllers.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
+using G1ANT.Addon.MSOffice.Models.Access.AccessObjects;
 using G1ANT.Addon.MSOffice.Models.Access.Dao;
 using G1ANT.Language;
 using System;
@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace G1ANT.Addon.MSOffice.Panels
 {
-    [Panel(Name = "Access forms and controls tree", DockingSide = DockingSide.Right, InitialAppear = false, Width = 400, 
+    [Panel(Name = "Access forms and controls tree", DockingSide = DockingSide.Right, InitialAppear = false, Width = 400,
         Description = "Panel with Access forms and controls tree")]
     public partial class AccessControlsTreePanel : RobotPanel
     {
@@ -26,8 +26,7 @@ namespace G1ANT.Addon.MSOffice.Panels
             this.controller = controller ?? new AccessUIControlsTreeController(
                 controlsTree,
                 comboBox1,
-                new RunningObjectTableService(),
-                new TooltipService()
+                new RunningObjectTableService()
             );
         }
 
@@ -73,7 +72,7 @@ namespace G1ANT.Addon.MSOffice.Panels
                 return;
             }
             var clickedModel = clickedNode.Tag;
-            
+
             //todo: move to controller and use constants
             loadFormToolStripMenuItem.Available = clickedModel is AccessObjectModel && clickedNode.Parent?.Text == "Forms";
 

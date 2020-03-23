@@ -12,7 +12,7 @@ using Microsoft.Office.Interop.Access;
 
 namespace G1ANT.Addon.MSOffice.Access
 {
-    public interface IAccessFormControlsTreeWalker
+    internal interface IAccessFormControlsTreeWalker
     {
         AccessControlModel GetAccessControlByPath(Application application, string path);
         AccessControlModel GetAccessControlByPath(Application application, ControlPathModel controlPath);

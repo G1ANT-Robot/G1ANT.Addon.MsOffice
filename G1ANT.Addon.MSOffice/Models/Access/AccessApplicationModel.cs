@@ -1,4 +1,5 @@
-﻿using Microsoft.Office.Interop.Access;
+﻿using G1ANT.Addon.MSOffice.Models.Access.VBE;
+using Microsoft.Office.Interop.Access;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
@@ -13,6 +14,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public string ActiveDatasheet { get; }
         public string ActiveForm { get; }
         public string ActiveReport { get; }
+        public VbeModel VBE { get; }
         public AccessCurrentProjectModel CurrentProject { get; }
 
         public AccessApplicationModel(Application application)
@@ -31,6 +33,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             }
             catch { }
 
+            VBE = new VbeModel(application.VBE);
             CurrentProject = new AccessCurrentProjectModel(application?.CurrentProject);
         }
     }

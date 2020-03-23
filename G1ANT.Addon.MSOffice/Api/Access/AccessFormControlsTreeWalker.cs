@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace G1ANT.Addon.MSOffice.Access
 {
-    public class AccessFormControlsTreeWalker : IAccessFormControlsTreeWalker
+    internal class AccessFormControlsTreeWalker : IAccessFormControlsTreeWalker
     {
         public AccessControlModel GetAccessControlByPath(Application application, string path)
         {

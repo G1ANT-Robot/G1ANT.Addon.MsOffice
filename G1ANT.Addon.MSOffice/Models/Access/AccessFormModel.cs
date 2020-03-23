@@ -14,10 +14,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class AccessFormModel : IComparable, INameModel
+    internal class AccessFormModel : IComparable, INameModel, IDetailedNameModel
     {
         public string Name { get; }
 
@@ -45,7 +46,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public ICollection<AccessControlModel> Controls { get; private set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public AccessDynamicPropertiesModel Properties { get; }
+        public AccessDynamicPropertyCollectionModel Properties { get; }
 
         public AccessFormModel(Form form, bool getFormProperties, bool getControls, bool getControlsProperties)
         {
@@ -64,7 +65,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             X = form.WindowLeft;
             Y = form.WindowTop;
 
-            Properties = !getFormProperties || form.Properties.Count == 0 ? null : new AccessDynamicPropertiesModel(form.Properties);
+            Properties = !getFormProperties || form.Properties.Count == 0 ? null : new AccessDynamicPropertyCollectionModel(form.Properties);
             if (getControls)
                 LoadControls(getControlsProperties);
         }
@@ -84,7 +85,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
                 .ToList();
         }
 
-        internal AccessDynamicPropertiesModel GetDynamicProperties() => new AccessDynamicPropertiesModel(Form.Properties);
+        internal AccessDynamicPropertyCollectionModel GetDynamicProperties() => new AccessDynamicPropertyCollectionModel(Form.Properties);
 
 
         internal object GetPropertyValue(string name)
@@ -113,6 +114,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             }
         }
 
+
         public int CompareTo(object obj)
         {
             if (obj == null)
@@ -129,6 +131,24 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             return model.Name == this.Name ? 0 : 1; // names of forms seem to be unique
         }
 
+
         public override string ToString() => $"{Name}{(Name != Caption ? " " + Caption : "")}{(Name != FormName ? " " + FormName : "")}";
+
+        public string ToDetailedString()
+        {
+            var result = new StringBuilder();
+
+            result.AppendLine($"Name: {Name}");
+            result.AppendLine($"Caption: {Caption}");
+            if (FormName != Name)
+                result.AppendLine($"FormName: {FormName}");
+            result.AppendLine($"Height: {Height}");
+            result.AppendLine($"Width: {Width}");
+            result.AppendLine($"X: {X}");
+            result.AppendLine($"Y: {Y}");
+
+            return result.ToString();
+        }
+
     }
 }

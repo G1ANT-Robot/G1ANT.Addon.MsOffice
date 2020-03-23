@@ -8,18 +8,24 @@
 *
 */
 
+
 namespace G1ANT.Addon.MSOffice.Models.Access
 {
-    public class AccessObjectMacroCollectionModel : AccessObjectCollectionModel
+    internal class AccessDynamicPropertyModel : INameModel
     {
-        public AccessObjectMacroCollectionModel(RotApplicationModel rotApplicationModel)
+        public string Name { get; }
+        public string Value { get; }
+
+        public AccessDynamicPropertyModel(dynamic property)
         {
             try
             {
-                Initialize(rotApplicationModel.Application.CurrentProject.AllMacros);
+                Name = property.Name;
+                Value = property.Value?.ToString();
             }
-            catch
-            { }
+            catch { }
         }
+
+        public override string ToString() => $"{Name}: {Value}";
     }
 }

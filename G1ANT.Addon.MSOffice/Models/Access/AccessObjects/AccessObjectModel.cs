@@ -10,10 +10,11 @@
 
 using Microsoft.Office.Interop.Access;
 using System;
+using System.Text;
 
-namespace G1ANT.Addon.MSOffice.Models.Access
+namespace G1ANT.Addon.MSOffice.Models.Access.AccessObjects
 {
-    public class AccessObjectModel : IComparable, INameModel
+    public class AccessObjectModel : IComparable, INameModel, IDetailedNameModel
     {
         public AccessObject Object { get; }
         public string Name { get; }
@@ -55,5 +56,22 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         }
 
         public override string ToString() => $"{Name}{(Name != FullName ? " " + FullName : "")}";// {(IsLoaded ? "" : "(not loaded)")}";
+
+        public string ToDetailedString()
+        {
+            var result = new StringBuilder();
+
+            result.AppendLine($"Name: {Name}");
+            result.AppendLine($"FullName: {FullName}");
+            result.AppendLine($"Type: {TypeName}");
+            result.AppendLine($"IsLoaded: {IsLoaded}");
+            result.AppendLine($"IsWeb: {IsWeb}");
+            result.AppendLine($"Attributes: {Attributes}");
+            result.AppendLine($"DateCreated: {DateCreated}");
+            result.AppendLine($"DateModified: {DateModified}");
+
+            return result.ToString();
+        }
+
     }
 }

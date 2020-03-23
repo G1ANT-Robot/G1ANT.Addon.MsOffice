@@ -8,6 +8,7 @@
 *
 */
 
+using G1ANT.Addon.MSOffice.Models.Access.AccessObjects;
 using Microsoft.Office.Interop.Access;
 
 namespace G1ANT.Addon.MSOffice.Models.Access.Data
