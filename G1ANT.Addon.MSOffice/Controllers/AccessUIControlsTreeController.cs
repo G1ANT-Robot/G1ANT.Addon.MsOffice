@@ -210,7 +210,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
             return new TreeNode[] {
                 new LazyTreeNode(
                     PropertiesLabel,
-                    () => GetObjectPropertiesAsTreeNodes(model.Properties.Value)
+                    () => model.Properties.Value.Select(p => new TreeNode(p.ToString()))
                 ),
                 new LazyTreeNode(
                     DocumentsLabel,
@@ -223,16 +223,12 @@ namespace G1ANT.Addon.MSOffice.Controllers
         {
             foreach (var document in documents)
             {
-                yield return new LazyTreeNode(
-                    document.Name,
-                    () => new List<TreeNode>()
-                    {
-                        new LazyTreeNode(
-                            PropertiesLabel,
-                            () => document.Properties.Select(p => new TreeNode( p.ToString() ))
-                        )
-                    }.Concat(GetObjectPropertiesAsTreeNodes(document))
-                 );
+                yield return new LazyTreeNode(document.Name)
+                    .Add(new LazyTreeNode(
+                        PropertiesLabel,
+                        () => document.Properties.Select(p => new TreeNode(p.ToString()))
+                    ))
+                    .AddRange(() => GetObjectPropertiesAsTreeNodes(document));
             }
 
         }
