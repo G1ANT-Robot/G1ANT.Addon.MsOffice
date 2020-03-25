@@ -122,6 +122,8 @@
     <Compile Include="Commands\Access\Data\Functions\AccessGetFunctionsCommand.cs" />
     <Compile Include="Commands\Access\Data\Queries\AccessGetQueriesCommand.cs" />
     <Compile Include="Commands\Access\Data\Queries\AccessGetQueryDetailsCommand.cs" />
+    <Compile Include="Commands\Access\Data\Reports\AccessGetReportPropertyCommand.cs" />
+    <Compile Include="Commands\Access\Data\Reports\AccessSetReportPropertyCommand.cs" />
     <Compile Include="Commands\Access\Data\StoredProcedures\AccessGetStoredProcedureDetailsCommand.cs" />
     <Compile Include="Commands\Access\Data\StoredProcedures\AccessGetStoredProceduresCommand.cs" />
     <Compile Include="Commands\Access\Data\Tables\AccessGetTableDetailsCommand.cs" />
@@ -133,6 +135,11 @@
     <Compile Include="Commands\Access\Printers\AccessPrintCommand.cs" />
     <Compile Include="Commands\Access\Printers\AccessGetCurrentPrinterCommand.cs" />
     <Compile Include="Commands\Access\Printers\AccessGetPrintersCommand.cs" />
+    <Compile Include="Commands\Access\Data\Reports\AccessCloseReportCommand.cs" />
+    <Compile Include="Commands\Access\Data\Reports\AccessGetReportsCommand.cs" />
+    <Compile Include="Commands\Access\Data\Reports\AccessGetReportDetailsCommand.cs" />
+    <Compile Include="Commands\Access\Data\Reports\AccessOpenReportCommand.cs" />
+    <Compile Include="Commands\Access\Projects\AccessCreateProjectCommand.cs" />
     <Compile Include="Forms\DataTableForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -147,7 +154,7 @@
     <Compile Include="Commands\Access\Application\AccessKillOrphanedProcessesCommand.cs" />
     <Compile Include="Commands\Access\Application\AccessJoinCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessRunSqlCommand.cs" />
-    <Compile Include="Commands\Access\AccessOpenProjectCommand.cs" />
+    <Compile Include="Commands\Access\Projects\AccessOpenProjectCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessGetControlValueCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessSetControlValueCommand.cs" />
     <Compile Include="Commands\Access\Controls\Properties\AccessGetControlDynamicPropertyCommand.cs" />

@@ -30,9 +30,55 @@ namespace G1ANT.Addon.MSOffice
         private string path;
         private Application application = null;
         private readonly IAccessFormControlsTreeWalker accessFormControlsTreeWalker;
+
         private readonly IRunningObjectTableService runningObjectTableService;
 
         internal int Id { get; }
+
+        internal void CreateAccessProject(string path, string connectionString = null)
+        {
+            application.CreateAccessProject(path, connectionString);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="typeOfObjectToExport">Possible values: Form, Function, Query, Report ServerView, StoredProcedure, Table</param>
+        /// <param name="objectName"></param>
+        /// <param name="destinationPath"></param>
+        /// <param name="destinationPathForSchema">The path for the exported schema information. If this argument is omitted, schema information is not exported to a separate XML file.</param>
+        /// <param name="destinationPathForPresentation">The path for the exported presentation information. If this argument is omitted, presentation information is not exported.</param>
+        /// <param name="destinationDirectoryForImages">The directory for exported images. If this argument is omitted, images are not exported.</param>
+        /// <param name="useUTF16ForEncoding">true for UTF16, false for UTF8</param>
+        /// <param name="otherFlags">Values: EmbedSchema, ExcludePrimaryKeyAndIndexes, RunFromServer, LiveReportSource, PersistReportML, ExportAllTableAndFieldProperties</param>
+        /// <param name="whereCondition">Specifies a subset of records to be exported.</param>
+        /// <param name="additionalData">Specifies additional tables to export. This argument is ignored if the OtherFlags argument is set to acLiveReportSource.</param>
+        internal void ExportXML(
+            string typeOfObjectToExport,
+            string objectName,
+            string destinationPath,
+            string destinationPathForSchema = null,
+            string destinationPathForPresentation = null,
+            string destinationDirectoryForImages = null,
+            bool useUTF16ForEncoding = false,
+            string otherFlags = null,
+            string whereCondition = null,
+            object additionalData = null
+        )
+        {
+            application.ExportXML(
+                ToEnum<AcExportXMLObjectType>(typeOfObjectToExport, "acExport"),
+                objectName,
+                destinationPath,
+                destinationPathForSchema,
+                destinationPathForPresentation,
+                destinationDirectoryForImages,
+                useUTF16ForEncoding ? AcExportXMLEncoding.acUTF16 : AcExportXMLEncoding.acUTF8,
+                otherFlags != null ? ToEnum<AcExportXMLOtherFlags>(otherFlags) : (AcExportXMLOtherFlags)0,
+                whereCondition,
+                additionalData
+            );
+        }
 
         internal List<string> GetQueryNames()
         {
@@ -40,7 +86,6 @@ namespace G1ANT.Addon.MSOffice
                 .Select(q => q.Name)
                 .ToList();
         }
-
 
         internal List<string> GetFunctionNames()
         {
@@ -77,6 +122,14 @@ namespace G1ANT.Addon.MSOffice
                 .ToList();
         }
 
+        internal List<string> GetReportNames()
+        {
+            return new AccessReportCollectionModel(application.Reports)
+                .Select(r => r.Name)
+                .ToList();
+        }
+
+        internal AccessReportModel GetReportDetails(string name) => new AccessReportModel(application, name);
         internal AccessObjectModel GetDatabaseDiagramDetails(string name) => new AccessObjectModel(application.CurrentData.AllStoredProcedures[name]);
         internal AccessObjectModel GetStoredProcedureDetails(string name) => new AccessObjectModel(application.CurrentData.AllDatabaseDiagrams[name]);
         internal AccessObjectModel GetViewDetails(string name) => new AccessObjectModel(application.CurrentData.AllViews[name]);
