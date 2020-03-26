@@ -627,10 +627,14 @@ namespace G1ANT.Addon.MSOffice.Controllers
             return node.Nodes.Count == 1 && node.Nodes[0].Text == "";
         }
 
-        private TreeNode GetLoadedFormNode(Microsoft.Office.Interop.Access.Application application, string formName)
+        private TreeNode GetLoadedFormNode(MSAccess.Application application, string formName)
         {
             var formModel = new AccessFormModel(application.Forms[formName], false, false, false);
+            return GetLoadedFormNode(formModel);
+        }
 
+        private TreeNode GetLoadedFormNode(AccessFormModel formModel)
+        {
             return new LazyTreeNode(formModel.ToString(), () => GetControlNodes(formModel))
             {
                 Tag = formModel,
@@ -667,26 +671,19 @@ namespace G1ANT.Addon.MSOffice.Controllers
             var result = new List<TreeNode>();
 
             result.Add(
-                new LazyTreeNode(
-                    PropertiesLabel,
-                    () => new List<TreeNode>() {
-                        new LazyTreeNode(DynamicPropertiesLabel, () => CreateDynamicPropertyNodes(accessFormModel.Form.Properties))
-                    }.Concat(CreatePropertyNodes(accessFormModel.Form))
-                )
+                new LazyTreeNode(PropertiesLabel)
+                    .Add(new LazyTreeNode(DynamicPropertiesLabel, () => CreateDynamicPropertyNodes(accessFormModel.Form.Properties)))
+                    .AddRange(() => CreatePropertyNodes(accessFormModel.Form))
             );
 
             accessFormModel.LoadControls(false);
 
             result.AddRange(
                 accessFormModel.Controls.Select(
-                    cn => new LazyTreeNode(
-                        cn.ToString(),
-                        () => GetControlNodes(cn)
-                    )
-                    { Tag = cn, ToolTipText = GetDetailedString(cn) }
+                    cn => new LazyTreeNode(cn.ToString(), () => GetControlNodes(cn)) { Tag = cn, ToolTipText = GetDetailedString(cn) }
                 )
             );
-                
+
 
             return result;
         }
@@ -695,13 +692,17 @@ namespace G1ANT.Addon.MSOffice.Controllers
         {
             var result = new List<TreeNode>();
 
+            if (accessControlModel.HasForm())
+            {
+                result.Add(new LazyTreeNode("Form").Add(
+                    GetLoadedFormNode(accessControlModel.GetForm())
+                ));
+            }
+
             result.Add(
-                new LazyTreeNode(
-                    PropertiesLabel,
-                    () => new List<TreeNode>() {
-                        new LazyTreeNode(DynamicPropertiesLabel, () => CreateDynamicPropertyNodes(accessControlModel.Control.Properties))
-                    }.Concat(CreatePropertyNodes(accessControlModel.Control))
-                )
+                new LazyTreeNode(PropertiesLabel)
+                .Add(new LazyTreeNode(DynamicPropertiesLabel, () => CreateDynamicPropertyNodes(accessControlModel.Control.Properties)))
+                .AddRange(() => CreatePropertyNodes(accessControlModel.Control))
             );
 
             if (accessControlModel.GetChildrenCount() > 0)

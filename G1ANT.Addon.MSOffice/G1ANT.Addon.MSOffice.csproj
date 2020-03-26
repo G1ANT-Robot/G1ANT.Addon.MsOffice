@@ -107,11 +107,13 @@
   <ItemGroup>
     <Compile Include="Api\Access\LazyTreeNode.cs" />
     <Compile Include="Commands\Access\AccessGetApplicationDetailsCommand.cs" />
+    <Compile Include="Commands\Access\Application\AccessNewCommand.cs" />
     <Compile Include="Commands\Access\Application\AccessSetNewPasswordCommand.cs" />
     <Compile Include="Commands\Access\Controls\AccessControlExecuteEventCommand.cs" />
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectDetailsCommand.cs" />
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectCommand.cs" />
     <Compile Include="Commands\Access\Controls\Dao\AccessGetControlSourceObjectNameCommand.cs" />
+    <Compile Include="Commands\Access\Controls\AccessGotoRecordCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessGetBaseConnectionStringCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessGetConnectionStringCommand.cs" />
     <Compile Include="Commands\Access\Data\AccessCommitTransactionCommand.cs" />
@@ -139,6 +141,8 @@
     <Compile Include="Commands\Access\Data\Reports\AccessGetReportsCommand.cs" />
     <Compile Include="Commands\Access\Data\Reports\AccessGetReportDetailsCommand.cs" />
     <Compile Include="Commands\Access\Data\Reports\AccessOpenReportCommand.cs" />
+    <Compile Include="Commands\Access\Projects\AccessImportObjectFromXmlCommand.cs" />
+    <Compile Include="Commands\Access\Projects\AccessExportObjectToXmlCommand.cs" />
     <Compile Include="Commands\Access\Projects\AccessCreateProjectCommand.cs" />
     <Compile Include="Forms\DataTableForm.cs">
       <SubType>Form</SubType>
@@ -226,7 +230,7 @@
     <Compile Include="Models\Access\Modules\ModuleModel.cs" />
     <Compile Include="Models\Access\Printers\AccessPrinterCollectionModel.cs" />
     <Compile Include="Models\Access\Printers\AccessPrinterModel.cs" />
-    <Compile Include="Models\Access\ResourceModel.cs" />
+    <Compile Include="Models\Access\Resources\ResourceModel.cs" />
     <Compile Include="Models\Access\RotApplicationModel.cs" />
     <Compile Include="Api\Access\RunningObjectTableService.cs" />
     <Compile Include="Api\Access\OleAccWrapper.cs" />
@@ -287,16 +291,16 @@
     <Compile Include="Commands\Excel\ExcelSwitchCommand.cs" />
     <Compile Include="Controllers\AccessUIControlsTreeController.cs" />
     <Compile Include="Helpers\ExcelHelper.cs" />
-    <Compile Include="Models\Access\ControlPathElementModel.cs" />
-    <Compile Include="Models\Access\ControlPathModel.cs" />
-    <Compile Include="Models\Access\ItemDataModel.cs" />
-    <Compile Include="Models\Access\AccessMacroModel.cs" />
-    <Compile Include="Models\Access\AccessControlModel.cs" />
-    <Compile Include="Models\Access\AccessFormModel.cs" />
+    <Compile Include="Models\Access\Controls\ControlPathElementModel.cs" />
+    <Compile Include="Models\Access\Controls\ControlPathModel.cs" />
+    <Compile Include="Models\Access\Controls\Items\ItemDataModel.cs" />
+    <Compile Include="Models\Access\Macros\AccessMacroModel.cs" />
+    <Compile Include="Models\Access\Controls\AccessControlModel.cs" />
+    <Compile Include="Models\Access\Forms\AccessFormModel.cs" />
     <Compile Include="Models\Access\AccessObjects\AccessObjectModel.cs" />
     <Compile Include="Models\Access\Properties\AccessObjectPropertyModel.cs" />
-    <Compile Include="Models\Access\ItemDataCollectionModel.cs" />
-    <Compile Include="Models\Access\SelectedItemDataCollectionModel.cs" />
+    <Compile Include="Models\Access\Controls\Items\ItemDataCollectionModel.cs" />
+    <Compile Include="Models\Access\Controls\Items\SelectedItemDataCollectionModel.cs" />
     <Compile Include="Models\Access\TempVars\TempVarCollectionModel.cs" />
     <Compile Include="Models\Access\TempVars\TempVarModel.cs" />
     <Compile Include="Models\Access\VBE\VbeAddinCollectionModel.cs" />

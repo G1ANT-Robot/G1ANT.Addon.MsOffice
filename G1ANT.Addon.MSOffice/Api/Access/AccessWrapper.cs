@@ -40,9 +40,7 @@ namespace G1ANT.Addon.MSOffice
             application.CreateAccessProject(path, connectionString);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <summary></summary>
         /// <param name="typeOfObjectToExport">Possible values: Form, Function, Query, Report ServerView, StoredProcedure, Table</param>
         /// <param name="objectName"></param>
         /// <param name="destinationPath"></param>
@@ -78,6 +76,14 @@ namespace G1ANT.Addon.MSOffice
                 whereCondition,
                 additionalData
             );
+        }
+
+        /// <summary></summary>
+        /// <param name="path"></param>
+        /// <param name="importOptions">StructureOnly, StructureAndData, AppendData</param>
+        internal void ImportXml(string path, string importOptions)
+        {
+            application.ImportXML(path, ToEnum<AcImportXMLOption>(importOptions));
         }
 
         internal List<string> GetQueryNames()
@@ -359,6 +365,12 @@ namespace G1ANT.Addon.MSOffice
                 : runningObjectTableService.GetNewestApplicationInstance();
         }
 
+        internal void New()
+        {
+            if (application != null)
+                throw new ApplicationException("Please close current instance or create new instance");
+            application = new Application();
+        }
 
         internal void Open(string path, string password = "", bool openExclusive = false, bool shouldShowApplication = true)
         {
@@ -430,10 +442,33 @@ namespace G1ANT.Addon.MSOffice
             return result.ToList();
         }
 
-        internal AccessFormModel GetForm(string formName)
+        /// <summary>Set selected record i.e. in subform</summary>
+        /// <param name="objectType">ActiveDataObject, DataTable, DataQuery, DataForm, DataReport, DataServerView, DataStoredProcedure, DataFunction</param>
+        /// <param name="objectName"></param>
+        /// <param name="operation">Previous, Next, First, Last, GoTo, NewRec</param>
+        /// <param name="offset"></param>
+        internal void GoToRecord(string objectType = "ActiveDataObject", string objectName = null, string operation = "Next", int offset = -1)
         {
-            var form = application.Forms[formName];
-            var result = new AccessFormModel(form, true, true, true);
+            var acDataObjectType = objectType == "ActiveDataObject" ? AcDataObjectType.acActiveDataObject : ToEnum<AcDataObjectType>(objectType);
+            if (acDataObjectType != AcDataObjectType.acActiveDataObject && string.IsNullOrEmpty(objectName))
+                throw new Exception($"{nameof(objectType)} differs from ActiveDataObject and {nameof(objectName)} is empty");
+
+            application.DoCmd.GoToRecord(acDataObjectType, objectName, ToEnum<AcRecord>(operation), offset);
+        }
+
+        internal AccessFormModel GetForm(string formNameOrPathToSubform, bool getFormProperties = true, bool getControls = true, bool getControlsProperties = false)
+        {
+            if (formNameOrPathToSubform.Contains("/"))
+            {
+                var control = GetControlByPath(formNameOrPathToSubform);
+                if (!control.HasForm())
+                {
+                    throw new ApplicationException("Selected control does not contain a subform");
+                }
+                return new AccessFormModel(control.Control.Form, getFormProperties, getControls, getControlsProperties);
+            }
+            var form = application.Forms[formNameOrPathToSubform];
+            var result = new AccessFormModel(form, getFormProperties, getControls, getControlsProperties);
 
             return result;
         }

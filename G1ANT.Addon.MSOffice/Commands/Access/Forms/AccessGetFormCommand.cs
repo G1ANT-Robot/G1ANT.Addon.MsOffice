@@ -19,7 +19,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Forms
     {
         public class Arguments : CommandArguments
         {
-            [Argument(Tooltip = "Name of form to get the details from", Required = true)]
+            [Argument(Tooltip = "Name of form to get the details from OR path to control of `SubForm` type (see `access.getcontrol` parameter `Name` for examples)", Required = true)]
             public TextStructure Name { get; set; }
 
             [Argument(Tooltip = "Name of a variable where the command's result will be stored")]

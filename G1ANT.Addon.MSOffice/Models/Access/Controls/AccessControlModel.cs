@@ -51,7 +51,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         {
             Control = control ?? throw new ArgumentNullException(nameof(control));
             Name = control.Name;
-            Type = ((AcControlType)this.TryGetDynamicPropertyValue<int>("ControlType")).ToString();
+            Type = ((AcControlType)TryGetPropertyValue<int>("ControlType")).ToString();
             Caption = TryGetPropertyValue<string>("Caption");
             Value = TryGetPropertyValue<string>("Value");
 
@@ -192,6 +192,13 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             return Control.Form != null ? new AccessFormModel(Control.Form, false, false, false) : null;
         }
 
+        public bool HasForm()
+        {
+            try { return Control.Form != null; }
+            catch { }
+
+            return false;
+        }
 
         public void Blink(string propertyName = "ForeColor")
         {
@@ -217,11 +224,14 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         private void Shake()
         {
             var random = new Random();
+            var originX = Top;
+            var originY = Left;
             for (var i = 0; i < 50; ++i)
             {
-                Control.Move(Top + random.Next(-200, 200), Left + random.Next(-200, 200));
+                Control.Move(originX + random.Next(-100, 100), originY + random.Next(-100, 100));
                 Thread.Sleep(50);
             }
+            Control.Move(originX, originY);
         }
 
         public int CompareTo(object obj)
@@ -247,7 +257,8 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             var result = new StringBuilder();
 
             result.AppendLine($"Type: {Type}\r\n");
-            result.AppendLine($"Name: {Name}");
+            if (!string.IsNullOrEmpty(Name))
+                result.AppendLine($"Name: {Name}");
             if (!string.IsNullOrEmpty(Caption))
                 result.AppendLine($"Caption: {Caption}");
             if (Value != null)
