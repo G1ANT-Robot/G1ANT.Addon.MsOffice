@@ -8,6 +8,7 @@
 *
 */
 
+using G1ANT.Addon.MSOffice.Models.Access.Dao.Properties;
 using System;
 
 namespace G1ANT.Addon.MSOffice.Models.Access.Dao.TableDefs

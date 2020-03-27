@@ -49,15 +49,13 @@ namespace G1ANT.Addon.MSOffice.Api.Access
             return this;
         }
 
-    //public LazyTreeNode(string text, params Func<IEnumerable<LazyTreeNode>>[] treeNodeFactories) : base(text)
-    //{
-    //    this.treeNodeFactories = treeNodeFactories;
+        internal LazyTreeNode Add(Func<TreeNode> treeNode)
+        {
+            treeNodeFactories.Add(() => new List<TreeNode>() { treeNode() });
+            return this;
+        }
 
-    //    Nodes.Add("");
-    //}
-
-
-    private bool IsEmpty()
+        private bool IsEmpty()
         {
             return Nodes.Count == 1 && Nodes[0].Text == "";
         }
@@ -67,10 +65,11 @@ namespace G1ANT.Addon.MSOffice.Api.Access
             if (IsEmpty())
             {
                 Nodes.Clear();
-                try { treeNodeFactories.ToList().ForEach(f => Nodes.AddRange(f().ToArray())); }
+                try {
+                    treeNodeFactories.ToList().ForEach(f => Nodes.AddRange(f().ToArray()));
+                }
                 catch { }
             }
         }
-
     }
 }

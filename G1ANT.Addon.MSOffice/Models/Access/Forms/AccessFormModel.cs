@@ -7,6 +7,7 @@
 *    See License.txt file in the project root for full license information.
 *
 */
+using G1ANT.Addon.MSOffice.Models.Access.Forms.Recordsets;
 using Microsoft.Office.Interop.Access;
 using Newtonsoft.Json;
 using System;
@@ -48,6 +49,8 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public AccessDynamicPropertyCollectionModel Properties { get; }
 
+        public Lazy<AccessRecordsetModel> Recordset { get; }
+
         public AccessFormModel(Form form, bool getFormProperties, bool getControls, bool getControlsProperties)
         {
             Form = form ?? throw new ArgumentNullException(nameof(form));
@@ -64,6 +67,8 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             Height = form.WindowHeight;
             X = form.WindowLeft;
             Y = form.WindowTop;
+
+            Recordset = new Lazy<AccessRecordsetModel>(() => new AccessRecordsetModel(Form.Recordset));
 
             Properties = !getFormProperties || form.Properties.Count == 0 ? null : new AccessDynamicPropertyCollectionModel(form.Properties);
             if (getControls)
@@ -150,5 +155,12 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             return result.ToString();
         }
 
+        internal bool HasRecordset()
+        {
+            try { return Form.Recordset != null; }
+            catch { }
+
+            return false;
+        }
     }
 }

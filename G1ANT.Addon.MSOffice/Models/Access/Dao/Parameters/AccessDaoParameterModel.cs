@@ -8,18 +8,19 @@
 *
 */
 
+using G1ANT.Addon.MSOffice.Models.Access.Dao.Properties;
 using Microsoft.Office.Interop.Access.Dao;
 
-namespace G1ANT.Addon.MSOffice.Models.Access.Dao
+namespace G1ANT.Addon.MSOffice.Models.Access.Dao.Parameters
 {
-    public class AccessQueryParameterModel
+    public class AccessDaoParameterModel
     {
         public string Name { get; }
         public dynamic Value { get; }
         public AccessDaoPropertyCollectionModel Properties { get; }
         public string Type { get; }
 
-        public AccessQueryParameterModel(Parameter parameter)
+        public AccessDaoParameterModel(Parameter parameter)
         {
             Name = parameter.Name;
             Value = parameter.Value;

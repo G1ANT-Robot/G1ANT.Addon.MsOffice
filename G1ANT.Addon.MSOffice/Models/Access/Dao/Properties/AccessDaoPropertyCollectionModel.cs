@@ -11,7 +11,7 @@
 using Microsoft.Office.Interop.Access.Dao;
 using System.Collections.Generic;
 
-namespace G1ANT.Addon.MSOffice.Models.Access.Dao
+namespace G1ANT.Addon.MSOffice.Models.Access.Dao.Properties
 {
     public class AccessDaoPropertyCollectionModel : List<AccessDaoPropertyModel>
     {

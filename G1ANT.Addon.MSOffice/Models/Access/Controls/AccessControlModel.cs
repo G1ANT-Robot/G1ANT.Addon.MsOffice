@@ -9,6 +9,7 @@
 */
 
 using G1ANT.Addon.MSOffice.Helpers.Access;
+using G1ANT.Addon.MSOffice.Models.Access.Data;
 using Microsoft.Office.Interop.Access;
 using Newtonsoft.Json;
 using System;
@@ -30,6 +31,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public int Left { get; }
         public int Width { get; }
         public int Height { get; }
+        public Lazy<AccessReportModel> Report { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Caption { get; private set; }
@@ -60,6 +62,9 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             Width = TryGetPropertyValue<int>("Width");
             Height = TryGetPropertyValue<int>("Height");
 
+
+            Report = new Lazy<AccessReportModel>(() => new AccessReportModel(Control.Report));
+
             if (getProperties && control.Properties.Count > 0)
                 LoadProperties();
 
@@ -68,10 +73,13 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         }
 
 
-        public void LoadProperties()
+        internal void LoadProperties()
         {
             Properties = new AccessDynamicPropertyCollectionModel(Control.Properties);
         }
+
+        internal int GetFormHwnd() => Control.Form.Hwnd;
+        internal int GetAppHwnd() => Control.Application.hWndAccessApp();
 
         internal void SetValue(string value)
         {
@@ -195,6 +203,14 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public bool HasForm()
         {
             try { return Control.Form != null; }
+            catch { }
+
+            return false;
+        }
+
+        public bool HasReport()
+        {
+            try { return Control.Report != null; }
             catch { }
 
             return false;

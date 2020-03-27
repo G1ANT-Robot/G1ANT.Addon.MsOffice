@@ -8,12 +8,13 @@
 *
 */
 
+using G1ANT.Addon.MSOffice.Models.Access.Dao.Properties;
 using Microsoft.Office.Interop.Access.Dao;
 using System;
 
-namespace G1ANT.Addon.MSOffice.Models.Access.Dao
+namespace G1ANT.Addon.MSOffice.Models.Access.Dao.Fields
 {
-    public class AccessQueryFieldModel
+    public class AccessDaoFieldModel
     {
         public string Name { get; }
         public string Attributes { get; }
@@ -33,7 +34,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
         //public dynamic Value { get; }
         //public dynamic VisibleValue { get; }
 
-        public AccessQueryFieldModel(Field field)
+        public AccessDaoFieldModel(Field field)
         {
             Name = field.Name;
             Attributes = ((FieldAttributeEnum)field.Attributes).ToString();

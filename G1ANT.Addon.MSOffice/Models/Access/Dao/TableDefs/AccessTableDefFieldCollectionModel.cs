@@ -16,7 +16,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
 {
     internal class AccessTableDefFieldCollectionModel : List<AccessTableDefFieldModel>
     {
-        public AccessTableDefFieldCollectionModel(Fields fields)
+        public AccessTableDefFieldCollectionModel(Microsoft.Office.Interop.Access.Dao.Fields fields)
         {
             AddRange(fields.Cast<Field>().Select(f => new AccessTableDefFieldModel(f)));
         }

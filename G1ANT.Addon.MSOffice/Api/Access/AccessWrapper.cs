@@ -13,6 +13,7 @@ using G1ANT.Addon.MSOffice.Api.Access;
 using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Addon.MSOffice.Models.Access.AccessObjects;
 using G1ANT.Addon.MSOffice.Models.Access.Dao;
+using G1ANT.Addon.MSOffice.Models.Access.Dao.QueryDefs;
 using G1ANT.Addon.MSOffice.Models.Access.Data;
 using G1ANT.Addon.MSOffice.Models.Access.Printers;
 using G1ANT.Language;
@@ -88,7 +89,7 @@ namespace G1ANT.Addon.MSOffice
 
         internal List<string> GetQueryNames()
         {
-            return new AccessQueryCollectionModel(application.CurrentDb())
+            return new AccessQueryDefCollectionModel(application.CurrentDb())
                 .Select(q => q.Name)
                 .ToList();
         }
@@ -141,7 +142,7 @@ namespace G1ANT.Addon.MSOffice
         internal AccessObjectModel GetViewDetails(string name) => new AccessObjectModel(application.CurrentData.AllViews[name]);
         internal AccessObjectModel GetFunctionDetails(string name) => new AccessObjectModel(application.CurrentData.AllFunctions[name]);
         internal AccessTableDefModel GetTableDetails(string name) => new AccessTableDefModel(application.CurrentDb().TableDefs[name]);
-        internal AccessQueryDetailsModel GetQueryDetails(string name) => new AccessQueryDetailsModel(application.CurrentDb().QueryDefs[name]);
+        internal AccessQueryDefDetailsModel GetQueryDetails(string name) => new AccessQueryDefDetailsModel(application.CurrentDb().QueryDefs[name]);
 
 
         internal AccessWrapper(

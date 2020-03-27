@@ -5,7 +5,10 @@ using G1ANT.Addon.MSOffice.Models.Access.AccessObjects;
 using G1ANT.Addon.MSOffice.Models.Access.Dao;
 using G1ANT.Addon.MSOffice.Models.Access.Dao.Containers;
 using G1ANT.Addon.MSOffice.Models.Access.Dao.Documents;
+using G1ANT.Addon.MSOffice.Models.Access.Dao.Properties;
+using G1ANT.Addon.MSOffice.Models.Access.Dao.QueryDefs;
 using G1ANT.Addon.MSOffice.Models.Access.Data;
+using G1ANT.Addon.MSOffice.Models.Access.Forms.Recordsets;
 using G1ANT.Addon.MSOffice.Models.Access.Modules;
 using G1ANT.Addon.MSOffice.Models.Access.Printers;
 using G1ANT.Addon.MSOffice.Models.Access.VBE;
@@ -36,7 +39,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
         private const string DatabaseLabel = "Database";
         private const string DatabaseDiagramsLabel = "Database Diagrams";
         private const string FunctionsLabel = "Functions";
-        private const string QueriesLabel = "Queries";
+        private const string QueryDefsLabel = "Query Definitions";
         private const string StoredProceduresLabel = "Stored Prodecures";
         private const string TablesLabel = "Tables";
         private const string FieldsLabel = "Fields";
@@ -44,6 +47,8 @@ namespace G1ANT.Addon.MSOffice.Controllers
         private const string ViewsLabel = "Views";
         private const string ContainersLabel = "Containers";
         private const string DocumentsLabel = "Documents";
+        private const string RecordsetsLabel = "Recordsets";
+        private const string RecordsetLabel = "Recordset";
 
         private const string PrintersLabel = "Printers";
 
@@ -125,9 +130,9 @@ namespace G1ANT.Addon.MSOffice.Controllers
         //    }
         //}
 
-        internal void SelectedApplicationChanged(RotApplicationModel rotApplicationModel)
+        internal void SelectedApplicationChanged(RotApplicationModel model)
         {
-            if (rotApplicationModel.Application == null)
+            if (model.Application == null)
             {
                 controlsTree.Nodes.Clear();
                 return;
@@ -139,46 +144,46 @@ namespace G1ANT.Addon.MSOffice.Controllers
             controlsTree.BeginUpdate();
             controlsTree.Nodes.Clear();
 
+            var currentDb = new Lazy<Database>(() => model.Application.CurrentDb());
+
             controlsTree.Nodes.AddRange(
                 new TreeNode[]
                 {
-                    new LazyTreeNode(ApplicationLabel, () => GetApplicationNodes(rotApplicationModel)) { Tag = rotApplicationModel },
-                    new LazyTreeNode(FormsLabel, () => GetFormNodes(rotApplicationModel)) { Tag = rotApplicationModel },
-                    new LazyTreeNode(MacrosLabel, () => GetAccessObjectNodes(new AccessObjectMacroCollectionModel(rotApplicationModel))) { Tag = rotApplicationModel },
+                    new LazyTreeNode(ApplicationLabel, () => GetApplicationNodes(model)) { Tag = model },
+                    new LazyTreeNode(FormsLabel, () => GetFormNodes(model)) { Tag = model },
+                    new LazyTreeNode(MacrosLabel, () => GetAccessObjectNodes(new AccessObjectMacroCollectionModel(model))) { Tag = model },
                     
                     //new LazyTreeNode(ReportsLabel, () => GetAccessObjectNodes(new AccessObjectReportCollectionModel(rotApplicationModel))) { Tag = rotApplicationModel },
-                    new LazyTreeNode(ReportsLabel, () => GetReportNodes(rotApplicationModel)),
+                    new LazyTreeNode(ReportsLabel, () => GetReportNodes(model)),
 
-                    new LazyTreeNode(ResourcesLabel, () => GetResourceNodes()) { Tag = rotApplicationModel },
-                    new LazyTreeNode(ModulesLabel, () => GetModuleNodes() ) { Tag = rotApplicationModel },
+                    new LazyTreeNode(ResourcesLabel, () => GetResourceNodes()) { Tag = model },
+                    new LazyTreeNode(ModulesLabel, () => GetModuleNodes() ) { Tag = model },
                     new TreeNode(DatabaseLabel) {
                         Nodes = {
                             new LazyTreeNode(
                                 DatabaseDiagramsLabel,
-                                () => GetAccessObjectNodes(new AccessObjectDatabaseDiagramCollectionModel(rotApplicationModel))
-                            ) { Tag = rotApplicationModel },
+                                () => GetAccessObjectNodes(new AccessObjectDatabaseDiagramCollectionModel(model))
+                            ) { Tag = model },
                             new LazyTreeNode(
                                 FunctionsLabel,
-                                () => GetAccessObjectNodes(new AccessObjectFunctionCollectionModel(rotApplicationModel))) { Tag = rotApplicationModel },
+                                () => GetAccessObjectNodes(new AccessObjectFunctionCollectionModel(model))) { Tag = model },
                             new LazyTreeNode(
-                                QueriesLabel,
-                                () => GetQueryNodes(rotApplicationModel)) { Tag = rotApplicationModel },
+                                QueryDefsLabel,
+                                () => GetQueryNodes(new AccessQueryDefCollectionModel(currentDb.Value))) { Tag = model },
                             new LazyTreeNode(
                                 StoredProceduresLabel,
-                                () => GetAccessObjectNodes(new AccessObjectStoredProcedureCollectionModel(rotApplicationModel))
-                            ) { Tag = rotApplicationModel },
+                                () => GetAccessObjectNodes(new AccessObjectStoredProcedureCollectionModel(model))
+                            ) { Tag = model },
                             new LazyTreeNode(
                                 TablesLabel,
-                                () => GetTableDefNodes(rotApplicationModel.Application.CurrentDb())
-                            ) { Tag = rotApplicationModel },
+                                () => GetTableDefNodes(new AccessTableDefCollectionModel(currentDb.Value.TableDefs))
+                            ) { Tag = model },
                             new LazyTreeNode(
                                 ViewsLabel,
-                                () => GetAccessObjectNodes(new AccessObjectViewCollectionModel(rotApplicationModel))
-                            ) { Tag = rotApplicationModel },
-                            new LazyTreeNode(
-                                ContainersLabel,
-                                () => GetContainerNodes(rotApplicationModel)
-                            ),
+                                () => GetAccessObjectNodes(new AccessObjectViewCollectionModel(model))
+                            ) { Tag = model },
+                            new LazyTreeNode(ContainersLabel, () => GetContainerNodes(new AccessContainerCollectionModel(currentDb.Value.Containers))),
+                            new LazyTreeNode(RecordsetsLabel,() => GetRecordsetNodes(new AccessRecordsetCollectionModel(currentDb.Value.Recordsets)))
                         },
                     },
                     new LazyTreeNode(PrintersLabel, () => GetPrinterNodes()),
@@ -189,20 +194,65 @@ namespace G1ANT.Addon.MSOffice.Controllers
             controlsTree.EndUpdate();
         }
 
-        private IEnumerable<TreeNode> GetReportNodes(RotApplicationModel rotApplicationModel)
+        private IEnumerable<TreeNode> GetRecordsetNodes(AccessRecordsetCollectionModel model)
         {
-            return new AccessReportCollectionModel(rotApplicationModel.Application.Reports).Select(
-                r => new LazyTreeNode(r.ToString()) { Tag = r }
-                    .Add(new LazyTreeNode(PropertiesLabel, () => r.Properties.Value.Select(p => new TreeNode(p.ToString()))))
-                    .AddRange(() => GetObjectPropertiesAsTreeNodes(r))
-             );
+            return model.Select(r => GetRecordsetNode(r));
         }
 
-        private IEnumerable<TreeNode> GetContainerNodes(RotApplicationModel rotApplicationModel)
+        private TreeNode GetRecordsetNode(AccessRecordsetModel model)
         {
-            return new AccessContainerCollectionModel(rotApplicationModel.Application.CurrentDb().Containers).Select(
-                c => new LazyTreeNode(c.ToString(), () => GetContainerDetailNodes(c))
-            );
+            var result = new LazyTreeNode(model.ToString()) { Tag = model }
+                .Add(new LazyTreeNode(FieldsLabel, () => model.Fields.Select(f => new LazyTreeNode(f.Name, () => GetObjectPropertiesAsTreeNodes(f)))));
+
+            if (model.Connection != null)
+                result.Add(new LazyTreeNode("Connection").Add(GetConnectionNode(model.Connection)));
+
+            result.AddRange(() => GetObjectPropertiesAsTreeNodes(model));
+
+            return result;
+        }
+
+        private TreeNode GetConnectionNode(AccessConnectionModel model)
+        {
+            return new LazyTreeNode(model.Name) { Tag = model }
+                .Add(() => new LazyTreeNode(QueryDefsLabel, () => GetQueryNodes(model.QueryDefs.Value)))
+                .Add(() => new LazyTreeNode(RecordsetsLabel, () => GetRecordsetNodes(model.Recordsets.Value)))
+                .Add(() => new LazyTreeNode(DatabaseLabel).Add(GetDatabaseNode(model.Database.Value)))
+                .AddRange(() => GetObjectPropertiesAsTreeNodes(model));
+        }
+
+        private TreeNode GetDatabaseNode(AccessDatabaseModel model)
+        {
+            return new LazyTreeNode(model.ToString())
+                .Add(() => new LazyTreeNode(QueryDefsLabel, () => GetQueryNodes(model.QueryDefs.Value)))
+                .Add(() => new LazyTreeNode(RecordsetsLabel, () => GetRecordsetNodes(model.Recordsets.Value)))
+                .Add(() => new LazyTreeNode(PropertiesLabel, () => GetDaoPropertyNodes(model.Properties.Value)))
+                .Add(() => new LazyTreeNode("Connection").Add(GetConnectionNode(model.Connection.Value)))
+                .Add(() => new LazyTreeNode(ContainersLabel, () => GetContainerNodes(model.Containers.Value)))
+                .AddRange(() => GetObjectPropertiesAsTreeNodes(model));
+        }
+
+        private IEnumerable<TreeNode> GetDaoPropertyNodes(AccessDaoPropertyCollectionModel model)
+        {
+            return model.Select(p => new LazyTreeNode(p.ToString()));
+        }
+
+        private IEnumerable<TreeNode> GetReportNodes(RotApplicationModel rotApplicationModel)
+        {
+            return new AccessReportCollectionModel(rotApplicationModel.Application.Reports)
+                .Select(r => GetReportNode(r));
+        }
+
+        private TreeNode GetReportNode(AccessReportModel model)
+        {
+            return new LazyTreeNode(model.ToString()) { Tag = model }
+                .Add(new LazyTreeNode(PropertiesLabel, () => model.Properties.Value.Select(p => new TreeNode(p.ToString()))))
+                .AddRange(() => GetObjectPropertiesAsTreeNodes(model));
+        }
+
+        private IEnumerable<TreeNode> GetContainerNodes(AccessContainerCollectionModel model)
+        {
+            return model.Select(c => new LazyTreeNode(c.ToString(), () => GetContainerDetailNodes(c)));
         }
 
         private IEnumerable<TreeNode> GetContainerDetailNodes(AccessContainerModel model)
@@ -462,19 +512,19 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 .ToArray();
         }
 
-        private IEnumerable<TreeNode> GetQueryDetailsPropertyNodes(AccessQueryModel accessQueryModel)
+        private IEnumerable<TreeNode> GetQueryDetailsPropertyNodes(AccessQueryDefModel model)
         {
-            var details = accessQueryModel.Details.Value;
+            var details = model.Details.Value;
 
             return new TreeNode[]
             {
                 new LazyTreeNode(
-                    "Fields",
-                    () => details.Fields.Select(f => new LazyTreeNode(f.Name, () => GetObjectPropertiesAsTreeNodes(f)))
+                    FieldsLabel,
+                    () => details.Fields.Value.Select(f => new LazyTreeNode(f.Name, () => GetObjectPropertiesAsTreeNodes(f)))
                 ),
                 new LazyTreeNode(
                     ParametersLabel,
-                    () => details.Parameters.Select(p => new LazyTreeNode(
+                    () => details.Parameters.Value.Select(p => new LazyTreeNode(
                         p.ToString(),
                         () => p.Properties.Select(pp => new LazyTreeNode(
                             PropertiesLabel,
@@ -484,7 +534,7 @@ namespace G1ANT.Addon.MSOffice.Controllers
                 ),
                 new LazyTreeNode(
                     PropertiesLabel,
-                    () => details.Properties.Select(p => new TreeNode(p.ToString()))
+                    () => details.Properties.Value.Select(p => new TreeNode(p.ToString()))
                 ),
                 new TreeNode($"SQL: {details.SQL}"),
                 //new TreeNode($"Name: {details.Name}"),
@@ -499,11 +549,11 @@ namespace G1ANT.Addon.MSOffice.Controllers
             };
         }
 
-        private IEnumerable<TreeNode> GetTableDefNodes(Database database)
+        private IEnumerable<TreeNode> GetTableDefNodes(AccessTableDefCollectionModel model)
         {
-            var tableDefs = new AccessTableDefCollectionModel(database.TableDefs);
+            //var tableDefs = new AccessTableDefCollectionModel(database.TableDefs);
 
-            return tableDefs.Select(td => new TreeNode(
+            return model.Select(td => new TreeNode(
                 td.ToString(),
                 new TreeNode[] {
                     new LazyTreeNode(
@@ -611,10 +661,9 @@ namespace G1ANT.Addon.MSOffice.Controllers
         }
 
 
-        private IEnumerable<TreeNode> GetQueryNodes(RotApplicationModel rotApplicationModel)
+        private IEnumerable<TreeNode> GetQueryNodes(AccessQueryDefCollectionModel model)
         {
-            var queries = new AccessQueryCollectionModel(rotApplicationModel);
-            return queries.Select(q => new LazyTreeNode(
+            return model.Select(q => new LazyTreeNode(
                 q.ToString(),
                 () => GetQueryDetailsPropertyNodes(q)
             )
@@ -633,12 +682,12 @@ namespace G1ANT.Addon.MSOffice.Controllers
             return GetLoadedFormNode(formModel);
         }
 
-        private TreeNode GetLoadedFormNode(AccessFormModel formModel)
+        private TreeNode GetLoadedFormNode(AccessFormModel model)
         {
-            return new LazyTreeNode(formModel.ToString(), () => GetControlNodes(formModel))
+            return new LazyTreeNode(model.ToString(), () => GetFormDetailNodes(model))
             {
-                Tag = formModel,
-                ToolTipText = GetDetailedString(formModel)
+                Tag = model,
+                ToolTipText = GetDetailedString(model)
             };
         }
 
@@ -666,50 +715,62 @@ namespace G1ANT.Addon.MSOffice.Controllers
         }
 
 
-        private List<TreeNode> GetControlNodes(AccessFormModel accessFormModel)
+        private List<TreeNode> GetFormDetailNodes(AccessFormModel model)
         {
             var result = new List<TreeNode>();
 
+            if (model.HasRecordset())
+            {
+                result.Add(new LazyTreeNode(RecordsetLabel).Add(GetRecordsetNode(model.Recordset.Value)));
+            }
+
             result.Add(
                 new LazyTreeNode(PropertiesLabel)
-                    .Add(new LazyTreeNode(DynamicPropertiesLabel, () => CreateDynamicPropertyNodes(accessFormModel.Form.Properties)))
-                    .AddRange(() => CreatePropertyNodes(accessFormModel.Form))
+                    .Add(new LazyTreeNode(DynamicPropertiesLabel, () => CreateDynamicPropertyNodes(model.Form.Properties)))
+                    .AddRange(() => CreatePropertyNodes(model.Form))
             );
 
-            accessFormModel.LoadControls(false);
+            model.LoadControls(false);
 
             result.AddRange(
-                accessFormModel.Controls.Select(
+                model.Controls.Select(
                     cn => new LazyTreeNode(cn.ToString(), () => GetControlNodes(cn)) { Tag = cn, ToolTipText = GetDetailedString(cn) }
                 )
             );
 
-
             return result;
         }
 
-        private List<TreeNode> GetControlNodes(AccessControlModel accessControlModel)
+        private List<TreeNode> GetControlNodes(AccessControlModel model)
         {
             var result = new List<TreeNode>();
 
-            if (accessControlModel.HasForm())
+            if (model.HasForm())
             {
                 result.Add(new LazyTreeNode("Form").Add(
-                    GetLoadedFormNode(accessControlModel.GetForm())
+                    GetLoadedFormNode(model.GetForm())
+                ));
+            }
+
+            if (model.HasReport())
+            {
+                result.Add(new LazyTreeNode("Report").Add(
+                    () => GetReportNode(model.Report.Value)
                 ));
             }
 
             result.Add(
                 new LazyTreeNode(PropertiesLabel)
-                .Add(new LazyTreeNode(DynamicPropertiesLabel, () => CreateDynamicPropertyNodes(accessControlModel.Control.Properties)))
-                .AddRange(() => CreatePropertyNodes(accessControlModel.Control))
+                .Add(new LazyTreeNode(DynamicPropertiesLabel, () => CreateDynamicPropertyNodes(model.Control.Properties)))
+                .AddRange(() => CreatePropertyNodes(model.Control))
             );
 
-            if (accessControlModel.GetChildrenCount() > 0)
-            {
-                accessControlModel.LoadChildren(false);
 
-                result.AddRange(accessControlModel.Children.Select(
+            if (model.GetChildrenCount() > 0)
+            {
+                model.LoadChildren(false);
+
+                result.AddRange(model.Children.Select(
                     cm => new LazyTreeNode(
                         cm.ToString(),
                         () => GetControlNodes(cm)
