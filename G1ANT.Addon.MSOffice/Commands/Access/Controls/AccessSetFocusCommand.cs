@@ -7,7 +7,9 @@
 *    See License.txt file in the project root for full license information.
 *
 */
+
 using G1ANT.Language;
+using System;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
 {
@@ -26,6 +28,10 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Controls
         public void Execute(Arguments arguments)
         {
             var control = AccessManager.CurrentAccess.GetControlByPath(arguments.Path.Value);
+
+            var handle = (IntPtr)control.GetFormHwnd();
+            RobotWin32.BringWindowToFront(handle);
+            RobotWin32.ShowWindow(handle, RobotWin32.ShowWindowEnum.Maximize);
             control.SetFocus();
         }
     }
