@@ -10,7 +10,6 @@
 
 using G1ANT.Language;
 using Newtonsoft.Json.Linq;
-using System;
 
 namespace G1ANT.Addon.MSOffice.Commands.Access.Forms
 {
@@ -31,12 +30,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Forms
 
         public void Execute(Arguments arguments)
         {
-            var name = arguments.Name?.Object?.ToString();
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException(nameof(arguments.Name));
-
-            var currentAccess = AccessManager.CurrentAccess;
-            var result = currentAccess.GetForm(name);
+            var result = AccessManager.CurrentAccess.GetForm(arguments.Name.Value);
 
             Scripter.Variables.SetVariableValue(arguments.Result.Value, new JsonStructure(JObject.FromObject(result)));
         }
