@@ -55,5 +55,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Printers
             PrintQuality = printer.PrintQuality;
             RowSpacing = printer.RowSpacing;
         }
+
+        public override string ToString() => Name;
     }
 }

@@ -8,6 +8,7 @@
 *
 */
 
+using G1ANT.Addon.MSOffice.Models.Access.Dao.Fields;
 using G1ANT.Addon.MSOffice.Models.Access.Dao.Properties;
 using Microsoft.Office.Interop.Access.Dao;
 using System;
@@ -24,7 +25,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
         public Lazy<AccessDaoPropertyCollectionModel> Properties { get; }
         public bool IsUnique { get; }
         public int DistinctCount { get; }
-        public dynamic Fields { get; }
+        public Lazy<AccessDaoFieldCollectionModel> Fields { get; }
 
         public AccessTableDefIndexModel() { }
 
@@ -38,7 +39,10 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao
             Properties = new Lazy<AccessDaoPropertyCollectionModel>(() => new AccessDaoPropertyCollectionModel(index.Properties));
             IsUnique = index.Unique;
             DistinctCount = index.DistinctCount;
-            Fields = new AccessTableDefIndexFieldCollectionModel(index.Fields);
+            Fields = new Lazy<AccessDaoFieldCollectionModel>(() => new AccessDaoFieldCollectionModel(index.Fields));
+            //Fields = new Lazy<AccessTableDefIndexFieldCollectionModel>(() => new AccessTableDefIndexFieldCollectionModel(index.Fields));
         }
+
+
     }
 }

@@ -8,15 +8,19 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Forms.Recordsets
     {
         private Recordset recordset;
 
-        public AccessDaoFieldCollectionModel Fields { get; }
-        public string EditMode { get; }
-        public string Name { get; }
-        public Array LastModified { get; }
+        public Lazy<AccessDaoFieldCollectionModel> Fields { get; }
+        public EditModeEnum EditMode => (EditModeEnum)recordset.EditMode;
+        public string Name => recordset.Name;
+        public RecordsetTypeEnum Type => (RecordsetTypeEnum)recordset.Type;
 
-        //public dynamic Index { get; }
+        public DateTime? LastUpdated { get { try { return recordset.LastUpdated; } catch { return null; } } }
+        public DateTime? DateCreated { get { try { return recordset.DateCreated; } catch { return null; } } }
+
         public int AbsolutePosition { get => recordset.AbsolutePosition; set => recordset.AbsolutePosition = value; }
 
-        public int RecordCount { get => recordset.RecordCount; }
+        public int RecordCount => recordset.RecordCount;
+
+        public RecordStatusEnum RecordStatus { get { try { return (RecordStatusEnum)recordset.RecordStatus; } catch { return (RecordStatusEnum)(-1); } } }
 
         public string Sort { get => recordset.Sort; set => recordset.Sort = value; }
 
@@ -27,6 +31,10 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Forms.Recordsets
             get { try { return new AccessConnectionModel(recordset.Connection); } catch { return null; } }
             set => recordset.Connection = value.Connection;
         }
+
+        public Array LastModified => recordset.LastModified;
+
+        //public dynamic Index { get; }
 
         /// <summary>
         /// Sets or returns a value indicating the type of locking that is in effect while editing.
@@ -43,22 +51,15 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Forms.Recordsets
         /// <summary>End of a File</summary>
         public bool EOF => recordset.EOF;
 
-        public dynamic DateCreated { get; }
+
 
         public AccessRecordsetModel(Recordset recordset)
         {
             this.recordset = recordset;
 
-            Fields = new AccessDaoFieldCollectionModel(recordset.Fields);
-
-            EditMode = ((EditModeEnum)recordset.EditMode).ToString();
-
-            Name = recordset.Name;
-
+            Fields = new Lazy<AccessDaoFieldCollectionModel>(() => new AccessDaoFieldCollectionModel(recordset.Fields));
+            
             //Index = recordset.Index;
-
-            LastModified = recordset.LastModified;
-            try { DateCreated = recordset.DateCreated; } catch { }
         }
 
 

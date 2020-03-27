@@ -10,24 +10,27 @@
 
 using G1ANT.Addon.MSOffice.Models.Access.Dao.Properties;
 using Microsoft.Office.Interop.Access.Dao;
+using System;
 
 namespace G1ANT.Addon.MSOffice.Models.Access.Dao.Parameters
 {
-    public class AccessDaoParameterModel
+    public class AccessDaoParameterModel : INameModel, IDetailedNameModel
     {
         public string Name { get; }
         public dynamic Value { get; }
-        public AccessDaoPropertyCollectionModel Properties { get; }
+        public Lazy<AccessDaoPropertyCollectionModel> Properties { get; }
         public string Type { get; }
 
         public AccessDaoParameterModel(Parameter parameter)
         {
             Name = parameter.Name;
             Value = parameter.Value;
-            Properties = new AccessDaoPropertyCollectionModel(parameter.Properties);
+            Properties = new Lazy<AccessDaoPropertyCollectionModel>(() => new AccessDaoPropertyCollectionModel(parameter.Properties));
             Type = ((DataTypeEnum)parameter.Type).ToString();
         }
 
-        public override string ToString() => $"{Name}: {Value}, type: {Type}";
+        public override string ToString() => Name;
+
+        public string ToDetailedString() => $"{Name}: {Value}, type: {Type}";
     }
 }

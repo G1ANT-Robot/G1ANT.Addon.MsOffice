@@ -46,5 +46,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Forms.Recordsets
         {
             return new AccessRecordsetModel(Connection.OpenRecordset(name, type, options, lockEdit));
         }
+
+        public override string ToString() => Name;
     }
 }

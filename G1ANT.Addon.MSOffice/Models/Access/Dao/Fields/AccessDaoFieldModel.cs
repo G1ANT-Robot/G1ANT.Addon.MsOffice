@@ -14,7 +14,7 @@ using System;
 
 namespace G1ANT.Addon.MSOffice.Models.Access.Dao.Fields
 {
-    public class AccessDaoFieldModel
+    public class AccessDaoFieldModel : INameModel
     {
         public string Name { get; }
         public string Attributes { get; }
@@ -54,5 +54,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao.Fields
             //Value = field.Value;
             //VisibleValue = field.VisibleValue;
         }
+
+        public override string ToString() => Name;
     }
 }

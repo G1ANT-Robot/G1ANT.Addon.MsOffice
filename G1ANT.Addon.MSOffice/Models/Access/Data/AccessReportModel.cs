@@ -23,7 +23,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Data
         //public AccessControlModel DefaultControl { get => new AccessControlModel(Report.DefaultControl, false, false); }
         public Lazy<List<AccessControlModel>> Controls { get; }
         public Lazy<AccessDynamicPropertyCollectionModel> Properties { get; }
-        public Lazy<ModuleModel> Module { get; }
+        public Lazy<AccessModuleModel> Module { get; }
         public bool AllowDesignChanges { get => Report.AllowDesignChanges; set => Report.AllowDesignChanges = value; }
         public bool AllowLayoutView { get => Report.AllowLayoutView; set => Report.AllowLayoutView = value; }
         public bool AllowReportView { get => Report.AllowReportView; set => Report.AllowReportView = value; }
@@ -89,7 +89,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Data
             );
 
             Properties = new Lazy<AccessDynamicPropertyCollectionModel>(() => new AccessDynamicPropertyCollectionModel(report.Properties));
-            Module = new Lazy<ModuleModel>(() => new ModuleModel(report.Module));
+            Module = new Lazy<AccessModuleModel>(() => new AccessModuleModel(report.Module));
         }
 
         public AccessReportModel(Application application, string name) : this(application.Reports[name])

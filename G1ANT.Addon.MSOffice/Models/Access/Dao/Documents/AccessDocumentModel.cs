@@ -22,7 +22,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao.Documents
         public string Name { get; }
         public string Owner { get; }
         public int Permissions { get; }
-        public AccessDaoPropertyCollectionModel Properties { get; }
+        public Lazy<AccessDaoPropertyCollectionModel> Properties { get; }
         public string UserName { get; }
 
         public AccessDocumentModel(Document document)
@@ -36,7 +36,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Dao.Documents
                 Name = document.Name;
                 Owner = document.Owner;
                 Permissions = document.Permissions;
-                Properties = new AccessDaoPropertyCollectionModel(document.Properties);
+                Properties = new Lazy<AccessDaoPropertyCollectionModel>(() => new AccessDaoPropertyCollectionModel(document.Properties));
                 UserName = document.UserName;
             }
             catch { }

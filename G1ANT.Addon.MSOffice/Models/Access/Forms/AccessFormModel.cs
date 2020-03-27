@@ -24,34 +24,42 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public string Name { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string Value { get; }
+        internal string Value { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string Caption { get; }
+        internal string Caption { get; }
 
         [JsonIgnore]
-        public Form Form { get; }
+        internal Form Form { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string FormName { get; }
+        internal string FormName { get; }
 
-        public int Hwnd { get; }
-        public int InsideWidth { get; }
-        public short Width { get; }
-        public short Height { get; }
-        public short X { get; }
-        public short Y { get; }
-        public int InsideHeight { get; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public ICollection<AccessControlModel> Controls { get; private set; }
+        internal int Hwnd { get; }
+        internal int InsideWidth { get; }
+        internal short Width { get; }
+        internal short Height { get; }
+        internal short X { get; }
+        internal short Y { get; }
+        internal int InsideHeight { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public AccessDynamicPropertyCollectionModel Properties { get; }
+        internal ICollection<AccessControlModel> Controls { get; private set; }
 
-        public Lazy<AccessRecordsetModel> Recordset { get; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        internal Lazy<AccessDynamicPropertyCollectionModel> Properties { get; }
 
-        public AccessFormModel(Form form, bool getFormProperties, bool getControls, bool getControlsProperties)
+        internal Lazy<AccessRecordsetModel> Recordset { get; }
+        internal bool HasRecordset()
+        {
+            try { return Form.Recordset != null; }
+            catch { }
+
+            return false;
+        }
+
+
+        internal AccessFormModel(Form form, bool getFormProperties, bool getControls, bool getControlsProperties)
         {
             Form = form ?? throw new ArgumentNullException(nameof(form));
 
@@ -70,13 +78,13 @@ namespace G1ANT.Addon.MSOffice.Models.Access
 
             Recordset = new Lazy<AccessRecordsetModel>(() => new AccessRecordsetModel(Form.Recordset));
 
-            Properties = !getFormProperties || form.Properties.Count == 0 ? null : new AccessDynamicPropertyCollectionModel(form.Properties);
+            Properties = !getFormProperties || form.Properties.Count == 0 ? null : new Lazy<AccessDynamicPropertyCollectionModel>(() => new AccessDynamicPropertyCollectionModel(form.Properties));
             if (getControls)
                 LoadControls(getControlsProperties);
         }
 
 
-        public void LoadControls(bool getControlsProperties)
+        internal void LoadControls(bool getControlsProperties)
         {
             if (Form.Controls.Count > 0)
                 Controls = Form.Controls.Cast<Control>().Select(c => new AccessControlModel(c, getControlsProperties, false)).ToList();
@@ -153,14 +161,6 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             result.AppendLine($"Y: {Y}");
 
             return result.ToString();
-        }
-
-        internal bool HasRecordset()
-        {
-            try { return Form.Recordset != null; }
-            catch { }
-
-            return false;
         }
     }
 }

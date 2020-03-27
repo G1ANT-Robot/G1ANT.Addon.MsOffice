@@ -4,7 +4,7 @@ using System;
 
 namespace G1ANT.Addon.MSOffice.Models.Access.Modules
 {
-    internal class ModuleModel : INameModel
+    internal class AccessModuleModel : INameModel
     {
         public string Name { get; }
         public AcModuleType Type { get; }
@@ -15,7 +15,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Modules
         public int CountOfLines { get; }
         public string Code { get; }
 
-        public ModuleModel(Module module)
+        public AccessModuleModel(Module module)
         {
             Module = module ?? throw new ArgumentNullException(nameof(module));
             Name = module.Name;

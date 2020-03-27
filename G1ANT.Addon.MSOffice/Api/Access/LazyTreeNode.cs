@@ -1,4 +1,5 @@
-﻿using System;
+﻿using G1ANT.Addon.MSOffice.Models.Access;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -9,33 +10,23 @@ namespace G1ANT.Addon.MSOffice.Api.Access
     {
         private readonly List<Func<IEnumerable<TreeNode>>> treeNodeFactories;
 
-        //public LazyTreeNode(string text, Func<IEnumerable<TreeNode>> treeNodeFactory) : base(text)
-        //{
-        //    this.treeNodeFactories = new Func<IEnumerable<TreeNode>>[] { treeNodeFactory };
-
-        //    Nodes.Add("");
-        //}
-
-        //public LazyTreeNode(string text, params Func<IEnumerable<TreeNode>>[] treeNodeFactories) : base(text)
-        //{
-        //    this.treeNodeFactories = treeNodeFactories;
-
-        //    Nodes.Add("");
-        //}
-
-        public LazyTreeNode(string text, params Func<IEnumerable<TreeNode>>[] treeNodeFactories) : base(text)
-        {
-            this.treeNodeFactories = treeNodeFactories.ToList();
-
-            Nodes.Add("");
-        }
-
         public LazyTreeNode(string text) : base(text)
         {
             this.treeNodeFactories = new List<Func<IEnumerable<TreeNode>>>();
 
             Nodes.Add("");
         }
+
+        public LazyTreeNode(string text, object model) : this(text)
+        {
+            this.Tag = model;
+            if (model is IDetailedNameModel detailedModel)
+                this.ToolTipText = detailedModel.ToDetailedString();
+        }
+
+        public LazyTreeNode(INameModel model) : this(model.ToString(), model)
+        { }
+
 
         public LazyTreeNode Add(TreeNode treeNode)
         {
@@ -65,11 +56,14 @@ namespace G1ANT.Addon.MSOffice.Api.Access
             if (IsEmpty())
             {
                 Nodes.Clear();
-                try {
-                    treeNodeFactories.ToList().ForEach(f => Nodes.AddRange(f().ToArray()));
-                }
-                catch { }
+                treeNodeFactories.ToList().ForEach(f => Nodes.AddRange(f().ToArray()));
             }
+        }
+
+        internal LazyTreeNode EmptyChildren()
+        {
+            Nodes.Clear();
+            return this;
         }
     }
 }
