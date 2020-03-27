@@ -8,7 +8,6 @@
 *
 */
 
-using G1ANT.Addon.MSOffice.Models.Access.Forms.Recordsets;
 using G1ANT.Language;
 using Newtonsoft.Json.Linq;
 
@@ -32,7 +31,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Access.Forms
         public void Execute(Arguments arguments)
         {
             var form = AccessManager.CurrentAccess.GetForm(arguments.Name.Value, false, false, false);
-            var recordset = new AccessRecordsetModel(form.Form.Recordset);
+            var recordset = form.Recordset.Value;
 
             Scripter.Variables.SetVariableValue(arguments.Result.Value, new JsonStructure(JObject.FromObject(recordset)));
         }
