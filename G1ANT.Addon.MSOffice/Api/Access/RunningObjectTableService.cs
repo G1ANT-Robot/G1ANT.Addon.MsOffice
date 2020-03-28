@@ -61,7 +61,8 @@ namespace G1ANT.Addon.MSOffice.Api.Access
                     {
                         Name = app.Name,
                         Application = app,
-                        ApplicationMainHwnd = app.hWndAccessApp()
+                        ApplicationMainHwnd = app.hWndAccessApp(),
+                        ProcessId = process.Id
                     };
                 }
 

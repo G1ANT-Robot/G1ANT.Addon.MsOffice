@@ -10,5 +10,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.VBE
         {
             AddRange(projects.Cast<VBProject>().Select(p => new VbeProjectModel(p)));
         }
+
+        public override string ToString() => "Projects";
     }
 }

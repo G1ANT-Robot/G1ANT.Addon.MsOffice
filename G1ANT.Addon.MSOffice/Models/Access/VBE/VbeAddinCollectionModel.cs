@@ -10,5 +10,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.VBE
         {
             AddRange(addins.Cast<AddIn>().Select(a => new VbeAddinModel(a)));
         }
+
+        public override string ToString() => "Addins";
     }
 }

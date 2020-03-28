@@ -1,7 +1,8 @@
-﻿using G1ANT.Addon.MSOffice.Models.Access.VBE;
-using Microsoft.Office.Interop.Access;
+﻿using G1ANT.Addon.MSOffice.Models.Access.Application.TempVars;
+using G1ANT.Addon.MSOffice.Models.Access.VBE;
+using System;
 
-namespace G1ANT.Addon.MSOffice.Models.Access
+namespace G1ANT.Addon.MSOffice.Models.Access.Application
 {
     internal class AccessApplicationModel : INameModel
     {
@@ -14,10 +15,11 @@ namespace G1ANT.Addon.MSOffice.Models.Access
         public string ActiveDatasheet { get; }
         public string ActiveForm { get; }
         public string ActiveReport { get; }
-        public VbeModel VBE { get; }
-        public AccessCurrentProjectModel CurrentProject { get; }
+        public Lazy<VbeModel> VBE { get; }
+        public Lazy<AccessCurrentProjectModel> CurrentProject { get; }
+        public Lazy<AccessTempVarsCollectionModel> TempVars { get; }
 
-        public AccessApplicationModel(Application application)
+        public AccessApplicationModel(Microsoft.Office.Interop.Access.Application application)
         {
             ADOConnectString = application.ADOConnectString;
             Build = application.Build;
@@ -30,11 +32,13 @@ namespace G1ANT.Addon.MSOffice.Models.Access
                 ActiveDatasheet = application.Screen.ActiveDatasheet?.Name;
                 ActiveForm = application.Screen.ActiveForm?.Name;
                 ActiveReport = application.Screen.ActiveReport?.Name;
+
             }
             catch { }
 
-            VBE = new VbeModel(application.VBE);
-            CurrentProject = new AccessCurrentProjectModel(application?.CurrentProject);
+            TempVars = new Lazy<AccessTempVarsCollectionModel>(() => new AccessTempVarsCollectionModel(application.TempVars));
+            VBE = new Lazy<VbeModel>(() => new VbeModel(application.VBE));
+            CurrentProject = new Lazy<AccessCurrentProjectModel>(() => new AccessCurrentProjectModel(application.CurrentProject));
         }
     }
 }

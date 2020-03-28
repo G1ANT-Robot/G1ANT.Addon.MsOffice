@@ -7,7 +7,9 @@ namespace G1ANT.Addon.MSOffice.Models.Access.VBE
     {
         public VbeWindowCollectionModel(Microsoft.Vbe.Interop.Windows windows)
         {
-            AddRange(windows.Cast<dynamic>().Select(w => new VbeWindowModel(w)));
+            AddRange(windows.Cast<Microsoft.Vbe.Interop.Window>().Select(w => new VbeWindowModel(w)));
         }
+
+        public override string ToString() => "Windows";
     }
 }

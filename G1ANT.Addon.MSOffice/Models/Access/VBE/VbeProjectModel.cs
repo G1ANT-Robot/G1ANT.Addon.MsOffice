@@ -2,7 +2,7 @@
 
 namespace G1ANT.Addon.MSOffice.Models.Access.VBE
 {
-    internal class VbeProjectModel : INameModel
+    internal class VbeProjectModel : INameModel, IDetailedNameModel
     {
         public string FileName { get; }
         public string BuildFileName { get; }
@@ -29,6 +29,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.VBE
                 References = new VbeReferenceCollectionModel(project.References);
         }
 
-        public override string ToString() => $"{Name}, {Description}, {FileName}, mode: {Mode}, type: {Type}, saved: {Saved}";
+        public string ToDetailedString() => $"{Name}, {Description}, {FileName}, mode: {Mode}, type: {Type}, saved: {Saved}";
+        public override string ToString() => Name;
     }
 }

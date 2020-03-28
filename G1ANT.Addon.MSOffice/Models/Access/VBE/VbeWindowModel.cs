@@ -2,7 +2,7 @@
 
 namespace G1ANT.Addon.MSOffice.Models.Access.VBE
 {
-    internal class VbeWindowModel
+    internal class VbeWindowModel : IDetailedNameModel
     {
         public string Caption { get; }
         public bool Visible { get; }
@@ -27,6 +27,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.VBE
             catch { }
         }
 
-        public override string ToString() => $"{Caption} {Type} {PixelLeft}/{PixelTop} {PixelWidth}x{PixelHeight}";
+        public override string ToString() => Caption;
+        public string ToDetailedString() => $"{Caption} {Type} {PixelLeft}/{PixelTop} {PixelWidth}x{PixelHeight}";
     }
 }

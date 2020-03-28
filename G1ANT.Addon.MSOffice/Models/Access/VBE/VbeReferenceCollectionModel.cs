@@ -10,5 +10,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.VBE
         {
             AddRange(references.Cast<Reference>().Select(r => new VbeReferenceModel(r)));
         }
+
+        public override string ToString() => "References";
     }
 }

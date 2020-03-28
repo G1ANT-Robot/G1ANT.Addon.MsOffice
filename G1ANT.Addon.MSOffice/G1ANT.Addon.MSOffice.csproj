@@ -189,8 +189,10 @@
     <Compile Include="Commands\Access\Forms\Properties\AccessSetFormDynamicPropertyCommand.cs" />
     <Compile Include="Commands\Access\Forms\Properties\AccessSetFormPropertyCommand.cs" />
     <Compile Include="Commands\Access\Macros\AccessRunProcedureCommand.cs" />
-    <Compile Include="Models\Access\AccessApplicationModel.cs" />
+    <Compile Include="Models\Access\Application\AccessApplicationModel.cs" />
     <Compile Include="Models\Access\AccessCurrentProjectModel.cs" />
+    <Compile Include="Models\Access\Application\TempVars\AccessTempVarsCollectionModel.cs" />
+    <Compile Include="Models\Access\Application\TempVars\AccessTempVarsModel.cs" />
     <Compile Include="Models\Access\Dao\Fields\AccessDaoFieldModel.cs" />
     <Compile Include="Models\Access\Dao\QueryDefs\AccessQueryDefCollectionModel.cs" />
     <Compile Include="Models\Access\Dao\QueryDefs\AccessQueryDefDetailsModel.cs" />
@@ -306,8 +308,6 @@
     <Compile Include="Models\Access\Properties\AccessObjectPropertyModel.cs" />
     <Compile Include="Models\Access\Controls\Items\ItemDataCollectionModel.cs" />
     <Compile Include="Models\Access\Controls\Items\SelectedItemDataCollectionModel.cs" />
-    <Compile Include="Models\Access\TempVars\TempVarCollectionModel.cs" />
-    <Compile Include="Models\Access\TempVars\TempVarModel.cs" />
     <Compile Include="Models\Access\VBE\VbeAddinCollectionModel.cs" />
     <Compile Include="Models\Access\VBE\VbeAddinModel.cs" />
     <Compile Include="Models\Access\VBE\VbeModel.cs" />

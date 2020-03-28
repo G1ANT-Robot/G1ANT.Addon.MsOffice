@@ -2,8 +2,9 @@
 
 namespace G1ANT.Addon.MSOffice.Models.Access.VBE
 {
-    internal class VbeAddinModel
+    internal class VbeAddinModel : INameModel, IDetailedNameModel
     {
+        public string Name => Description;
         public string Description { get; }
         public dynamic Object { get; }
         public string Guid { get; }
@@ -12,11 +13,16 @@ namespace G1ANT.Addon.MSOffice.Models.Access.VBE
         public VbeAddinModel(AddIn addIn)
         {
             Description = addIn.Description;
-            Object = addIn.Object?.ToString();
-            Guid = addIn.Guid;
-            ProgId = addIn.ProgId;
+            try
+            {
+                Object = addIn.Object?.ToString();
+                Guid = addIn.Guid;
+                ProgId = addIn.ProgId;
+            }
+            catch { }
         }
 
-        public override string ToString() => $"{Description}, {Object}, {Guid}";
+        public string ToDetailedString() => $"{Description}, {Object}, {Guid}";
+        public override string ToString() => Name;
     }
 }

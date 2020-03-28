@@ -92,7 +92,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access.Data
             Module = new Lazy<AccessModuleModel>(() => new AccessModuleModel(report.Module));
         }
 
-        public AccessReportModel(Application application, string name) : this(application.Reports[name])
+        public AccessReportModel(Microsoft.Office.Interop.Access.Application application, string name) : this(application.Reports[name])
         { }
 
         public void Requery()

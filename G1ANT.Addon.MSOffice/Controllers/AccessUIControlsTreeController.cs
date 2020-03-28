@@ -2,6 +2,7 @@
 using G1ANT.Addon.MSOffice.Forms;
 using G1ANT.Addon.MSOffice.Models.Access;
 using G1ANT.Addon.MSOffice.Models.Access.AccessObjects;
+using G1ANT.Addon.MSOffice.Models.Access.Application;
 using G1ANT.Addon.MSOffice.Models.Access.Dao;
 using G1ANT.Addon.MSOffice.Models.Access.Dao.Containers;
 using G1ANT.Addon.MSOffice.Models.Access.Dao.Documents;
@@ -554,41 +555,68 @@ namespace G1ANT.Addon.MSOffice.Controllers
 
         private List<TreeNode> GetApplicationNodes(RotApplicationModel rotApplicationModel)
         {
-            var app = rotApplicationModel.Application;
+            var result = new List<TreeNode>();
+            //var app = rotApplicationModel.Application;
+            var model = new AccessApplicationModel(rotApplicationModel.Application);
 
-            var vbe = new VbeModel(app.VBE);
-            var vbeProjectsNode = new TreeNode("Projects", vbe.Projects.Select(p => new TreeNode(p.ToString())).ToArray());
-            var vbeWindowsNode = new TreeNode("Windows", vbe.Windows.Select(w => new TreeNode(w.ToString())).ToArray());
-            var vbeAddinsNode = new TreeNode("Addins", vbe.Addins.Select(a => new TreeNode(a.ToString())).ToArray());
+            var vbe = model.VBE.Value;
+            var vbeProjectsNode = new LazyTreeNode(vbe.Projects).AddRange(() => vbe.Projects.Select(p => new LazyTreeNode(p)));
+            var vbeWindowsNode = new LazyTreeNode(vbe.Windows).AddRange(() => vbe.Windows.Select(w => new LazyTreeNode(w)));
+            var vbeAddinsNode = new LazyTreeNode(vbe.Addins).AddRange(() => vbe.Addins.Select(a => new LazyTreeNode(a)));
 
-            var vbeNode = new TreeNode(
-                $"VBE Version: {vbe.Version}",
-                new TreeNode[] {
-                    new TreeNode($"MainWindow: {vbe.MainWindow}"),
-                    vbeWindowsNode,
-                    new TreeNode($"Active project {vbe.ActiveVBProject}"),
-                    vbeProjectsNode,
-                    vbeAddinsNode
-                }
-            );
+            var vbeNode = new LazyTreeNode(vbe)
+                .AddRange(() =>
+                    new TreeNode[] {
+                        new LazyTreeNode("MainWindow").AddRange(() => GetObjectPropertiesAsTreeNodes(vbe.MainWindow)),
+                        vbeWindowsNode,
+                        new LazyTreeNode("Active project").AddRange(() => GetVBProjectNodes(vbe.ActiveVBProject)),
+                        vbeProjectsNode,
+                        vbeAddinsNode
+                    }
+                );
+            result.Add(vbeNode);
 
-            var result = new List<TreeNode>()
-            {
-                new TreeNode($"Name: {app.Name}"),
-                new TreeNode($"Version: {app.Version}"),
-                new TreeNode($"ADOConnectString: {app.ADOConnectString}"),
-                new TreeNode($"BaseConnectionString: {app.CurrentProject.BaseConnectionString}"),
-                new TreeNode($"Current Object Name: {app.CurrentObjectName}"),
-                new TreeNode($"Current Object Type: {app.CurrentObjectType}"),
-                vbeNode,
-            };
-
-
-            var tempVars = new TempVarCollectionModel(app.TempVars);
+            var tempVars = model.TempVars.Value;
             if (tempVars.Any())
                 result.Add(new TreeNode($"Temp Vars", tempVars.Select(t => new TreeNode(t.ToString())).ToArray()));
 
+            result.Add(GetCurrentProjectParentNode(model.CurrentProject));
+
+            result.AddRange(GetObjectPropertiesAsTreeNodes(model));
+
             return result;
+        }
+
+        private TreeNode GetCurrentProjectParentNode(Lazy<AccessCurrentProjectModel> model)
+        {
+            return new LazyTreeNode("Current project")
+                .AddRange(() => GetAccessPropertyNodes(model.Value.Properties))
+                .AddRange(() => GetObjectPropertiesAsTreeNodes(model.Value));
+        }
+
+        private IEnumerable<TreeNode> GetAccessPropertyNodes(Lazy<AccessObjectPropertyCollectionModel> properties)
+        {
+            return properties.Value.Select(
+                p => new LazyTreeNode(p).AddRange(() => GetObjectPropertiesAsTreeNodes(p))
+             );
+        }
+
+        private IEnumerable<TreeNode> GetVBProjectNodes(VbeProjectModel model)
+        {
+            return new TreeNode[] { GetReferenceParentNode(model.References) }
+                .Concat(GetObjectPropertiesAsTreeNodes(model));
+        }
+
+        private TreeNode GetReferenceParentNode(VbeReferenceCollectionModel references)
+        {
+            return new LazyTreeNode(references).AddRange(() => GetReferenceNodes(references));
+        }
+
+        private IEnumerable<TreeNode> GetReferenceNodes(VbeReferenceCollectionModel references)
+        {
+            return references.Select(
+                r => new LazyTreeNode(r).AddRange(() => GetObjectPropertiesAsTreeNodes(r))
+            );
         }
 
         private IEnumerable<TreeNode> GetModulePropertyNodes(AccessModuleModel model)

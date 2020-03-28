@@ -24,7 +24,7 @@ namespace G1ANT.Addon.MSOffice.Api.Access
                 this.ToolTipText = detailedModel.ToDetailedString();
         }
 
-        public LazyTreeNode(INameModel model) : this(model.ToString(), model)
+        public LazyTreeNode(object model) : this(model.ToString(), model)
         { }
 
 

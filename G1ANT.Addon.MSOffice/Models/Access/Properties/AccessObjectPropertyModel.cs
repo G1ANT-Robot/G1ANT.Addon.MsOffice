@@ -22,5 +22,7 @@ namespace G1ANT.Addon.MSOffice.Models.Access
             Name = property.Name;
             Value = property.Value?.ToString();
         }
+
+        public override string ToString() => Name;
     }
 }

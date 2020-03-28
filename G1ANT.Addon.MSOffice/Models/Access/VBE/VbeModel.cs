@@ -28,5 +28,8 @@
             MainWindow = new VbeWindowModel(vbe.MainWindow);
             //Events = new VbeEventCollectionModel(vbe.Events);
         }
+
+
+        public override string ToString() => $"VBE {Version}";
     }
 }
