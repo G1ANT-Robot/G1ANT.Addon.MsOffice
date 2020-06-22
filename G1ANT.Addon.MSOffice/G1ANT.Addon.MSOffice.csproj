@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -47,6 +48,16 @@
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>$(ProgramFiles)\Microsoft Visual Studio\2017\Community\Common7\IDE\PublicAssemblies\Microsoft.mshtml.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Access, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Access.15.0.4420.1017\lib\net20\Microsoft.Office.Interop.Access.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Access.Dao, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Access.Dao.15.0.4420.1017\lib\net20\Microsoft.Office.Interop.Access.Dao.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
@@ -75,6 +86,10 @@
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\MicrosoftOfficeCore.15.0.0\lib\net35\Office.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
@@ -96,54 +111,55 @@
     <Compile Include="Api\OutlookWrapper.cs" />
     <Compile Include="Api\WordManager.cs" />
     <Compile Include="Api\WordWrapper.cs" />
-    <Compile Include="Commands\ExcelActivateSheetCommand.cs" />
-    <Compile Include="Commands\ExcelAddSheetCommand.cs" />
-    <Compile Include="Commands\ExcelCloseCommand.cs" />
-    <Compile Include="Commands\ExcelCopyCommand.cs" />
-    <Compile Include="Commands\ExcelExportCommand.cs" />
-    <Compile Include="Commands\ExcelGetColorCommand.cs" />
-    <Compile Include="Commands\ExcelGetFormulaCommand.cs" />
-    <Compile Include="Commands\ExcelGetRowCommand.cs" />
-    <Compile Include="Commands\ExcelGetValueCommand.cs" />
-    <Compile Include="Commands\ExcelImportTextCommand.cs" />
-    <Compile Include="Commands\ExcelDuplicateRowCommand.cs" />
-    <Compile Include="Commands\ExcelPasteCommand.cs" />
-    <Compile Include="Commands\ExcelRemoveRowCommand.cs" />
-    <Compile Include="Commands\ExcelRemoveColumnCommand.cs" />
-    <Compile Include="Commands\ExcelInsertColumnCommand.cs" />
-    <Compile Include="Commands\ExcelOpenCommand.cs" />
-    <Compile Include="Commands\ExcelRunMacroCommand.cs" />
-    <Compile Include="Commands\ExcelRunVBCodeCommand.cs" />
-    <Compile Include="Commands\ExcelSaveCommand.cs" />
-    <Compile Include="Commands\ExcelInsertRowCommand.cs" />
-    <Compile Include="Commands\ExcelSelectRangeCommand.cs" />
-    <Compile Include="Commands\ExcelSetColorCommand.cs" />
-    <Compile Include="Commands\ExcelSetValueCommand.cs" />
-    <Compile Include="Commands\ExcelSwitchCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelInsertFormulaCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelActivateSheetCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelAddSheetCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelCloseCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelCopyCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelExportCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelGetColorCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelGetFormulaCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelGetRowCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelGetValueCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelImportTextCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelDuplicateRowCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelPasteCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelRemoveRowCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelRemoveColumnCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelInsertColumnCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelOpenCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelRunMacroCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelRunVBCodeCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelSaveCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelInsertRowCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelSelectRangeCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelSetColorCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelSetValueCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelSwitchCommand.cs" />
     <Compile Include="Helpers\ExcelHelper.cs" />
     <Compile Include="Structures\OutlookAttachmentStructure.cs" />
-    <Compile Include="Commands\OutlookCloseCommand.cs" />
-    <Compile Include="Commands\OutlookFindMailsCommand.cs" />
+    <Compile Include="Commands\Outlook\OutlookCloseCommand.cs" />
+    <Compile Include="Commands\Outlook\OutlookFindMailsCommand.cs" />
     <Compile Include="Structures\OutlookFolderStructure.cs" />
-    <Compile Include="Commands\OutlookGetFolderCommand.cs" />
-    <Compile Include="Commands\OutlookGetRootFoldersCommand.cs" />
+    <Compile Include="Commands\Outlook\OutlookGetFolderCommand.cs" />
+    <Compile Include="Commands\Outlook\OutlookGetRootFoldersCommand.cs" />
     <Compile Include="Structures\OutlookMailStructure.cs" />
-    <Compile Include="Commands\OutlookMoveToCommand.cs" />
-    <Compile Include="Commands\OutlookNewMessageCommand.cs" />
-    <Compile Include="Commands\OutlookOpenCommand.cs" />
-    <Compile Include="Commands\OutlookReplyCommand.cs" />
-    <Compile Include="Commands\OutlookSaveAttachmentCommand.cs" />
-    <Compile Include="Commands\OutlookSelectItemCommand.cs" />
-    <Compile Include="Commands\OutlookSendCommand.cs" />
-    <Compile Include="Commands\WordCloseCommand.cs" />
-    <Compile Include="Commands\WordExportCommand.cs" />
-    <Compile Include="Commands\WordGetTextCommand.cs" />
-    <Compile Include="Commands\WordOpenCommand.cs" />
-    <Compile Include="Commands\WordReplaceCommand.cs" />
-    <Compile Include="Commands\WordRunMacroCommand.cs" />
-    <Compile Include="Commands\WordInsertTextCommand.cs" />
-    <Compile Include="Commands\WordSaveCommand.cs" />
-    <Compile Include="Commands\WordSwitchCommand.cs" />
+    <Compile Include="Commands\Outlook\OutlookMoveToCommand.cs" />
+    <Compile Include="Commands\Outlook\OutlookNewMessageCommand.cs" />
+    <Compile Include="Commands\Outlook\OutlookOpenCommand.cs" />
+    <Compile Include="Commands\Outlook\OutlookReplyCommand.cs" />
+    <Compile Include="Commands\Outlook\OutlookSaveAttachmentCommand.cs" />
+    <Compile Include="Commands\Outlook\OutlookSelectItemCommand.cs" />
+    <Compile Include="Commands\Outlook\OutlookSendCommand.cs" />
+    <Compile Include="Commands\Word\WordCloseCommand.cs" />
+    <Compile Include="Commands\Word\WordExportCommand.cs" />
+    <Compile Include="Commands\Word\WordGetTextCommand.cs" />
+    <Compile Include="Commands\Word\WordOpenCommand.cs" />
+    <Compile Include="Commands\Word\WordReplaceCommand.cs" />
+    <Compile Include="Commands\Word\WordRunMacroCommand.cs" />
+    <Compile Include="Commands\Word\WordInsertTextCommand.cs" />
+    <Compile Include="Commands\Word\WordSaveCommand.cs" />
+    <Compile Include="Commands\Word\WordSwitchCommand.cs" />
     <Compile Include="MSOfficeAddon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -181,5 +197,15 @@
   <ItemGroup>
     <EmbeddedResource Include="License.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\insert_into.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\search.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
