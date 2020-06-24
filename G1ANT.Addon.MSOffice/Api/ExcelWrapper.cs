@@ -24,7 +24,7 @@ namespace G1ANT.Addon.MSOffice
     public class ExcelWrapper
     {
         private Microsoft.Office.Interop.Excel.Application application = null;
-        private _Workbook workbook = null;
+        private Workbook workbook = null;
         private _Worksheet sheet = null;
         private string path = null;
 
@@ -219,12 +219,12 @@ namespace G1ANT.Addon.MSOffice
             InitialiseNewinstance(visibile);
             workbook = OpenWorkbook(path);
             ActivateSheet(sheetName);
-            application.WindowDeactivate += new AppEvents_WindowDeactivateEventHandler(WindowDeactivated);
+            workbook.BeforeClose += new WorkbookEvents_BeforeCloseEventHandler(WorkbookBeforeClose);
         }
 
-        private _Workbook OpenWorkbook(string path)
+        private Workbook OpenWorkbook(string path)
         {
-            _Workbook workbook = null;
+            Workbook workbook = null;
             try
             {
                 workbook = string.IsNullOrEmpty(path) ? application.Workbooks.Add(Missing.Value) : application.Workbooks.Open(path);
@@ -491,10 +491,9 @@ namespace G1ANT.Addon.MSOffice
             return null;
         }
 
-        private void WindowDeactivated(Workbook wb, Microsoft.Office.Interop.Excel.Window wn)
+        private void WorkbookBeforeClose(ref bool Cancel)
         {
             ExcelManager.RemoveInstance(Id);
-            Close();
         }
     }
 }
