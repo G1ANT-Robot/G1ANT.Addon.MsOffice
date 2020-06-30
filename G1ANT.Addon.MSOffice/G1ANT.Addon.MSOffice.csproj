@@ -136,6 +136,7 @@
     <Compile Include="Commands\Excel\ExcelSetColorCommand.cs" />
     <Compile Include="Commands\Excel\ExcelSetValueCommand.cs" />
     <Compile Include="Commands\Excel\ExcelSwitchCommand.cs" />
+    <Compile Include="Commands\Outlook\OutlookCopyToCommand.cs" />
     <Compile Include="Helpers\ExcelHelper.cs" />
     <Compile Include="Structures\OutlookAttachmentStructure.cs" />
     <Compile Include="Commands\Outlook\OutlookCloseCommand.cs" />
