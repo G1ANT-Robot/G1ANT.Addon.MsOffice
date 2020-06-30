@@ -30,21 +30,24 @@ namespace G1ANT.Addon.MSOffice
         public void Execute(Arguments arguments)
         {
             var outlookManager = OutlookManager.CurrentOutlook;
-            if (outlookManager != null)
+            if (outlookManager == null)
+                throw new NullReferenceException("Current Outlook is not set.");
+
+            switch (arguments.Item)
             {
-                if (arguments.Item is OutlookMailStructure mail)
-                {
-                    MailItem mailCopy = mail.Value.Copy();
+                case OutlookMailStructure mail:
+                    var mailCopy = mail.Value.Copy();
                     mailCopy.Move(arguments.DestinationFolder.Value);
                     mailCopy.Save();
-                }
-                else if (arguments.Item is OutlookFolderStructure folder)
+                    break;
+
+                case OutlookFolderStructure folder:
                     folder.Value.CopyTo(arguments.DestinationFolder.Value);
-                else
+                    break;
+
+                default:
                     throw new NotSupportedException($"{arguments.Item.GetType()} is not supported.");
             }
-            else
-                throw new NullReferenceException("Current Outlook is not set.");
         }
     }
 }
