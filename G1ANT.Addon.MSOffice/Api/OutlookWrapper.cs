@@ -287,15 +287,6 @@ namespace G1ANT.Addon.MSOffice
             try
             {
                 Application.Quit();
-
-                    foreach (Process p in Process.GetProcessesByName("outlook"))
-                    {
-                        try
-                        {
-                            p.Kill();
-                        }
-                        catch { }
-                    }
             }
             catch (System.Exception ex)
             {
