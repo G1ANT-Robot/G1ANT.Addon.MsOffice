@@ -69,7 +69,6 @@ namespace G1ANT.Addon.MSOffice
             if (toRemove != null)
             {
                 launchedExcels.Remove(toRemove);
-                toRemove.Close();
             }
             else
             {
