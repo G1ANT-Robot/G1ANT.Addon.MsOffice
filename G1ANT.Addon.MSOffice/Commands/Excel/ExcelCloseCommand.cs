@@ -30,7 +30,7 @@ namespace G1ANT.Addon.MSOffice
         {
             try
             {
-                ExcelManager.RemoveInstance();
+                ExcelManager.CurrentExcel.Close();
             }
             catch (Exception ex)
             {

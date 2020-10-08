@@ -18,6 +18,8 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 
 using G1ANT.Language;
+using System.Globalization;
+using System.Threading;
 
 namespace G1ANT.Addon.MSOffice
 {
@@ -282,23 +284,13 @@ namespace G1ANT.Addon.MSOffice
 
         public void Paste()
         {
-            sheet.Paste();
+            sheet.GetType().InvokeMember("Paste", BindingFlags.InvokeMethod, null, sheet, null, Thread.CurrentThread.CurrentCulture);
         }
 
         public void Close()
         {
-            try
-            {
-                int hWnd = application.Application.Hwnd;
-                uint processId;
-                RobotWin32.GetWindowThreadProcessId((IntPtr)hWnd, out processId);
-                Process proc = Process.GetProcessById((int)processId);
-                proc.Kill();
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException($"Error occurred while closing current Excel Instance. Message: {ex.Message}");
-            }
+            object misValue = System.Reflection.Missing.Value;
+            workbook.Close(false, misValue, misValue);
         }
 
         public void SelectRange(object startColumn, int startRow, object endColumn, int endRow)
