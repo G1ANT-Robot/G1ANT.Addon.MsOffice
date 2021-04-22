@@ -44,14 +44,14 @@ namespace G1ANT.Addon.MSOffice
 
         public void Execute(Arguments arguments)
         {
-            OutlookManager.CurrentOutlook.NewMessage(
+            var newMail = OutlookManager.CurrentOutlook.NewMessage(
                 to: arguments.To.Value,
                 subject: arguments.Subject.Value,
                 body: arguments.Body.Value,
                 isHtmlBody: arguments.IsBodyHtml.Value,
                 attachmentPath: arguments.Attachments.Value.Where(a => a != null && !string.IsNullOrWhiteSpace(a.ToString())).Select(a => a.ToString()).ToList());
 
-            Scripter.Variables.SetVariableValue(arguments.Result.Value, new TextStructure("true"));
+            Scripter.Variables.SetVariableValue(arguments.Result.Value, new OutlookMailStructure(newMail, null, Scripter));
         }
     }
 }
