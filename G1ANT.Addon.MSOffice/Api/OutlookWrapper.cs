@@ -64,7 +64,7 @@ namespace G1ANT.Addon.MSOffice
             }
         }
 
-        public void NewMessage(string to, string subject, string body, bool isHtmlBody, List<string> attachmentPath)
+        public MailItem NewMessage(string to, string subject, string body, bool isHtmlBody, List<string> attachmentPath)
         {
             mailItem = Application.CreateItem(OlItemType.olMailItem);
             mailItem.To = to;
@@ -96,6 +96,7 @@ namespace G1ANT.Addon.MSOffice
             }
 
             mailItem.Display();
+            return mailItem;
         }
 
         public void DiscardMail()
@@ -280,6 +281,11 @@ namespace G1ANT.Addon.MSOffice
                 mail.Send();
             else
                 mailItem.Send();
+        }
+
+        public void SendAndReceive()
+        {
+            nameSpace?.SendAndReceive(false);
         }
 
         public void Close()
