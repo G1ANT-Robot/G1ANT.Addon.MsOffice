@@ -27,6 +27,7 @@ namespace G1ANT.Addon.MSOffice
         private const string BodyIndex = "body";
         private const string HtmlBodyIndex = "htmlbody";
         private const string AttachmentsIndex = "attachments";
+        private const string UnreadIndex = "unread";
 
         public OutlookMailStructure(string value, string format = "", AbstractScripter scripter = null) :
             base(value, format, scripter)
@@ -51,6 +52,7 @@ namespace G1ANT.Addon.MSOffice
             Indexes.Add(CcIndex);
             Indexes.Add(BccIndex);
             Indexes.Add(AccountIndex);
+            Indexes.Add(UnreadIndex);
         }
 
         public override Structure Get(string index = "")
@@ -75,6 +77,8 @@ namespace G1ANT.Addon.MSOffice
                     return new TextStructure(GetRecipientListOfType(OlMailRecipientType.olBCC), null, Scripter);
                 case AccountIndex:
                     return new TextStructure(Value.SendUsingAccount.SmtpAddress, null, Scripter);
+                case UnreadIndex:
+                    return new BooleanStructure(Value.UnRead, null, Scripter);
                 case AttachmentsIndex:
                     {
                         var outlookManager = OutlookManager.CurrentOutlook;
@@ -112,6 +116,21 @@ namespace G1ANT.Addon.MSOffice
                     case HtmlBodyIndex:
                         Value.HTMLBody = structure.ToString();
                         break;
+                    case UnreadIndex:
+                        Value.UnRead = Convert.ToBoolean(structure.Object);
+                        break;
+                    case CcIndex:
+                        if (structure is TextStructure cc)
+                            SetRecipientListOfType(OlMailRecipientType.olCC, cc.ToString());
+                        else
+                            throw new ArgumentException("Should be text separated by all emails by ';'");
+                        break;
+                    case BccIndex:
+                        if (structure is TextStructure bcc)
+                            SetRecipientListOfType(OlMailRecipientType.olBCC, bcc.ToString());
+                        else
+                            throw new ArgumentException("Should be text separated by all emails by ';'");
+                        break;
                     case AccountIndex:
                         {
                             Accounts accounts = Value.Session.Accounts;
@@ -141,6 +160,25 @@ namespace G1ANT.Addon.MSOffice
         protected override MailItem Parse(string value, string format = null)
         {
             return null;
+        }
+
+        private void AddRecipient(string recipient, OlMailRecipientType recipientType)
+        {
+            var newRecipient = Value.Recipients.Add(recipient);
+            newRecipient.Type = (int)recipientType;
+        }
+
+        private void SetRecipientListOfType(OlMailRecipientType recipientType, string recipients)
+        {
+            for (int idx = Value.Recipients.Count; idx > 0; idx--)
+            {
+                var recipient = Value.Recipients[idx];
+                if (recipient.Type == (int)recipientType)
+                    Value.Recipients.Remove(idx);
+            }
+            var list = recipients.Split(';');
+            list.Where(x => !string.IsNullOrEmpty(x)).ToList().ForEach(x => AddRecipient(x, recipientType));
+            Value.Recipients.ResolveAll();
         }
 
         private string GetRecipientListOfType(OlMailRecipientType recipientType)
