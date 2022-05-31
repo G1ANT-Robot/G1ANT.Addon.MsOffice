@@ -70,27 +70,13 @@ namespace G1ANT.Addon.MSOffice
                 case HtmlBodyIndex:
                     return new TextStructure(Value.HTMLBody, null, Scripter);
                 case FromIndex:
-                    if (Value.SenderEmailType == "EX")
-                    {
-                        try
-                        {
-                            return new TextStructure(Value.Sender.GetExchangeUser().PrimarySmtpAddress, null, Scripter);
-                        }
-                        catch (System.Exception)
-                        {
-                            return new TextStructure(Value.SenderEmailAddress, null, Scripter);
-                        }
-                    }
-                    else
-                    {
-                        return new TextStructure(Value.SenderEmailAddress, null, Scripter);
-                    }
+                    return new TextStructure(GetMailFromIndex(Value), null, Scripter);
                 case CcIndex:
                     return new TextStructure(GetRecipientListOfType(OlMailRecipientType.olCC), null, Scripter);
                 case BccIndex:
                     return new TextStructure(GetRecipientListOfType(OlMailRecipientType.olBCC), null, Scripter);
                 case AccountIndex:
-                    return new TextStructure(Value.SendUsingAccount.SmtpAddress, null, Scripter);
+                    return new TextStructure(Value.SendUsingAccount?.SmtpAddress ?? "", null, Scripter);
                 case UnreadIndex:
                     return new BooleanStructure(Value.UnRead, null, Scripter);
                 case AttachmentsIndex:
@@ -166,6 +152,24 @@ namespace G1ANT.Addon.MSOffice
             }
         }
 
+        private string GetMailFromIndex(MailItem Value)
+        {
+            if (Value.SenderEmailType == "EX")
+            {
+                try
+                {
+                    return Value.Sender.GetExchangeUser().PrimarySmtpAddress;
+                }
+                catch (System.Exception)
+                {
+                    return Value.SenderEmailAddress;
+                }
+            }
+            else
+            {
+                return Value.SenderEmailAddress;
+            }
+        }
         public override string ToString(string format)
         {
             return Get(FromIndex)?.ToString();
