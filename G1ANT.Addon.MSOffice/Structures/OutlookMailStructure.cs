@@ -70,7 +70,21 @@ namespace G1ANT.Addon.MSOffice
                 case HtmlBodyIndex:
                     return new TextStructure(Value.HTMLBody, null, Scripter);
                 case FromIndex:
-                    return new TextStructure(Value.SenderEmailAddress, null, Scripter);
+                    if (Value.SenderEmailType == "EX")
+                    {
+                        try
+                        {
+                            return new TextStructure(Value.Sender.GetExchangeUser().PrimarySmtpAddress, null, Scripter);
+                        }
+                        catch (System.Exception)
+                        {
+                            return new TextStructure(Value.SenderEmailAddress, null, Scripter);
+                        }
+                    }
+                    else
+                    {
+                        return new TextStructure(Value.SenderEmailAddress, null, Scripter);
+                    }
                 case CcIndex:
                     return new TextStructure(GetRecipientListOfType(OlMailRecipientType.olCC), null, Scripter);
                 case BccIndex:
