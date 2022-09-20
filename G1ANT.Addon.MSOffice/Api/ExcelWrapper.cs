@@ -47,13 +47,48 @@ namespace G1ANT.Addon.MSOffice
         {
             try
             {
-                Range range = sheet.Cells[rowNumber, columnAddress] as Range;                
+                Range range = sheet.Cells[rowNumber, columnAddress] as Range;
                 return range.Text?.ToString() ?? string.Empty;
             }
             catch
             {
                 throw new ArgumentException($"Wrong row number: '{rowNumber}' or column address: '{columnAddress}'.");
             }
+        }
+
+        public System.Data.DataTable GetRangeValue(int startingColIndex, int endingColIndex, int startingRowIndex, int endingRowIndex, bool hasHeaders)
+        {
+            var rangeTable = new System.Data.DataTable("RangeTable");
+
+            var nbOfColumns = endingColIndex - startingColIndex + 1;
+            var nbOfRows = endingRowIndex - startingRowIndex + 1;
+
+            var startingCell = sheet.Cells[startingRowIndex, startingColIndex];
+            var endingCell = sheet.Cells[endingRowIndex, endingColIndex];
+            var range = sheet.Range[startingCell, endingCell].Cells.Value;
+
+            for (int i = 0; i < nbOfColumns; i++)
+                rangeTable.Columns.Add();
+
+            if (hasHeaders)
+            {
+                for (int i = 1; i < nbOfColumns + 1; i++)
+                    rangeTable.Columns[i - 1].ColumnName = range[1, i];
+                
+                nbOfRows += -1;
+            }
+
+            for (int i = 1; i < nbOfRows + 1; i++)
+            {
+                var dataRow = rangeTable.NewRow();
+
+                for (int j = 1; j < nbOfColumns + 1; j++)
+                    dataRow[j - 1] = range[i, j];
+
+                rangeTable.Rows.Add(dataRow);
+            }
+
+            return rangeTable;
         }
 
         public Dictionary<string, object> GetRow(int rowNumber)
@@ -105,9 +140,9 @@ namespace G1ANT.Addon.MSOffice
             try
             {
                 var cell = sheet.Cells[row, column];
-                if(backgroundColor.HasValue)
+                if (backgroundColor.HasValue)
                     cell.Interior.Color = ColorTranslator.ToOle(backgroundColor.Value);
-                if(fontColor.HasValue)
+                if (fontColor.HasValue)
                     cell.Font.Color = ColorTranslator.ToOle(fontColor.Value);
             }
             catch
