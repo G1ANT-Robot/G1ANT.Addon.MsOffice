@@ -68,13 +68,18 @@ namespace G1ANT.Addon.MSOffice
             var range = sheet.Range[startingCell, endingCell].Cells.Value;
 
             for (int i = 0; i < nbOfColumns; i++)
-                rangeTable.Columns.Add();
+                rangeTable.Columns.Add("Column" + i.ToString());
 
             if (hasHeaders)
             {
                 for (int i = 1; i < nbOfColumns + 1; i++)
-                    rangeTable.Columns[i - 1].ColumnName = range[1, i];
-                
+                {
+                    // nie wiem co w przypadku gdy ktos zaznacza has headers a wartosci sa puste
+                    // nazwy kolumn nie moga byc nullowe
+                    // moze rzucac jakis exception?
+                    if (range[1, i] != null)
+                        rangeTable.Columns[i - 1].ColumnName = Convert.ToString(range[1, i]);
+                }
                 nbOfRows += -1;
             }
 
@@ -83,7 +88,7 @@ namespace G1ANT.Addon.MSOffice
                 var dataRow = rangeTable.NewRow();
 
                 for (int j = 1; j < nbOfColumns + 1; j++)
-                    dataRow[j - 1] = range[i, j];
+                    dataRow[j - 1] = Convert.ToString(range[i, j]);
 
                 rangeTable.Rows.Add(dataRow);
             }
