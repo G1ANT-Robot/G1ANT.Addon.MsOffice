@@ -13,8 +13,8 @@ using G1ANT.Language;
 
 namespace G1ANT.Addon.MSOffice.Commands.Excel
 {
-    [Command(Name = "excel.getrangevalue", Tooltip = "This command gets a value from a specified range")]
-    public class ExcelGetRangeValueCommand : Command
+    [Command(Name = "excel.getrange", Tooltip = "This command gets a value from a specified range")]
+    public class ExcelGetRangeCommand : Command
     {
         public class Arguments : CommandArguments
         {
@@ -38,7 +38,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Excel
 
         }
 
-        public ExcelGetRangeValueCommand(AbstractScripter scripter) : base(scripter)
+        public ExcelGetRangeCommand(AbstractScripter scripter) : base(scripter)
         {
         }
 
