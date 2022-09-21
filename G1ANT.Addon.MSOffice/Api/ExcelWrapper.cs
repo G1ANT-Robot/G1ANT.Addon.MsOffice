@@ -56,7 +56,7 @@ namespace G1ANT.Addon.MSOffice
             }
         }
 
-        public System.Data.DataTable GetRangeValue(int startingColIndex, int endingColIndex, int startingRowIndex, int endingRowIndex, bool hasHeaders)
+        public System.Data.DataTable GetRangeValue(int startingColIndex, int endingColIndex, int startingRowIndex, int endingRowIndex)
         {
             var rangeTable = new System.Data.DataTable("RangeTable");
 
@@ -68,20 +68,7 @@ namespace G1ANT.Addon.MSOffice
             var range = sheet.Range[startingCell, endingCell].Cells.Value;
 
             for (int i = 0; i < nbOfColumns; i++)
-                rangeTable.Columns.Add("Column" + i.ToString());
-
-            if (hasHeaders)
-            {
-                for (int i = 1; i < nbOfColumns + 1; i++)
-                {
-                    // nie wiem co w przypadku gdy ktos zaznacza has headers a wartosci sa puste
-                    // nazwy kolumn nie moga byc nullowe
-                    // moze rzucac jakis exception?
-                    if (range[1, i] != null)
-                        rangeTable.Columns[i - 1].ColumnName = Convert.ToString(range[1, i]);
-                }
-                nbOfRows += -1;
-            }
+                rangeTable.Columns.Add("Column" + i.ToString(), typeof(String));
 
             for (int i = 1; i < nbOfRows + 1; i++)
             {

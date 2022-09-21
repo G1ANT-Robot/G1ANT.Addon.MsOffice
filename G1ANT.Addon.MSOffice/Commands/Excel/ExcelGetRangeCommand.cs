@@ -30,9 +30,6 @@ namespace G1ANT.Addon.MSOffice.Commands.Excel
             [Argument(Required = true, Tooltip = "Ending row's index")]
             public IntegerStructure RowEndIndex { get; set; }
 
-            [Argument(Tooltip = "If the first row contains headers")]
-            public BooleanStructure HasHeader { get; set; } = new BooleanStructure(false);
-
             [Argument(Tooltip = "Name of a variable where the command's result will be stored")]
             public VariableStructure Result { get; set; } = new VariableStructure("result");
 
@@ -51,7 +48,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Excel
                 throw new Exception("Starting index cannot be bigger than ending index");
 
             var result = ExcelManager.CurrentExcel.GetRangeValue(arguments.ColStartIndex.Value, arguments.ColEndIndex.Value,
-                             arguments.RowStartIndex.Value, arguments.RowEndIndex.Value, arguments.HasHeader.Value);
+                             arguments.RowStartIndex.Value, arguments.RowEndIndex.Value);
             Scripter.Variables.SetVariableValue(arguments.Result.Value, new DataTableStructure(result, null, Scripter));
         }
 
