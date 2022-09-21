@@ -47,7 +47,7 @@ namespace G1ANT.Addon.MSOffice
         {
             try
             {
-                Range range = sheet.Cells[rowNumber, columnAddress] as Range;
+                var range = sheet.Cells[rowNumber, columnAddress] as Range;
                 return range.Text?.ToString() ?? string.Empty;
             }
             catch
