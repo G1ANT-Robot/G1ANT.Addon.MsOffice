@@ -111,7 +111,7 @@
     <Compile Include="Api\OutlookWrapper.cs" />
     <Compile Include="Api\WordManager.cs" />
     <Compile Include="Api\WordWrapper.cs" />
-    <Compile Include="Commands\Excel\ExcelGetRangeValueCommand.cs" />
+    <Compile Include="Commands\Excel\ExcelGetRangeCommand.cs" />
     <Compile Include="Commands\Excel\ExcelInsertFormulaCommand.cs" />
     <Compile Include="Commands\Excel\ExcelActivateSheetCommand.cs" />
     <Compile Include="Commands\Excel\ExcelAddSheetCommand.cs" />

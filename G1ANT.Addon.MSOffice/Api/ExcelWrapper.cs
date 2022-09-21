@@ -61,14 +61,14 @@ namespace G1ANT.Addon.MSOffice
             var rangeTable = new System.Data.DataTable("RangeTable");
 
             var nbOfColumns = Math.Max(endingColIndex, startingColIndex) - Math.Min(endingColIndex, startingColIndex) + 1;
-            var nbOfRows = Math.Max(endingRowIndex, startingRowIndex) - Math.Max(endingRowIndex, startingRowIndex) + 1;
+            var nbOfRows = Math.Max(endingRowIndex, startingRowIndex) - Math.Min(endingRowIndex, startingRowIndex) + 1;
 
             var startingCell = sheet.Cells[startingRowIndex, startingColIndex];
             var endingCell = sheet.Cells[endingRowIndex, endingColIndex];
             var range = sheet.Range[startingCell, endingCell].Cells.Value;
 
             for (int i = 0; i < nbOfColumns; i++)
-                rangeTable.Columns.Add("Column" + i.ToString(), typeof(String));
+                rangeTable.Columns.Add("Column" + (i+1).ToString(), typeof(String));
 
             for (int i = 1; i < nbOfRows + 1; i++)
             {
