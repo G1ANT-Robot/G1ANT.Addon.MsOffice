@@ -60,8 +60,8 @@ namespace G1ANT.Addon.MSOffice
         {
             var rangeTable = new System.Data.DataTable("RangeTable");
 
-            var nbOfColumns = endingColIndex - startingColIndex + 1;
-            var nbOfRows = endingRowIndex - startingRowIndex + 1;
+            var nbOfColumns = Math.Max(endingColIndex, startingColIndex) - Math.Min(endingColIndex, startingColIndex) + 1;
+            var nbOfRows = Math.Max(endingRowIndex, startingRowIndex) - Math.Max(endingRowIndex, startingRowIndex) + 1;
 
             var startingCell = sheet.Cells[startingRowIndex, startingColIndex];
             var endingCell = sheet.Cells[endingRowIndex, endingColIndex];

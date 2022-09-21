@@ -44,9 +44,6 @@ namespace G1ANT.Addon.MSOffice.Commands.Excel
             if (arguments.ColStartIndex.Value < 1 || arguments.ColEndIndex.Value < 1 || arguments.RowStartIndex.Value < 1 || arguments.RowEndIndex.Value < 1)
                 throw new Exception("Index cannot be smaller than 1");
 
-            if (arguments.ColStartIndex.Value > arguments.ColEndIndex.Value || arguments.RowStartIndex.Value > arguments.RowEndIndex.Value)
-                throw new Exception("Starting index cannot be bigger than ending index");
-
             var result = ExcelManager.CurrentExcel.GetRangeValue(arguments.ColStartIndex.Value, arguments.ColEndIndex.Value,
                              arguments.RowStartIndex.Value, arguments.RowEndIndex.Value);
             Scripter.Variables.SetVariableValue(arguments.Result.Value, new DataTableStructure(result, null, Scripter));
