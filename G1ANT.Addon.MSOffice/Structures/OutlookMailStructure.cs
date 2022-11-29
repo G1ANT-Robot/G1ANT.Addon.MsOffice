@@ -28,6 +28,8 @@ namespace G1ANT.Addon.MSOffice
         private const string HtmlBodyIndex = "htmlbody";
         private const string AttachmentsIndex = "attachments";
         private const string UnreadIndex = "unread";
+        private const string DateIndex = "date";
+        private const string PriorityIndex = "priority";
 
         public OutlookMailStructure(string value, string format = "", AbstractScripter scripter = null) :
             base(value, format, scripter)
@@ -44,6 +46,7 @@ namespace G1ANT.Addon.MSOffice
         protected void Init()
         {
             Indexes.Add(IdIndex);
+            Indexes.Add(DateIndex);
             Indexes.Add(SubjectIndex);
             Indexes.Add(AttachmentsIndex);
             Indexes.Add(BodyIndex);
@@ -52,6 +55,7 @@ namespace G1ANT.Addon.MSOffice
             Indexes.Add(CcIndex);
             Indexes.Add(BccIndex);
             Indexes.Add(AccountIndex);
+            Indexes.Add(UnreadIndex);
             Indexes.Add(UnreadIndex);
         }
 
@@ -62,7 +66,10 @@ namespace G1ANT.Addon.MSOffice
             switch (index.ToLower())
             {
                 case IdIndex:
-                    return new TextStructure(Value.EntryID, null, Scripter);
+                    var messageId = Value.PropertyAccessor.GetProperty(OutlookWrapper.MessgeIdPropertyName);
+                    return new TextStructure(messageId, null, Scripter);
+                case DateIndex:
+                    return new DateTimeStructure(Value.ReceivedTime, null, Scripter);
                 case SubjectIndex:
                     return new TextStructure(Value.Subject, null, Scripter);
                 case BodyIndex:

@@ -17,11 +17,14 @@ using System.Reflection;
 using System.IO;
 using System.Diagnostics;
 using System.Data.Linq.SqlClient;
+using MailKit.Search;
 
 namespace G1ANT.Addon.MSOffice
 {
     public class OutlookWrapper
     {
+        public const string MessgeIdPropertyName = "http://schemas.microsoft.com/mapi/proptag/0x1035001F";
+
         private OutlookWrapper() { }
         public OutlookWrapper(int id)
         {
@@ -247,6 +250,21 @@ namespace G1ANT.Addon.MSOffice
                
             }
             return foundMails;
+        }
+
+        public MailItem GetMailById(string mailId)
+        {
+            var filter = $"@SQL=\"{MessgeIdPropertyName}\" = '{mailId}'";
+
+            foreach (MAPIFolder f in nameSpace.Folders)
+            {
+                MAPIFolder inboxFolder = f.Store.GetDefaultFolder(OlDefaultFolders.olFolderInbox);
+                Items items = inboxFolder.Items;
+                var foundItems = items.Find(filter);
+                if (foundItems is MailItem mail)
+                    return mail;
+            }
+            return null;
         }
 
         public MailItem Reply(MailItem mail)
