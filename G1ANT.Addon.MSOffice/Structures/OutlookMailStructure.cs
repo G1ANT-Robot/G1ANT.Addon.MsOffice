@@ -28,6 +28,7 @@ namespace G1ANT.Addon.MSOffice
         private const string HtmlBodyIndex = "htmlbody";
         private const string AttachmentsIndex = "attachments";
         private const string UnreadIndex = "unread";
+        private const string DateIndex = "date";
 
         public OutlookMailStructure(string value, string format = "", AbstractScripter scripter = null) :
             base(value, format, scripter)
@@ -53,6 +54,7 @@ namespace G1ANT.Addon.MSOffice
             Indexes.Add(BccIndex);
             Indexes.Add(AccountIndex);
             Indexes.Add(UnreadIndex);
+            Indexes.Add(DateIndex);
         }
 
         public override Structure Get(string index = "")
@@ -79,6 +81,8 @@ namespace G1ANT.Addon.MSOffice
                     return new TextStructure(Value.SendUsingAccount?.SmtpAddress ?? "", null, Scripter);
                 case UnreadIndex:
                     return new BooleanStructure(Value.UnRead, null, Scripter);
+                case DateIndex:
+                    return new DateTimeStructure(Value.SentOn, null, Scripter);
                 case AttachmentsIndex:
                     {
                         var outlookManager = OutlookManager.CurrentOutlook;
