@@ -137,6 +137,7 @@
     <Compile Include="Commands\Excel\ExcelSetValueCommand.cs" />
     <Compile Include="Commands\Excel\ExcelSwitchCommand.cs" />
     <Compile Include="Commands\Outlook\OutlookCopyToCommand.cs" />
+    <Compile Include="Commands\Outlook\OutlookSaveCommand.cs" />
     <Compile Include="Commands\Outlook\OutlookSendAndReceiveCommand.cs" />
     <Compile Include="Helpers\ExcelHelper.cs" />
     <Compile Include="Structures\OutlookAttachmentStructure.cs" />
