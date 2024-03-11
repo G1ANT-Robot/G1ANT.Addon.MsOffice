@@ -283,6 +283,14 @@ namespace G1ANT.Addon.MSOffice
                 mailItem.Send();
         }
 
+        public void SaveAs(MailItem mail, string path)
+        {
+            var mailToSave = mail != null ? mail : mailItem;
+            if (!Path.HasExtension(path))
+                path = Path.ChangeExtension(path, ".msg");
+            mailToSave.SaveAs(path, OlSaveAsType.olMSGUnicode);
+        }
+
         public void SendAndReceive()
         {
             nameSpace?.SendAndReceive(false);
