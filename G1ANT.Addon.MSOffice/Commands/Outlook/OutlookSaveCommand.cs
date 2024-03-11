@@ -17,7 +17,7 @@ namespace G1ANT.Addon.MSOffice.Commands.Outlook
             [Argument(Tooltip = "Path to the file where message will be stored")]
             public TextStructure Path { get; set; } 
 
-            [Argument(Tooltip = "Name of an `outlookmail` variable where a mail to be sent is stored")]
+            [Argument(Tooltip = "Mail structure to be saved")]
             public OutlookMailStructure Mail { get; set; }
         }
         public OutlookSaveCommand(AbstractScripter scripter) : base(scripter)
