@@ -28,6 +28,7 @@ namespace G1ANT.Addon.MSOffice
         private const string HtmlBodyIndex = "htmlbody";
         private const string AttachmentsIndex = "attachments";
         private const string UnreadIndex = "unread";
+        private const string DateIndex = "date";
 
         public OutlookMailStructure(string value, string format = "", AbstractScripter scripter = null) :
             base(value, format, scripter)
@@ -53,6 +54,7 @@ namespace G1ANT.Addon.MSOffice
             Indexes.Add(BccIndex);
             Indexes.Add(AccountIndex);
             Indexes.Add(UnreadIndex);
+            Indexes.Add(DateIndex);
         }
 
         public override Structure Get(string index = "")
@@ -70,15 +72,17 @@ namespace G1ANT.Addon.MSOffice
                 case HtmlBodyIndex:
                     return new TextStructure(Value.HTMLBody, null, Scripter);
                 case FromIndex:
-                    return new TextStructure(Value.SenderEmailAddress, null, Scripter);
+                    return new TextStructure(GetSenderEmailAddress(Value), null, Scripter);
                 case CcIndex:
                     return new TextStructure(GetRecipientListOfType(OlMailRecipientType.olCC), null, Scripter);
                 case BccIndex:
                     return new TextStructure(GetRecipientListOfType(OlMailRecipientType.olBCC), null, Scripter);
                 case AccountIndex:
-                    return new TextStructure(Value.SendUsingAccount.SmtpAddress, null, Scripter);
+                    return new TextStructure(Value.SendUsingAccount?.SmtpAddress ?? "", null, Scripter);
                 case UnreadIndex:
                     return new BooleanStructure(Value.UnRead, null, Scripter);
+                case DateIndex:
+                    return new DateTimeStructure(Value.SentOn, null, Scripter);
                 case AttachmentsIndex:
                     {
                         var outlookManager = OutlookManager.CurrentOutlook;
@@ -152,6 +156,24 @@ namespace G1ANT.Addon.MSOffice
             }
         }
 
+        private string GetSenderEmailAddress(MailItem Value)
+        {
+            if (Value.SenderEmailType == "EX")
+            {
+                try
+                {
+                    return Value.Sender.GetExchangeUser().PrimarySmtpAddress;
+                }
+                catch (System.Exception)
+                {
+                    return Value.SenderEmailAddress;
+                }
+            }
+            else
+            {
+                return Value.SenderEmailAddress;
+            }
+        }
         public override string ToString(string format)
         {
             return Get(FromIndex)?.ToString();
