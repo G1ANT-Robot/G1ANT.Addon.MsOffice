@@ -44,12 +44,15 @@ namespace G1ANT.Addon.MSOffice
 
                 if (arguments.Args?.Value != null)
                 {
-                    foreach (Structure arg in arguments.Args?.Value)
+                    foreach (var arg in arguments.Args?.Value)
                     {
-                        TextStructure tmpArgument = arg as TextStructure;
-                        if (tmpArgument != null)
+                        if (arg is TextStructure textStruc)
                         {
-                            args.Add(tmpArgument.Value);
+                            args.Add(textStruc.Value);
+                        }
+                        else if (arg is string str)
+                        {
+                            args.Add(str);
                         }
                     }
                 }
